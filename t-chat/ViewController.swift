@@ -8,13 +8,43 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, StateLoggable {
+    
+    var currentState: ViewControllerState = .noState
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        self.changeState(to: .disapeared, in: #function)
     }
-
-
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        self.changeState(to: .willLayoutSubviews, in: #function)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        self.changeState(to: .didLayoutSubviews, in: #function)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.changeState(to: .appearing, in: #function)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.changeState(to: .appeared, in: #function)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.changeState(to: .disapearing, in: #function)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.changeState(to: .disapeared, in: #function)
+    }
 }
 
