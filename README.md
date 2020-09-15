@@ -12,4 +12,4 @@
 
 ## 3. Задание со звездочкой
 
-Добавлена Scheme `t-chat with state logging` с переменной окружения `state_logging_level = verbose`. Если запустить конфигурацию `t-chat` логгирования не будет.
+Добавлена Scheme `t-chat with state logging` с переменной окружения `state_logging_level = verbose`. Если запустить Scheme `t-chat` логгирования не будет.
