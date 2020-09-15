@@ -7,7 +7,6 @@
 //
 
 enum AppState {
-    case notLaunched
     case notRunning
     case inactive
     case active

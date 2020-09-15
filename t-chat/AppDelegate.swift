@@ -13,37 +13,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate, StateLoggable {
 
     var window: UIWindow?
     
-    var currentState: AppState = .notLaunched
+    var currentState: AppState = .notRunning
     
     func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-        self.changeState(to: .notRunning, in: #function)
+        processState(nextState: .inactive, in: #function)
         return true
     }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        self.changeState(to: .inactive, in: #function)
+        processState(nextState: .inactive, in: #function)
         return true
     }
     
     func applicationWillEnterForeground(_ application: UIApplication) {
-        self.changeState(to: .inactive, in: #function)
+        processState(nextState: .inactive, in: #function)
     }
     
     func applicationDidBecomeActive(_ application: UIApplication) {
-        self.changeState(to: .active, in: #function)
+        processState(nextState: .active, in: #function)
     }
     
     func applicationWillResignActive(_ application: UIApplication) {
-        self.changeState(to: .inactive, in: #function)
+        processState(nextState: .inactive, in: #function)
     }
     
     func applicationDidEnterBackground(_ application: UIApplication) {
-        self.changeState(to: .background, in: #function)
+        processState(nextState: .background, in: #function)
     }
     
     func applicationWillTerminate(_ application: UIApplication) {
-        self.changeState(to: .notRunning, in: #function)
+        processState(nextState: .notRunning, in: #function)
     }
 
 }
-

@@ -8,17 +8,17 @@
 import UIKit
 
 protocol StateLoggable: AnyObject {
-    associatedtype ItemState
+    associatedtype ItemState: Equatable
     var currentState: ItemState { get set }
 }
 
 extension StateLoggable {
-    func changeState(to nextState: ItemState, in function: String) {
+    func processState(nextState: ItemState, in function: String) {
         if ProcessInfo.processInfo.environment["state_logging_level"] == "verbose" {
-            print("\(String(describing: type(of: self))) moved from \(currentState) to \(nextState): \(function)")
+            print("\(String(describing: type(of: self))) \(nextState == currentState ? "still in \(currentState)" : "moved from \(currentState) to \(nextState)") : \(function)")
+            
+            self.currentState = nextState
         }
-        
-        self.currentState = nextState
     }
 }
 
