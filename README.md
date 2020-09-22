@@ -1,15 +1,11 @@
-# Домашнее задание № 1
+# Домашнее задание № 2
 
-## 1. Логирование событий AppDelegete и ViewController
+## 1. Логирование контролов
 
-Состояния задаются в `enum AppState` для `UIApplicationDelegete` и `enum ViewControllerState` для `UIViewController`. Логгирование осуществляется через протокол `StateLoggable`.
+Добавлены `print(...)` для вывода требуемых логов в задании 3.
 
-Для демонстрации состояний VC добавлен `DemoViewController` и переход на него и обратно.
+## 2. Задание со звездочкой
 
-## 2. GitIgnore
+Чтобы не выводилась ошибка при сворачивании `UIAlertController` создан класс `TCAlertController`, в котором убираются некоторые констрейнты.
 
-Сгенерирован через gitignore.io
-
-## 3. Задание со звездочкой
-
-Добавлена Scheme `t-chat with state logging` с переменной окружения `state_logging_level = verbose`. Если запустить Scheme `t-chat` логгирования не будет.
+Выбор изображения реализован в классе `ImagePicker`. Для получения выбранного изображения необходимо реализовать делегат `ImagePickerDelegate`. 
