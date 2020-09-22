@@ -84,7 +84,7 @@ extension ProfileViewController {
     func setProfileImage() {
         if let imageURL = userProfile.photoURL {
             do {
-                if let image = try ImageManager.getImageFrom(url: imageURL) {
+                if let image = try ImageManager.shared.getImageFrom(url: imageURL) {
                     profileImageView.image = image
                 }
                 

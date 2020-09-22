@@ -85,7 +85,7 @@ extension ImagePicker: UIImagePickerControllerDelegate, UINavigationControllerDe
         if let url = info[.imageURL] as? URL {
             self.didSelectImage(picker, url: url)
         } else if let image = info[.originalImage] as? UIImage {
-            ImageManager.saveToCameraRoll(image) { [weak self] url in
+            ImageManager.shared.saveToCameraRoll(image) { [weak self] url in
                 guard let self = self, let url = url else { return }
                 self.didSelectImage(picker, url: url)
             }
