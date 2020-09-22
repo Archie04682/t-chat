@@ -19,6 +19,14 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LrY-D4-E3a">
                                 <rect key="frame" x="67.5" y="45" width="240" height="240"/>
                                 <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6IR-59-qyB" customClass="TCProfileImageView" customModule="t_chat" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="240" height="240"/>
+                                        <color key="backgroundColor" red="0.89411764709999997" green="0.90980392160000001" blue="0.16862745100000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="240" id="Jgs-fF-pxn"/>
+                                            <constraint firstAttribute="width" constant="240" id="UgN-2w-DVU"/>
+                                        </constraints>
+                                    </view>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ST1-0C-ZME">
                                         <rect key="frame" x="210" y="222" width="30" height="32"/>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="16"/>
@@ -28,11 +36,12 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" red="0.89411764709999997" green="0.90980392160000001" blue="0.16862745100000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="ST1-0C-ZME" secondAttribute="trailing" id="3lM-ki-ZOl"/>
                                     <constraint firstAttribute="height" constant="240" id="FlM-r3-Zxl"/>
                                     <constraint firstAttribute="width" constant="240" id="KK7-tm-8ud"/>
+                                    <constraint firstItem="6IR-59-qyB" firstAttribute="centerY" secondItem="LrY-D4-E3a" secondAttribute="centerY" id="iOJ-P6-gv8"/>
+                                    <constraint firstItem="6IR-59-qyB" firstAttribute="centerX" secondItem="LrY-D4-E3a" secondAttribute="centerX" id="ryY-C2-ewa"/>
                                     <constraint firstAttribute="bottom" secondItem="ST1-0C-ZME" secondAttribute="bottom" constant="-14" id="yUt-4a-F9H"/>
                                 </constraints>
                             </view>
@@ -79,7 +88,7 @@ Moscow, Russia</string>
                     </view>
                     <connections>
                         <outlet property="editProfileImageButton" destination="ST1-0C-ZME" id="L69-dr-8YJ"/>
-                        <outlet property="profileImageContainer" destination="LrY-D4-E3a" id="Fo3-2D-rgD"/>
+                        <outlet property="profileImageView" destination="6IR-59-qyB" id="C55-Xv-8cW"/>
                         <outlet property="saveButton" destination="VyS-Li-itx" id="JUN-6Y-2b1"/>
                         <outlet property="usernameLabel" destination="33p-6B-lfV" id="3fe-Rp-37N"/>
                     </connections>

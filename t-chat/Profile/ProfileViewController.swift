@@ -12,15 +12,13 @@ import Photos
 class ProfileViewController: UIViewController {
     
     
-    @IBOutlet weak var profileImageContainer: UIView!
+    @IBOutlet weak var profileImageView: TCProfileImageView!
     @IBOutlet weak var editProfileImageButton: UIButton!
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var saveButton: UIButton!
-
+    
     
     private var profileImageURL: URL?
-    private var initialsLabel: UILabel?
-    private var profileImageView: UIImageView?
     private let imagePicker = ImagePicker()
     
     private let username = "Marina Dudarenko"
@@ -64,28 +62,22 @@ class ProfileViewController: UIViewController {
 extension ProfileViewController {
     
     func setupViews() {
-        profileImageContainer.layer.cornerRadius = profileImageContainer.frame.width / 2
-
         saveButton.layer.cornerRadius = 14
         saveButton.clipsToBounds = true
         
         usernameLabel.text = username
-        displayProfileImage()
+        updateProfileImage()
     }
     
-    func displayProfileImage() {
+    func updateProfileImage() {
         if profileImageURL == nil {
-            profileImageView?.removeFromSuperview()
-            profileImageView = nil
-            createInitialsPlaceholder()
+            setInitials()
         } else {
-            initialsLabel?.removeFromSuperview()
-            initialsLabel = nil
-            createProfileImage()
+            setProfileImage()
         }
     }
 
-    func createInitialsPlaceholder() {
+    func setInitials() {
         let initials = username.components(separatedBy: " ").map { word in
             if let firstLetter = word.first {
                 return String(firstLetter)
@@ -93,39 +85,22 @@ extension ProfileViewController {
 
             return ""
         }.joined()
-
-        let label = UILabel()
-
-        label.text = initials
-        label.font = UIFont.systemFont(ofSize: 120)
-        label.textAlignment = .center
-
-        profileImageContainer.addSubview(label)
-        label.centerIn(superview: profileImageContainer)
-        initialsLabel = label
+        
+        profileImageView.initials = initials
     }
     
-    func createProfileImage() {
+    func setProfileImage() {
         if let imageURL = profileImageURL {
             do {
                 if let image = try ImageManager.getImageFrom(url: imageURL) {
-                    let imageView = UIImageView(image: image)
-                    imageView.frame = CGRect(x: 0, y: 0, width: 240, height: 240)
-                    imageView.layer.cornerRadius = imageView.frame.width / 2
-                    imageView.contentMode = UIView.ContentMode.scaleAspectFill
-                    imageView.clipsToBounds = true
-
-                    profileImageContainer.addSubview(imageView)
-                    imageView.centerIn(superview: profileImageContainer)
-
-                    profileImageView = imageView
+                    profileImageView.image = image
                 }
                 
             } catch {
                 let ac = UIAlertController(title: "Ошибка", message: "Произошла ошибка при загрузке изображения.", preferredStyle: .alert)
                 ac.addAction(UIAlertAction(title: "Ok", style: .cancel))
                 present(ac, animated: true) {
-                    self.createInitialsPlaceholder()
+                    self.setInitials()
                 }
             }
         }
@@ -151,7 +126,7 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
         ac.addAction(UIAlertAction(title: "Удалить изображение", style: .destructive) {[weak self] _ in
             guard let self = self else { return }
             self.profileImageURL = nil
-            self.displayProfileImage()
+            self.setProfileImage()
         })
         ac.addAction(UIAlertAction(title: "Отменить", style: .cancel))
         present(ac, animated: true)
@@ -163,7 +138,7 @@ extension ProfileViewController: ImagePickerDelegate {
     
     func didSelectImage(url: URL?) {
         self.profileImageURL = url
-        self.displayProfileImage()
+        self.setProfileImage()
     }
     
 }

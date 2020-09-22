@@ -20,6 +20,7 @@
 		FC3CA90A2514B0DB00C7980E /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3CA9092514B0DB00C7980E /* ProfileViewController.swift */; };
 		FC82CC6E2519C9190041DFAE /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC82CC6D2519C9190041DFAE /* ImagePicker.swift */; };
 		FC82CC712519D61D0041DFAE /* TCAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC82CC702519D61D0041DFAE /* TCAlertController.swift */; };
+		FC82CC742519D9DE0041DFAE /* TCProfileImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC82CC732519D9DE0041DFAE /* TCProfileImageView.swift */; };
 		FC96CBF02518AC910036E085 /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC96CBEF2518AC910036E085 /* ImageManager.swift */; };
 /* End PBXBuildFile section */
 
@@ -39,6 +40,7 @@
 		FC3CA9092514B0DB00C7980E /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		FC82CC6D2519C9190041DFAE /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		FC82CC702519D61D0041DFAE /* TCAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCAlertController.swift; sourceTree = "<group>"; };
+		FC82CC732519D9DE0041DFAE /* TCProfileImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCProfileImageView.swift; sourceTree = "<group>"; };
 		FC96CBEF2518AC910036E085 /* ImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -72,7 +74,7 @@
 		FC0BA0D7250B7A68005AE946 /* t-chat */ = {
 			isa = PBXGroup;
 			children = (
-				FC82CC6F2519D5ED0041DFAE /* Controls */,
+				FC82CC6F2519D5ED0041DFAE /* Views */,
 				FC3CA9082514B0C400C7980E /* Profile */,
 				FC0BA0D8250B7A68005AE946 /* AppDelegate.swift */,
 				FC0BA0DC250B7A68005AE946 /* ViewController.swift */,
@@ -99,12 +101,13 @@
 			path = Profile;
 			sourceTree = "<group>";
 		};
-		FC82CC6F2519D5ED0041DFAE /* Controls */ = {
+		FC82CC6F2519D5ED0041DFAE /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				FC82CC702519D61D0041DFAE /* TCAlertController.swift */,
+				FC82CC732519D9DE0041DFAE /* TCProfileImageView.swift */,
 			);
-			path = Controls;
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -182,6 +185,7 @@
 				FC0BA0EF250B9675005AE946 /* ViewControllerState.swift in Sources */,
 				FC0BA0DD250B7A68005AE946 /* ViewController.swift in Sources */,
 				FC3CA90A2514B0DB00C7980E /* ProfileViewController.swift in Sources */,
+				FC82CC742519D9DE0041DFAE /* TCProfileImageView.swift in Sources */,
 				FC82CC6E2519C9190041DFAE /* ImagePicker.swift in Sources */,
 				FC96CBF02518AC910036E085 /* ImageManager.swift in Sources */,
 				FC0BA0F4250B9DEA005AE946 /* StateLoggable.swift in Sources */,
