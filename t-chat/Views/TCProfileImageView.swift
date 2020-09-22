@@ -21,6 +21,7 @@ class TCProfileImageView: UIView {
             label.text = initials
             label.font = UIFont.systemFont(ofSize: frame.width / 2)
             label.textAlignment = .center
+            label.setLetterSpacing(value: -28)
             addSubview(label)
             center(child: label)
             initialsLabel = label
@@ -37,7 +38,11 @@ class TCProfileImageView: UIView {
             imageView.contentMode = UIView.ContentMode.scaleAspectFill
             imageView.clipsToBounds = true
             addSubview(imageView)
+            
             center(child: imageView)
+            imageView.widthAnchor.constraint(equalTo: widthAnchor).isActive = true
+            imageView.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
+            
             photoImageView = imageView
         }
     }
@@ -60,8 +65,18 @@ class TCProfileImageView: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         view.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        view.widthAnchor.constraint(equalTo: widthAnchor).isActive = true
-        view.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
+    }
+    
+}
+
+extension UILabel {
+    
+    func setLetterSpacing(value: Double) {
+        if let text = text, !text.isEmpty {
+            let attributedString = NSMutableAttributedString(string: text)
+            attributedString.addAttribute(.kern, value: value, range: NSRange(location: 0, length: attributedString.length - 1))
+            self.attributedText = attributedString
+        }
     }
     
 }
