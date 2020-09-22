@@ -20,7 +20,7 @@ class ImageManager {
         var placeHolder: PHObjectPlaceholder? = nil
         PHPhotoLibrary.shared().performChanges({
             let creationRequest = PHAssetChangeRequest.creationRequestForAsset(from: image)
-            placeHolder = creationRequest.placeholderForCreatedAsset!
+            placeHolder = creationRequest.placeholderForCreatedAsset
         }, completionHandler: { success, error in
             guard success, let placeholder = placeHolder else {
                 completion(nil)
