@@ -34,7 +34,7 @@ class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(saveButton.frame)
+        print("\(#function):\t\t \(saveButton.frame)")
         setupViews()
         imagePicker.delegate = self
         imagePicker.viewController = self
@@ -43,13 +43,12 @@ class ProfileViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         /*
-        Значения Frame разные, потому что сначала вычисляются значения frame по констрейнтам. Это Update этап.
+         Значения отличаются, т.к. на этапе viewDidLoad() мы получаем значения frame по констрейнтам и размерам экрана в Storyboard и пока у нас нет размеров девайса, на котором мы запустили.
+         Контролы заресайзятся и расположатся в layoutSubviews и мы получим реальные значения на девайсе, где запустили приложение.
         
-        Далее, идет этап Layout, который отвечает за размеры и позицию View и его Subviews на экране.
-        
-        Если выставить девайс в Storyboard IPhone 11 Pro, то разницы между выводимыми сообщениями не будет. Как я понял, это потому, что высота и ширина экрана будет одинаковой у девайса в Storyboard и эмулятора.
+        Если выставить девайс в Storyboard IPhone 11 Pro, то разницы между выводимыми сообщениями не будет.
         */
-        print(saveButton.frame)
+        print("\(#function):\t \(saveButton.frame)")
     }
     
     @IBAction func editProfileImageButtonPressed(_ sender: Any) {
