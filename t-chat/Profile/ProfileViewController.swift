@@ -11,17 +11,15 @@ import Photos
 
 class ProfileViewController: UIViewController {
     
-    
     @IBOutlet weak var profileImageView: TCProfileImageView!
     @IBOutlet weak var editProfileImageButton: UIButton!
     @IBOutlet weak var usernameLabel: UILabel!
+    @IBOutlet weak var aboutLabel: UILabel!
     @IBOutlet weak var saveButton: UIButton!
     
-    
-    private var profileImageURL: URL?
+    private var userProfile = UserProfile(username: "Marina Dudarenko", about: "UX/UI designer, web-designer Moscow, Russia")
+
     private let imagePicker = ImagePicker()
-    
-    private let username = "Marina Dudarenko"
     
     required init?(coder: NSCoder) {
         /*
@@ -38,8 +36,8 @@ class ProfileViewController: UIViewController {
         super.viewDidLoad()
         print(saveButton.frame)
         setupViews()
-        self.imagePicker.delegate = self
-        self.imagePicker.viewController = self
+        imagePicker.delegate = self
+        imagePicker.viewController = self
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -47,7 +45,7 @@ class ProfileViewController: UIViewController {
         /*
         Значения Frame разные, потому что сначала вычисляются значения frame по констрейнтам. Это Update этап.
         
-        Далее, идет этап Layout, который отвечает за размеров и позиций View и его Subviews на экране.
+        Далее, идет этап Layout, который отвечает за размеры и позицию View и его Subviews на экране.
         
         Если выставить девайс в Storyboard IPhone 11 Pro, то разницы между выводимыми сообщениями не будет. Как я понял, это потому, что высота и ширина экрана будет одинаковой у девайса в Storyboard и эмулятора.
         */
@@ -65,12 +63,14 @@ extension ProfileViewController {
         saveButton.layer.cornerRadius = 14
         saveButton.clipsToBounds = true
         
-        usernameLabel.text = username
+        usernameLabel.text = userProfile.username
+        aboutLabel.text = userProfile.about
+
         updateProfileImage()
     }
     
     func updateProfileImage() {
-        if profileImageURL == nil {
+        if userProfile.photoURL == nil {
             setInitials()
         } else {
             setProfileImage()
@@ -78,19 +78,11 @@ extension ProfileViewController {
     }
 
     func setInitials() {
-        let initials = username.components(separatedBy: " ").map { word in
-            if let firstLetter = word.first {
-                return String(firstLetter)
-            }
-
-            return ""
-        }.joined()
-        
-        profileImageView.initials = initials
+        profileImageView.initials = userProfile.initials
     }
     
     func setProfileImage() {
-        if let imageURL = profileImageURL {
+        if let imageURL = userProfile.photoURL {
             do {
                 if let image = try ImageManager.getImageFrom(url: imageURL) {
                     profileImageView.image = image
@@ -106,10 +98,6 @@ extension ProfileViewController {
         }
     }
     
-}
-
-extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    
     func editProfilePhoto() {
         let ac = TCAlertController(title: "Изменить фото", message: nil, preferredStyle: .actionSheet)
 
@@ -123,11 +111,13 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
             })
         }
         
-        ac.addAction(UIAlertAction(title: "Удалить изображение", style: .destructive) {[weak self] _ in
-            guard let self = self else { return }
-            self.profileImageURL = nil
-            self.setProfileImage()
-        })
+        if userProfile.photoURL != nil {
+            ac.addAction(UIAlertAction(title: "Удалить изображение", style: .destructive) { _ in
+                self.userProfile.photoURL = nil
+                self.updateProfileImage()
+            })
+        }
+        
         ac.addAction(UIAlertAction(title: "Отменить", style: .cancel))
         present(ac, animated: true)
     }
@@ -137,18 +127,8 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
 extension ProfileViewController: ImagePickerDelegate {
     
     func didSelectImage(url: URL?) {
-        self.profileImageURL = url
-        self.setProfileImage()
+        self.userProfile.photoURL = url
+        self.updateProfileImage()
     }
     
-}
-
-extension UIView {
-    func centerIn(superview: UIView) {
-        self.translatesAutoresizingMaskIntoConstraints = false
-        self.centerXAnchor.constraint(equalTo: superview.centerXAnchor).isActive = true
-        self.centerYAnchor.constraint(equalTo: superview.centerYAnchor).isActive = true
-        self.widthAnchor.constraint(equalTo: superview.widthAnchor).isActive = true
-        self.heightAnchor.constraint(equalTo: superview.heightAnchor).isActive = true
-    }
 }

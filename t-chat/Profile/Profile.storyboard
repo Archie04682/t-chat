@@ -54,13 +54,11 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0p5-Wl-mLB">
-                                <rect key="frame" x="67.5" y="378" width="240" height="38.5"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0p5-Wl-mLB">
+                                <rect key="frame" x="67.5" y="378" width="240" height="19.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="240" id="gef-9v-WuR"/>
                                 </constraints>
-                                <string key="text">UX/UI designer, web-designer
-Moscow, Russia</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -87,6 +85,7 @@ Moscow, Russia</string>
                         <viewLayoutGuide key="safeArea" id="fRE-1f-H3V"/>
                     </view>
                     <connections>
+                        <outlet property="aboutLabel" destination="0p5-Wl-mLB" id="h1c-UM-AYf"/>
                         <outlet property="editProfileImageButton" destination="ST1-0C-ZME" id="L69-dr-8YJ"/>
                         <outlet property="profileImageView" destination="6IR-59-qyB" id="C55-Xv-8cW"/>
                         <outlet property="saveButton" destination="VyS-Li-itx" id="JUN-6Y-2b1"/>
