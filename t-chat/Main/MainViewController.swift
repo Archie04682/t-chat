@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: StateLoggingViewController {
+class MainViewController: StateLoggingViewController {
     
 }
 

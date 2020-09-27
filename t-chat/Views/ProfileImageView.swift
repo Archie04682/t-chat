@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TCProfileImageView: UIView {
+class ProfileImageView: UIView {
     
     private var initialsLabel: UILabel?
     private var photoImageView: UIImageView?

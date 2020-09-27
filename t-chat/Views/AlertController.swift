@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TCAlertController: UIAlertController {
+class AlertController: UIAlertController {
 
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -11,7 +11,7 @@ import Photos
 
 class ProfileViewController: UIViewController {
     
-    @IBOutlet weak var profileImageView: TCProfileImageView!
+    @IBOutlet weak var profileImageView: ProfileImageView!
     @IBOutlet weak var editProfileImageButton: UIButton!
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var aboutLabel: UILabel!
@@ -98,7 +98,7 @@ extension ProfileViewController {
     }
     
     func editProfilePhoto() {
-        let ac = TCAlertController(title: "Изменить фото", message: nil, preferredStyle: .actionSheet)
+        let ac = AlertController(title: "Изменить фото", message: nil, preferredStyle: .actionSheet)
 
         ac.addAction(UIAlertAction(title: "Выбрать из галлереи", style: .default) { _ in
             self.imagePicker.pickImage(with: .photoLibrary)

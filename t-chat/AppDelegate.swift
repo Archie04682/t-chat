@@ -17,6 +17,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, StateLoggable {
     
     func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         logTransition(nextState: .inactive, in: #function)
+        let window = UIWindow(frame: UIScreen.main.bounds)
+        let navigationController = UINavigationController()
+        let conversationsListViewController = ConversationsListViewController()
+        
+        navigationController.viewControllers = [conversationsListViewController]
+        navigationController.navigationBar.prefersLargeTitles = true
+        window.rootViewController = navigationController
+        window.makeKeyAndVisible()
+        
+        self.window = window
+        
         return true
     }
 
