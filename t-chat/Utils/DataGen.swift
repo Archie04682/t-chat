@@ -46,6 +46,21 @@ class DataGen {
         return models
     }
     
+    func generateMessages(count: Int) -> [MessageCellModel] {
+        var models: [MessageCellModel] = []
+        for _ in 0..<count {
+            var message = messages[Int.random(in: 0..<messages.count)]
+            
+            while message.isEmpty {
+                message = messages[Int.random(in: 0..<messages.count)]
+            }
+            
+            models.append(MessageCellModel(text: message, isIncomming: Bool.random()))
+        }
+        
+        return models
+    }
+    
     private func generateName() -> String {
         return "\(firstNames[Int.random(in: 0..<firstNames.count)]) \(lastNames[Int.random(in: 0..<lastNames.count)])"
     }

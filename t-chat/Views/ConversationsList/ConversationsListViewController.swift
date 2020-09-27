@@ -51,6 +51,15 @@ class ConversationsListViewController: UIViewController {
         conversationsTable.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
         conversationsTable.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         conversationsTable.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        
+        let profileImageView = ProfileImageView(frame: CGRect.init(origin: CGPoint.zero, size: CGSize(width: 32, height: 32)))
+        profileImageView.initials = "MD"
+        profileImageView.backgroundColor = UIColor(red: 0.89, green: 0.91, blue: 0.17, alpha: 1.00)
+        profileImageView.widthAnchor.constraint(equalToConstant: 32).isActive = true
+        profileImageView.heightAnchor.constraint(equalToConstant: 32).isActive = true
+        
+        let usernavigationItem = UIBarButtonItem(customView: profileImageView)
+        navigationItem.rightBarButtonItem = usernavigationItem
     }
 
 }
@@ -74,6 +83,11 @@ extension ConversationsListViewController: UITableViewDataSource {
         
         cell.configure(with: sampleData[indexPath.section].1[indexPath.row])
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let vc = ConversationViewController(username: sampleData[indexPath.section].1[indexPath.row].name, messages: DataGen().generateMessages(count: !sampleData[indexPath.section].1[indexPath.row].message.isEmpty ? Int.random(in: 10..<15) : 0))
+        navigationController?.pushViewController(vc, animated: true)
     }
 
 }

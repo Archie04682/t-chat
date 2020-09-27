@@ -22,7 +22,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, StateLoggable {
         let conversationsListViewController = ConversationsListViewController()
         
         navigationController.viewControllers = [conversationsListViewController]
-        navigationController.navigationBar.prefersLargeTitles = true
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
         
