@@ -10,14 +10,14 @@ import UIKit
 
 class ConversationTableViewCell: UITableViewCell {
     
-    private var usernameLabel: UILabel = {
+    private lazy var usernameLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
         
         return label
     }()
     
-    private var lastMessageLabel: UILabel = {
+    private lazy var lastMessageLabel: UILabel = {
         let label = UILabel()
         label.textColor = UIColor(red: 0.24, green: 0.24, blue: 0.26, alpha: 0.60)
         label.numberOfLines = 2
@@ -25,7 +25,7 @@ class ConversationTableViewCell: UITableViewCell {
         return label
     }()
     
-    private var lastMessageLabelDate: UILabel = {
+    private lazy var lastMessageLabelDate: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 15, weight: .regular)
         label.textColor = UIColor(red: 0.24, green: 0.24, blue: 0.26, alpha: 0.60)
@@ -33,7 +33,7 @@ class ConversationTableViewCell: UITableViewCell {
         return label
     }()
     
-    let parentStackView: UIStackView = {
+    private lazy var parentStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -43,7 +43,7 @@ class ConversationTableViewCell: UITableViewCell {
         return stackView
     }()
     
-    let headerStackView: UIStackView = {
+    private lazy var headerStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.distribution = .fill

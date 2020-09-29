@@ -13,6 +13,7 @@ class ConversationMessageTableViewCell: UITableViewCell {
     private lazy var container: UIView = {
         var view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
+        
         return view
     }()
     

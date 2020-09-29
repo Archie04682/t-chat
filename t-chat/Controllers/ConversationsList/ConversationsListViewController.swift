@@ -11,6 +11,7 @@ import UIKit
 class ConversationsListViewController: UIViewController {
     
     private var sampleData: [(String, [ConversationCellModel])]
+    private var myProfile = UserProfile(username: "Marina Dudarenko", about: "UX/UI designer, web-designer Moscow, Russia")
     
     private lazy var conversationsTable: UITableView = {
         let tableView = UITableView.init(frame: .zero, style: .grouped)
@@ -38,8 +39,10 @@ class ConversationsListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        navigationController?.navigationItem.backBarButtonItem?.title = ""
         title = "Tinkoff Chat"
         setupViews()
+        navigationController?.delegate = self
         conversationsTable.register(ConversationTableViewCell.self, forCellReuseIdentifier: String(describing: type(of: ConversationTableViewCell.self)))
     }
     
@@ -52,22 +55,46 @@ class ConversationsListViewController: UIViewController {
         conversationsTable.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         conversationsTable.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         
-        let profileImageView = ProfileImageView(frame: CGRect.init(origin: CGPoint.zero, size: CGSize(width: 32, height: 32)))
+        let profileImageView = ProfileImageView(frame: CGRect.init(origin: CGPoint.zero, size: CGSize(width: 24, height: 24)))
         profileImageView.initials = "MD"
         profileImageView.backgroundColor = UIColor(red: 0.89, green: 0.91, blue: 0.17, alpha: 1.00)
-        profileImageView.widthAnchor.constraint(equalToConstant: 32).isActive = true
-        profileImageView.heightAnchor.constraint(equalToConstant: 32).isActive = true
+        profileImageView.widthAnchor.constraint(equalToConstant: 24).isActive = true
+        profileImageView.heightAnchor.constraint(equalToConstant: 24).isActive = true
         
         let usernavigationItem = UIBarButtonItem(customView: profileImageView)
         navigationItem.rightBarButtonItem = usernavigationItem
+        
+        let profileTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.goToProfile))
+        profileImageView.addGestureRecognizer(profileTapGestureRecognizer)
+    }
+    
+    @objc func goToProfile() {
+        let vc = ProfileViewController(user: myProfile)
+
+        vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(closeProfilePage))
+        vc.title = "My profile"
+        let nvc = UINavigationController(rootViewController: vc)
+        
+        present(nvc, animated: true, completion: nil)
+    }
+    
+    @objc func closeProfilePage() {
+        self.dismiss(animated: true, completion: nil)
     }
 
+}
+
+extension ConversationsListViewController: UINavigationControllerDelegate {
+    func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
+        let item = UIBarButtonItem(title: " ", style: .plain, target: nil, action: nil)
+        viewController.navigationItem.backBarButtonItem = item
+    }
 }
 
 extension ConversationsListViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return sampleData.count
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -82,11 +109,13 @@ extension ConversationsListViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: type(of: ConversationTableViewCell.self))) as? ConversationTableViewCell else { return UITableViewCell(style: .default, reuseIdentifier: "default") }
         
         cell.configure(with: sampleData[indexPath.section].1[indexPath.row])
+        cell.accessoryType = .disclosureIndicator
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vc = ConversationViewController(username: sampleData[indexPath.section].1[indexPath.row].name, messages: DataGen().generateMessages(count: !sampleData[indexPath.section].1[indexPath.row].message.isEmpty ? Int.random(in: 10..<15) : 0))
+        let firstMessage = sampleData[indexPath.section].1[indexPath.row].message
+        let vc = ConversationViewController(username: sampleData[indexPath.section].1[indexPath.row].name, messages: firstMessage.isEmpty ? [] : DataGen().generateMessages(firstMessage: firstMessage))
         navigationController?.pushViewController(vc, animated: true)
     }
 

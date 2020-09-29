@@ -46,9 +46,9 @@ class DataGen {
         return models
     }
     
-    func generateMessages(count: Int) -> [MessageCellModel] {
-        var models: [MessageCellModel] = []
-        for _ in 0..<count {
+    func generateMessages(firstMessage: String) -> [MessageCellModel] {
+        var models: [MessageCellModel] = [MessageCellModel(text: firstMessage, isIncomming: true)]
+        for _ in 0..<Int.random(in: 3..<10) {
             var message = messages[Int.random(in: 0..<messages.count)]
             
             while message.isEmpty {

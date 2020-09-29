@@ -50,7 +50,6 @@ class ConversationViewController: UIViewController {
     
     private func setupViews() {
         title = username
-        
         if conversation.isEmpty {
             view.addSubview(noMessagesLabel)
             noMessagesLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -66,6 +65,17 @@ class ConversationViewController: UIViewController {
             conversationTable.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
             conversationTable.separatorStyle = .none
         }
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if !conversation.isEmpty {
+            // скроллим чат к последнему сообщению в чате
+            DispatchQueue.main.async {
+                self.conversationTable.scrollToRow(at: IndexPath(row: self.conversation.count - 1, section: 0), at: .bottom, animated: false)
+            }
+        }
     }
 
 }
@@ -80,7 +90,6 @@ extension ConversationViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: type(of: ConversationMessageTableViewCell.self))) as? ConversationMessageTableViewCell else { return UITableViewCell(style: .default, reuseIdentifier: "default") }
         
         cell.configure(with: conversation[indexPath.row])
-        
         return cell
     }
 
