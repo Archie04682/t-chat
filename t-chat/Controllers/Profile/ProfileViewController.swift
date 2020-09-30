@@ -64,6 +64,20 @@ class ProfileViewController: UIViewController {
         return button
     }()
     
+    private lazy var scrollView: UIScrollView = {
+        let view = UIScrollView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
+    private lazy var containerView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
     private let imagePicker = ImagePicker()
     private var userProfile: UserProfile
     
@@ -101,37 +115,61 @@ class ProfileViewController: UIViewController {
         profileImageContainer.addSubview(profileImageView)
         profileImageContainer.addSubview(editButton)
         
-        view.addSubview(profileImageContainer)
-        view.addSubview(usernameLabel)
-        view.addSubview(aboutUserLabel)
-        view.addSubview(saveButton)
+        containerView.addSubview(profileImageContainer)
+        containerView.addSubview(usernameLabel)
+        containerView.addSubview(saveButton)
+        containerView.addSubview(aboutUserLabel)
         
-        profileImageContainer.widthAnchor.constraint(equalToConstant: 240).isActive = true
-        profileImageContainer.heightAnchor.constraint(equalToConstant: 240).isActive = true
-        profileImageContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 45).isActive = true
-        profileImageContainer.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        scrollView.addSubview(containerView)
+        
+        view.addSubview(scrollView)
         
         profileImageView.widthAnchor.constraint(equalTo: profileImageContainer.widthAnchor).isActive = true
         profileImageView.heightAnchor.constraint(equalTo: profileImageContainer.heightAnchor).isActive = true
         profileImageView.centerXAnchor.constraint(equalTo: profileImageContainer.centerXAnchor).isActive = true
         profileImageView.centerYAnchor.constraint(equalTo: profileImageContainer.centerYAnchor).isActive = true
-        
+
         editButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
         editButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        editButton.trailingAnchor.constraint(equalTo: profileImageContainer.trailingAnchor, constant: 1.0).isActive = true
+        editButton.trailingAnchor.constraint(equalTo: profileImageContainer.trailingAnchor).isActive = true
         editButton.bottomAnchor.constraint(equalTo: profileImageContainer.bottomAnchor, constant: 14).isActive = true
         
-        usernameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        profileImageContainer.widthAnchor.constraint(equalToConstant: 240).isActive = true
+        profileImageContainer.heightAnchor.constraint(equalToConstant: 240).isActive = true
+        profileImageContainer.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 45).isActive = true
+        profileImageContainer.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
+        
+        usernameLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
         usernameLabel.topAnchor.constraint(equalTo: profileImageContainer.bottomAnchor, constant: 32).isActive = true
         usernameLabel.widthAnchor.constraint(equalTo: profileImageContainer.widthAnchor).isActive = true
         
-        aboutUserLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        aboutUserLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
         aboutUserLabel.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 32).isActive = true
         aboutUserLabel.widthAnchor.constraint(equalTo: profileImageContainer.widthAnchor).isActive = true
+        aboutUserLabel.bottomAnchor.constraint(lessThanOrEqualTo: saveButton.topAnchor, constant: -32).isActive = true
         
-        saveButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -56).isActive = true
-        saveButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 56).isActive = true
-        saveButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -30).isActive = true
+        saveButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -56).isActive = true
+        saveButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 56).isActive = true
+        saveButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -30).isActive = true
+        saveButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+    
+        containerView.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
+        containerView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
+        containerView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
+        containerView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
+        
+        scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
+        scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
+        
+        let height = containerView.heightAnchor.constraint(equalTo: scrollView.heightAnchor)
+        height.priority = UILayoutPriority.defaultLow
+        height.isActive = true
+
+        let width = containerView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
+        width.priority = UILayoutPriority(1000)
+        width.isActive = true
     }
 
 }

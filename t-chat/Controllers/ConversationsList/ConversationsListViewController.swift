@@ -11,7 +11,7 @@ import UIKit
 class ConversationsListViewController: UIViewController {
     
     private var sampleData: [(String, [ConversationCellModel])]
-    private var myProfile = UserProfile(username: "Marina Dudarenko", about: "UX/UI designer, web-designer Moscow, Russia")
+    private var myProfile = UserProfile(username: "Marina Dudarenko", about: "UX/UI designer, web-designer Moscow, Russia.")
     
     private lazy var conversationsTable: UITableView = {
         let tableView = UITableView.init(frame: .zero, style: .grouped)
@@ -55,11 +55,11 @@ class ConversationsListViewController: UIViewController {
         conversationsTable.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         conversationsTable.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         
-        let profileImageView = ProfileImageView(frame: CGRect.init(origin: CGPoint.zero, size: CGSize(width: 24, height: 24)))
+        let profileImageView = ProfileImageView(frame: CGRect.init(origin: CGPoint.zero, size: CGSize(width: 32, height: 32)))
         profileImageView.initials = "MD"
         profileImageView.backgroundColor = UIColor(red: 0.89, green: 0.91, blue: 0.17, alpha: 1.00)
-        profileImageView.widthAnchor.constraint(equalToConstant: 24).isActive = true
-        profileImageView.heightAnchor.constraint(equalToConstant: 24).isActive = true
+        profileImageView.widthAnchor.constraint(equalToConstant: 32).isActive = true
+        profileImageView.heightAnchor.constraint(equalToConstant: 32).isActive = true
         
         let usernavigationItem = UIBarButtonItem(customView: profileImageView)
         navigationItem.rightBarButtonItem = usernavigationItem
