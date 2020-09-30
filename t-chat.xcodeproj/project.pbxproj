@@ -16,6 +16,14 @@
 		FC0BA0EF250B9675005AE946 /* ViewControllerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0BA0EE250B9675005AE946 /* ViewControllerState.swift */; };
 		FC0BA0F4250B9DEA005AE946 /* StateLoggable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0BA0F3250B9DEA005AE946 /* StateLoggable.swift */; };
 		FC0BA0F6250BAB6E005AE946 /* DemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0BA0F5250BAB6E005AE946 /* DemoViewController.swift */; };
+		FC32038F2519E394000C2DD9 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC32038E2519E394000C2DD9 /* UserProfile.swift */; };
+		FC3203912519ED26000C2DD9 /* StateLoggingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3203902519ED26000C2DD9 /* StateLoggingViewController.swift */; };
+		FC3CA9062514B08F00C7980E /* Profile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FC3CA9052514B08F00C7980E /* Profile.storyboard */; };
+		FC3CA90A2514B0DB00C7980E /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3CA9092514B0DB00C7980E /* ProfileViewController.swift */; };
+		FC82CC6E2519C9190041DFAE /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC82CC6D2519C9190041DFAE /* ImagePicker.swift */; };
+		FC82CC712519D61D0041DFAE /* TCAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC82CC702519D61D0041DFAE /* TCAlertController.swift */; };
+		FC82CC742519D9DE0041DFAE /* TCProfileImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC82CC732519D9DE0041DFAE /* TCProfileImageView.swift */; };
+		FC96CBF02518AC910036E085 /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC96CBEF2518AC910036E085 /* ImageManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +38,14 @@
 		FC0BA0EE250B9675005AE946 /* ViewControllerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerState.swift; sourceTree = "<group>"; };
 		FC0BA0F3250B9DEA005AE946 /* StateLoggable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateLoggable.swift; sourceTree = "<group>"; };
 		FC0BA0F5250BAB6E005AE946 /* DemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoViewController.swift; sourceTree = "<group>"; };
+		FC32038E2519E394000C2DD9 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
+		FC3203902519ED26000C2DD9 /* StateLoggingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateLoggingViewController.swift; sourceTree = "<group>"; };
+		FC3CA9052514B08F00C7980E /* Profile.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Profile.storyboard; sourceTree = "<group>"; };
+		FC3CA9092514B0DB00C7980E /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		FC82CC6D2519C9190041DFAE /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		FC82CC702519D61D0041DFAE /* TCAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCAlertController.swift; sourceTree = "<group>"; };
+		FC82CC732519D9DE0041DFAE /* TCProfileImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCProfileImageView.swift; sourceTree = "<group>"; };
+		FC96CBEF2518AC910036E085 /* ImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,18 +78,50 @@
 		FC0BA0D7250B7A68005AE946 /* t-chat */ = {
 			isa = PBXGroup;
 			children = (
+				FC32038D2519E37E000C2DD9 /* Models */,
+				FC82CC6F2519D5ED0041DFAE /* Views */,
+				FC3CA9082514B0C400C7980E /* Profile */,
 				FC0BA0D8250B7A68005AE946 /* AppDelegate.swift */,
 				FC0BA0DC250B7A68005AE946 /* ViewController.swift */,
-				FC0BA0DE250B7A68005AE946 /* Main.storyboard */,
 				FC0BA0E1250B7A69005AE946 /* Assets.xcassets */,
 				FC0BA0E3250B7A69005AE946 /* LaunchScreen.storyboard */,
 				FC0BA0E6250B7A69005AE946 /* Info.plist */,
-				FC0BA0EC250B8911005AE946 /* AppState.swift */,
-				FC0BA0EE250B9675005AE946 /* ViewControllerState.swift */,
 				FC0BA0F3250B9DEA005AE946 /* StateLoggable.swift */,
 				FC0BA0F5250BAB6E005AE946 /* DemoViewController.swift */,
+				FC0BA0DE250B7A68005AE946 /* Main.storyboard */,
+				FC96CBEF2518AC910036E085 /* ImageManager.swift */,
+				FC82CC6D2519C9190041DFAE /* ImagePicker.swift */,
+				FC3203902519ED26000C2DD9 /* StateLoggingViewController.swift */,
 			);
 			path = "t-chat";
+			sourceTree = "<group>";
+		};
+		FC32038D2519E37E000C2DD9 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				FC0BA0EC250B8911005AE946 /* AppState.swift */,
+				FC0BA0EE250B9675005AE946 /* ViewControllerState.swift */,
+				FC32038E2519E394000C2DD9 /* UserProfile.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		FC3CA9082514B0C400C7980E /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				FC3CA9052514B08F00C7980E /* Profile.storyboard */,
+				FC3CA9092514B0DB00C7980E /* ProfileViewController.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		FC82CC6F2519D5ED0041DFAE /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				FC82CC702519D61D0041DFAE /* TCAlertController.swift */,
+				FC82CC732519D9DE0041DFAE /* TCProfileImageView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -135,6 +183,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FC0BA0E5250B7A69005AE946 /* LaunchScreen.storyboard in Resources */,
+				FC3CA9062514B08F00C7980E /* Profile.storyboard in Resources */,
 				FC0BA0E2250B7A69005AE946 /* Assets.xcassets in Resources */,
 				FC0BA0E0250B7A68005AE946 /* Main.storyboard in Resources */,
 			);
@@ -147,12 +196,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FC3203912519ED26000C2DD9 /* StateLoggingViewController.swift in Sources */,
 				FC0BA0EF250B9675005AE946 /* ViewControllerState.swift in Sources */,
 				FC0BA0DD250B7A68005AE946 /* ViewController.swift in Sources */,
+				FC3CA90A2514B0DB00C7980E /* ProfileViewController.swift in Sources */,
+				FC82CC742519D9DE0041DFAE /* TCProfileImageView.swift in Sources */,
+				FC82CC6E2519C9190041DFAE /* ImagePicker.swift in Sources */,
+				FC96CBF02518AC910036E085 /* ImageManager.swift in Sources */,
 				FC0BA0F4250B9DEA005AE946 /* StateLoggable.swift in Sources */,
 				FC0BA0F6250BAB6E005AE946 /* DemoViewController.swift in Sources */,
+				FC32038F2519E394000C2DD9 /* UserProfile.swift in Sources */,
 				FC0BA0ED250B8911005AE946 /* AppState.swift in Sources */,
 				FC0BA0D9250B7A68005AE946 /* AppDelegate.swift in Sources */,
+				FC82CC712519D61D0041DFAE /* TCAlertController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

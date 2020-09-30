@@ -13,7 +13,7 @@ protocol StateLoggable: AnyObject {
 }
 
 extension StateLoggable {
-    func processState(nextState: ItemState, in function: String) {
+    func logTransition(nextState: ItemState, in function: String) {
         if ProcessInfo.processInfo.environment["state_logging_level"] == "verbose" {
             print("\(String(describing: type(of: self))) \(nextState == currentState ? "still in \(currentState)" : "moved from \(currentState) to \(nextState)") : \(function)")
             
