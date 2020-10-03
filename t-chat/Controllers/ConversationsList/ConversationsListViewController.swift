@@ -66,6 +66,9 @@ class ConversationsListViewController: UIViewController {
         
         let profileTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.goToProfile))
         profileImageView.addGestureRecognizer(profileTapGestureRecognizer)
+        
+        let settingsNavigationItem = UIBarButtonItem(image: UIImage(named: "settings_light"), style: .plain, target: self, action: #selector(openSettings))
+        navigationItem.leftBarButtonItem = settingsNavigationItem
     }
     
     @objc func goToProfile() {
@@ -76,6 +79,10 @@ class ConversationsListViewController: UIViewController {
         let nvc = UINavigationController(rootViewController: vc)
         
         present(nvc, animated: true, completion: nil)
+    }
+    
+    @objc func openSettings() {
+        navigationController?.pushViewController(ThemesViewController(), animated: true)
     }
     
     @objc func closeProfilePage() {

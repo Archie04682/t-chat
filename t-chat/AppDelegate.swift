@@ -20,7 +20,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, StateLoggable {
         let window = UIWindow(frame: UIScreen.main.bounds)
         let navigationController = UINavigationController()
         let conversationsListViewController = ConversationsListViewController()
-        
         navigationController.viewControllers = [conversationsListViewController]
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
