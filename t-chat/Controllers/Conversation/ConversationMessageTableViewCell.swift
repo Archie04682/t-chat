@@ -24,8 +24,8 @@ class ConversationMessageTableViewCell: UITableViewCell {
         
         contentView.addSubview(messageView)
 
-        messageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10.0).isActive = true
-        messageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10.0).isActive = true
+        messageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5.0).isActive = true
+        messageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5.0).isActive = true
         messageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
         messageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
     }

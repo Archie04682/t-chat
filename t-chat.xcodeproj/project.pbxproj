@@ -26,6 +26,7 @@
 		FC94E5EF25286B1C000F09BE /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC94E5EE25286B1C000F09BE /* Theme.swift */; };
 		FC94E5F525287DB0000F09BE /* ThemeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC94E5F425287DB0000F09BE /* ThemeView.swift */; };
 		FC94E5F72528808D000F09BE /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC94E5F62528808D000F09BE /* MessageView.swift */; };
+		FC94E5FB2528B8B9000F09BE /* ThemePickerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC94E5FA2528B8B9000F09BE /* ThemePickerDelegate.swift */; };
 		FC96CBF02518AC910036E085 /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC96CBEF2518AC910036E085 /* ImageManager.swift */; };
 		FCAC8A8C251E60960085E686 /* ConfigurableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCAC8A8B251E60960085E686 /* ConfigurableView.swift */; };
 		FCEE4B3D251D151A00911B5C /* ConversationsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCEE4B3C251D151A00911B5C /* ConversationsListViewController.swift */; };
@@ -55,6 +56,7 @@
 		FC94E5EE25286B1C000F09BE /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		FC94E5F425287DB0000F09BE /* ThemeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeView.swift; sourceTree = "<group>"; };
 		FC94E5F62528808D000F09BE /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
+		FC94E5FA2528B8B9000F09BE /* ThemePickerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemePickerDelegate.swift; sourceTree = "<group>"; };
 		FC96CBEF2518AC910036E085 /* ImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageManager.swift; sourceTree = "<group>"; };
 		FCAC8A8B251E60960085E686 /* ConfigurableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurableView.swift; sourceTree = "<group>"; };
 		FCEE4B3C251D151A00911B5C /* ConversationsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsListViewController.swift; sourceTree = "<group>"; };
@@ -142,6 +144,7 @@
 				FC82CC6D2519C9190041DFAE /* ImagePicker.swift */,
 				FC3203902519ED26000C2DD9 /* StateLoggingViewController.swift */,
 				FC4F20C0251FB70800F0A8AB /* DataGen.swift */,
+				FC94E5FA2528B8B9000F09BE /* ThemePickerDelegate.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -261,6 +264,7 @@
 				FC4C599625208654008F72C2 /* ConversationViewController.swift in Sources */,
 				FC4F20C1251FB70800F0A8AB /* DataGen.swift in Sources */,
 				FC82CC742519D9DE0041DFAE /* ProfileImageView.swift in Sources */,
+				FC94E5FB2528B8B9000F09BE /* ThemePickerDelegate.swift in Sources */,
 				FC94E5F72528808D000F09BE /* MessageView.swift in Sources */,
 				FC5370362520B58700653A19 /* ConversationMessageTableViewCell.swift in Sources */,
 				FC4C59942520858A008F72C2 /* MessageCellModel.swift in Sources */,

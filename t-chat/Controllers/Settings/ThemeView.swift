@@ -74,8 +74,8 @@ class ThemeView: UIView {
 
         dialogSampleView.topAnchor.constraint(equalTo: selectionButton.topAnchor, constant: 5).isActive = true
         dialogSampleView.bottomAnchor.constraint(equalTo: selectionButton.bottomAnchor, constant: -5).isActive = true
-        dialogSampleView.leadingAnchor.constraint(equalTo: selectionButton.leadingAnchor).isActive = true
-        dialogSampleView.trailingAnchor.constraint(equalTo: selectionButton.trailingAnchor).isActive = true
+        dialogSampleView.leadingAnchor.constraint(equalTo: selectionButton.leadingAnchor, constant: 5).isActive = true
+        dialogSampleView.trailingAnchor.constraint(equalTo: selectionButton.trailingAnchor, constant: -5).isActive = true
         
         self.addSubview(selectionButton)
         self.addSubview(themeNameLabel)
@@ -94,11 +94,11 @@ extension ThemeView: ConfigurableView {
     func configure(with model: Theme) {
         themeNameLabel.text = model.themeName
         incommingMessageView.setBackgroundColor(model.incomingMessageBackgroundColor)
-        incommingMessageView.setMessageColor(model.textColor)
-        selectionButton.backgroundColor = model.backgroundColor
+        incommingMessageView.setMessageColor(model.incommingMessageTextColor)
+        selectionButton.backgroundColor = model.conversationBackgroundColor
         
         outcommingMessageView.setBackgroundColor(model.outcommingMessageBackgroundColor)
-        outcommingMessageView.setMessageColor(model.textColor)
-        selectionButton.backgroundColor = model.backgroundColor
+        outcommingMessageView.setMessageColor(model.outcommingMessageTextColor)
+        selectionButton.backgroundColor = model.conversationBackgroundColor
     }
 }

@@ -33,9 +33,17 @@ enum Theme {
         }
     }
     
+    var conversationBackgroundColor: UIColor {
+        switch self {
+        case .classic: return UIColor(red: 0xD6 / 0xFF, green: 0xE2 / 0xFF, blue: 0xEE / 0xFF, alpha: 1.0)
+        case .day: return .white
+        case .night: return .black
+        }
+    }
+    
     var incomingMessageBackgroundColor: UIColor {
         switch self {
-        case .classic: return UIColor(red: 0xDF / 0xFF, green: 0xDF / 0xFF, blue: 0xDF / 0xFF, alpha: 1.0)
+        case .classic: return .white
         case .day: return UIColor(red: 0xEA / 0xFF, green: 0xEB / 0xFF, blue: 0xED / 0xFF, alpha: 1.0)
         case .night: return UIColor(red: 0x2E / 0xFF, green: 0x2E / 0xFF, blue: 0x2E / 0xFF, alpha: 1.0)
         }
@@ -49,10 +57,17 @@ enum Theme {
         }
     }
     
-    var textColor: UIColor {
+    var incommingMessageTextColor: UIColor {
         switch self {
         case .classic, .day: return .black
         case .night: return .white
+        }
+    }
+    
+    var outcommingMessageTextColor: UIColor {
+        switch self {
+        case .classic: return .black
+        case .night, .day: return .white
         }
     }
     
