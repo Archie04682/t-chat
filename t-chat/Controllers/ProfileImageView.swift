@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TCProfileImageView: UIView {
+class ProfileImageView: UIView {
     
     private var initialsLabel: UILabel?
     private var photoImageView: UIImageView?
@@ -21,7 +21,7 @@ class TCProfileImageView: UIView {
             label.text = initials
             label.font = UIFont.systemFont(ofSize: frame.width / 2)
             label.textAlignment = .center
-            label.setLetterSpacing(value: -28)
+//            label.setLetterSpacing(value: -28)
             addSubview(label)
             center(child: label)
             initialsLabel = label
