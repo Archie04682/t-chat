@@ -17,6 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, StateLoggable {
     
     func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         logTransition(nextState: .inactive, in: #function)
+        ThemeManager.shared.apply(theme: ThemeManager.shared.currentTheme)
         let window = UIWindow(frame: UIScreen.main.bounds)
         let navigationController = UINavigationController()
         let conversationsListViewController = ConversationsListViewController()

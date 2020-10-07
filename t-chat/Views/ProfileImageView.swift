@@ -21,6 +21,7 @@ class ProfileImageView: UIView {
             label.text = initials
             label.font = UIFont.systemFont(ofSize: frame.width / 2)
             label.textAlignment = .center
+            label.textColor = .black
 //            label.setLetterSpacing(value: -28)
             addSubview(label)
             center(child: label)

@@ -29,6 +29,8 @@
 		FC94E5FB2528B8B9000F09BE /* ThemePickerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC94E5FA2528B8B9000F09BE /* ThemePickerDelegate.swift */; };
 		FC96CBF02518AC910036E085 /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC96CBEF2518AC910036E085 /* ImageManager.swift */; };
 		FCAC8A8C251E60960085E686 /* ConfigurableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCAC8A8B251E60960085E686 /* ConfigurableView.swift */; };
+		FCC7DA312529AE0D006B5A71 /* ThemeSelectionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC7DA302529AE0D006B5A71 /* ThemeSelectionButton.swift */; };
+		FCC7DA332529B45F006B5A71 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC7DA322529B45F006B5A71 /* ThemeManager.swift */; };
 		FCEE4B3D251D151A00911B5C /* ConversationsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCEE4B3C251D151A00911B5C /* ConversationsListViewController.swift */; };
 		FCEE4B40251D210100911B5C /* ConversationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCEE4B3F251D210100911B5C /* ConversationCell.swift */; };
 		FCEE4B42251D267C00911B5C /* ConversationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCEE4B41251D267C00911B5C /* ConversationTableViewCell.swift */; };
@@ -59,6 +61,8 @@
 		FC94E5FA2528B8B9000F09BE /* ThemePickerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemePickerDelegate.swift; sourceTree = "<group>"; };
 		FC96CBEF2518AC910036E085 /* ImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageManager.swift; sourceTree = "<group>"; };
 		FCAC8A8B251E60960085E686 /* ConfigurableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurableView.swift; sourceTree = "<group>"; };
+		FCC7DA302529AE0D006B5A71 /* ThemeSelectionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSelectionButton.swift; sourceTree = "<group>"; };
+		FCC7DA322529B45F006B5A71 /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
 		FCEE4B3C251D151A00911B5C /* ConversationsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsListViewController.swift; sourceTree = "<group>"; };
 		FCEE4B3F251D210100911B5C /* ConversationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationCell.swift; sourceTree = "<group>"; };
 		FCEE4B41251D267C00911B5C /* ConversationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationTableViewCell.swift; sourceTree = "<group>"; };
@@ -145,6 +149,7 @@
 				FC3203902519ED26000C2DD9 /* StateLoggingViewController.swift */,
 				FC4F20C0251FB70800F0A8AB /* DataGen.swift */,
 				FC94E5FA2528B8B9000F09BE /* ThemePickerDelegate.swift */,
+				FCC7DA322529B45F006B5A71 /* ThemeManager.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -166,6 +171,7 @@
 				FC82CC732519D9DE0041DFAE /* ProfileImageView.swift */,
 				FCAC8A8B251E60960085E686 /* ConfigurableView.swift */,
 				FC94E5F62528808D000F09BE /* MessageView.swift */,
+				FCC7DA302529AE0D006B5A71 /* ThemeSelectionButton.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -260,10 +266,12 @@
 			files = (
 				FC3203912519ED26000C2DD9 /* StateLoggingViewController.swift in Sources */,
 				FC94E5F525287DB0000F09BE /* ThemeView.swift in Sources */,
+				FCC7DA312529AE0D006B5A71 /* ThemeSelectionButton.swift in Sources */,
 				FC0BA0EF250B9675005AE946 /* ViewControllerState.swift in Sources */,
 				FC4C599625208654008F72C2 /* ConversationViewController.swift in Sources */,
 				FC4F20C1251FB70800F0A8AB /* DataGen.swift in Sources */,
 				FC82CC742519D9DE0041DFAE /* ProfileImageView.swift in Sources */,
+				FCC7DA332529B45F006B5A71 /* ThemeManager.swift in Sources */,
 				FC94E5FB2528B8B9000F09BE /* ThemePickerDelegate.swift in Sources */,
 				FC94E5F72528808D000F09BE /* MessageView.swift in Sources */,
 				FC5370362520B58700653A19 /* ConversationMessageTableViewCell.swift in Sources */,

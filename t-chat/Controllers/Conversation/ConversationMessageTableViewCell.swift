@@ -21,7 +21,6 @@ class ConversationMessageTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         self.selectionStyle = .none
-        
         contentView.addSubview(messageView)
 
         messageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5.0).isActive = true

@@ -26,7 +26,6 @@ class MessageView: UIView {
         label.text = "message"
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
-        
         return label
     }()
     
@@ -72,7 +71,8 @@ extension MessageView: ConfigurableView {
     func configure(with model: MessageCellModel) {
         let largePadding = UIScreen.main.bounds.width * 0.25
         
-        container.backgroundColor = model.isIncomming ? UIColor(red: 0.87, green: 0.87, blue: 0.87, alpha: 1.00) : UIColor(red: 0.86, green: 0.97, blue: 0.77, alpha: 1.00)
+        container.backgroundColor = model.isIncomming ? ThemeManager.shared.currentTheme.incommingMessageBackgroundColor : ThemeManager.shared.currentTheme.outcommingMessageBackgroundColor
+        messageLabel.textColor = model.isIncomming ? ThemeManager.shared.currentTheme.incommingMessageTextColor : ThemeManager.shared.currentTheme.outcommingMessageTextColor
         
         trailingConstraint?.isActive = false
         trailingConstraint = model.isIncomming ? container.trailingAnchor.constraint(lessThanOrEqualTo: self.trailingAnchor, constant: -largePadding) : container.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10)

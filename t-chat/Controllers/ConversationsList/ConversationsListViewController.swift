@@ -13,9 +13,10 @@ class ConversationsListViewController: UIViewController {
     private var sampleData: [(String, [ConversationCellModel])]
     private var myProfile = UserProfile(username: "Marina Dudarenko", about: "UX/UI designer, web-designer Moscow, Russia.")
     
+    private var theme = ThemeManager.shared.currentTheme
+    
     private lazy var conversationsTable: UITableView = {
         let tableView = UITableView.init(frame: .zero, style: .grouped)
-        tableView.backgroundColor = .white
         tableView.dataSource = self
         tableView.delegate = self
         
@@ -38,7 +39,6 @@ class ConversationsListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
         navigationController?.navigationItem.backBarButtonItem?.title = ""
         title = "Tinkoff Chat"
         setupViews()
@@ -71,6 +71,13 @@ class ConversationsListViewController: UIViewController {
         navigationItem.leftBarButtonItem = settingsNavigationItem
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        view.backgroundColor = ThemeManager.shared.currentTheme.backgroundColor
+        conversationsTable.backgroundColor = ThemeManager.shared.currentTheme.backgroundColor
+    }
+    
     @objc func goToProfile() {
         let vc = ProfileViewController(user: myProfile)
 
@@ -95,6 +102,12 @@ extension ConversationsListViewController: UINavigationControllerDelegate {
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
         let item = UIBarButtonItem(title: " ", style: .plain, target: nil, action: nil)
         viewController.navigationItem.backBarButtonItem = item
+        
+        if theme != ThemeManager.shared.currentTheme {
+            // перезагружаем данные, чтобы таблица заново вызвала cellForRowAt. Если использовать метод делегата willDisplayCell при навигации назад с экрана выбора тем, уже видимые ячейки не поменяют тему и таблица обновит ячейки при скролле.
+            conversationsTable.reloadData()
+            theme = ThemeManager.shared.currentTheme
+        }
     }
 }
 

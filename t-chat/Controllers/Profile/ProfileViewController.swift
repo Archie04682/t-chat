@@ -40,7 +40,7 @@ class ProfileViewController: UIViewController {
         label.textAlignment = .center
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
-        
+        label.textColor = ThemeManager.shared.currentTheme.textColor
         return label
     }()
     
@@ -49,7 +49,7 @@ class ProfileViewController: UIViewController {
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
-        
+        label.textColor = ThemeManager.shared.currentTheme.textColor
         return label
     }()
     
@@ -58,7 +58,7 @@ class ProfileViewController: UIViewController {
         button.setTitle("Save", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 19, weight: .semibold)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
+        button.backgroundColor = ThemeManager.shared.currentTheme.filledButtonColor
         button.layer.cornerRadius = 14
         
         return button
@@ -92,10 +92,15 @@ class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
         self.setupViews()
         imagePicker.delegate = self
         imagePicker.viewController = self
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.view.backgroundColor = ThemeManager.shared.currentTheme.backgroundColor
     }
     
     private func setupViews() {
@@ -211,7 +216,7 @@ extension ProfileViewController {
             Как написано на SO это давний баг https://stackoverflow.com/questions/55372093/uialertcontrollers-actionsheet-gives-constraint-error-on-ios-12-2-12-3
         */
         let ac = UIAlertController(title: "Изменить фото", message: nil, preferredStyle: .actionSheet)
-
+        
         ac.addAction(UIAlertAction(title: "Выбрать из галлереи", style: .default) { _ in
             self.imagePicker.pickImage(with: .photoLibrary)
         })
@@ -229,8 +234,13 @@ extension ProfileViewController {
             })
         }
         
-        ac.addAction(UIAlertAction(title: "Отменить", style: .cancel))
+        ac.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: nil))
+        
         present(ac, animated: true)
+    }
+    
+    @objc func dismissAlertController() {
+        self.dismiss(animated: true, completion: nil)
     }
     
 }

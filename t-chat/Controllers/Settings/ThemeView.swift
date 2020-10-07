@@ -10,13 +10,18 @@ import UIKit
 
 class ThemeView: UIView {
     
-    private lazy var selectionButton: UIButton = {
-        let button = UIButton(type: .custom)
+    var selected: ((Theme) -> ())?
+    
+    private var theme: Theme?
+    
+    private lazy var selectionButton: ThemeSelectionButton = {
+        let button = ThemeSelectionButton(type: .custom)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .clear
         button.layer.cornerRadius = 14
         button.layer.borderWidth = 1
         button.layer.borderColor = UIColor(red: 0x97 / 0xFF, green: 0x97 / 0xFF, blue: 0x97 / 0xFF, alpha: 1.0).cgColor
+        button.addTarget(self, action: #selector(tap(_:)), for: .touchUpInside)
         
         return button
     }()
@@ -35,7 +40,9 @@ class ThemeView: UIView {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 19, weight: .semibold)
-        
+        label.isUserInteractionEnabled = true
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap(_:)))
+        label.addGestureRecognizer(tapGestureRecognizer)
         return label
     }()
     
@@ -87,13 +94,30 @@ class ThemeView: UIView {
         
         themeNameLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
         themeNameLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        
+        
+    }
+    
+    @objc func tap(_ sender: UIView) {
+        if let theme = theme {
+            if let closure = selected {
+                closure(theme)
+                return
+            }
+        }
+    }
+
+    func checkIfButtonSelected(_ selectedTheme: Theme) {
+        selectionButton.isSelected = selectedTheme == theme
+        themeNameLabel.textColor = selectedTheme.textColor
     }
 }
 
 extension ThemeView: ConfigurableView {
     func configure(with model: Theme) {
+        theme = model
         themeNameLabel.text = model.themeName
-        incommingMessageView.setBackgroundColor(model.incomingMessageBackgroundColor)
+        incommingMessageView.setBackgroundColor(model.incommingMessageBackgroundColor)
         incommingMessageView.setMessageColor(model.incommingMessageTextColor)
         selectionButton.backgroundColor = model.conversationBackgroundColor
         

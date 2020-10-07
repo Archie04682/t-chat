@@ -10,6 +10,21 @@ import UIKit
 
 class ThemesViewController: UIViewController {
     
+    private var selectedTheme = ThemeManager.shared.currentTheme
+    
+    private lazy var themeViews: [ThemeView] = {
+        var views: [ThemeView] = []
+        for theme in Theme.allCases {
+            let view = ThemeView()
+
+            view.selected = themeDidChange(theme:)
+            view.configure(with: theme)
+            views.append(view)
+        }
+        
+        return views
+    }()
+    
     private lazy var container: UIStackView = {
         let view = UIStackView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -23,17 +38,15 @@ class ThemesViewController: UIViewController {
         super.viewDidLoad()
         title = "Settings"
         
-        view.backgroundColor = .white
+        // И delegate и closure объявлены слабыми ссылками, т.к. ThemeManager синглтон и будет "жить" в приложении дольше нашего ThemesViewController. Retain cycle получаем, если объявляем и dalegate и closure сильными ссылками
         
-        let classicThemeView = ThemeView()
-        classicThemeView.configure(with: Theme.classic)
-        let dayThemeView = ThemeView()
-        dayThemeView.configure(with: Theme.day)
-        let nightThemeView = ThemeView()
-        nightThemeView.configure(with: Theme.night)
-        container.addArrangedSubview(classicThemeView)
-        container.addArrangedSubview(dayThemeView)
-        container.addArrangedSubview(nightThemeView)
+        // ThemeManager.shared.delegate = self
+        ThemeManager.shared.didPickTheme = update(theme:)
+        view.backgroundColor = selectedTheme.conversationBackgroundColor
+        themeViews.forEach {
+            $0.checkIfButtonSelected(selectedTheme)
+            container.addArrangedSubview($0)
+        }
         
         view.addSubview(container)
         
@@ -42,5 +55,39 @@ class ThemesViewController: UIViewController {
         container.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 38).isActive = true
         container.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -38).isActive = true
     }
+    
+    private func themeDidChange(theme: Theme) {
+        ThemeManager.shared.apply(theme: theme)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        ThemeManager.shared.save(theme: selectedTheme)
+    }
+    
+    private func update(theme: Theme) {
+        self.selectedTheme = theme
+        
+        UIView.animate(withDuration: TimeInterval(0.7)) {
+            self.view.backgroundColor = theme.conversationBackgroundColor
+            self.navigationController?.navigationBar.barTintColor = theme.barTintColor
+            self.navigationController?.navigationBar.backgroundColor = theme.backgroundColor
+            self.navigationController?.navigationBar.titleTextAttributes = theme.navigationBarTitleTextAttributes
+            self.navigationController?.navigationBar.barStyle = theme.statusBarStyle
+        }
+        
+        themeViews.forEach {
+            $0.checkIfButtonSelected(selectedTheme)
+        }
+    }
 
+}
+
+extension ThemesViewController: ThemePickerDelegate {
+    
+    func didSelectTheme(theme: Theme) {
+        update(theme: theme)
+    }
+    
 }

@@ -6,6 +6,6 @@
 //  Copyright © 2020 Артур Гнедой. All rights reserved.
 //
 
-protocol ThemePickerDelegate {
+protocol ThemePickerDelegate: class {
     func didSelectTheme(theme: Theme)
 }
