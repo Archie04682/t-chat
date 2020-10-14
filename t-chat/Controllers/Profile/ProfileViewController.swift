@@ -159,20 +159,40 @@ class ProfileViewController: UIViewController {
         return button
     }()
     
+    private lazy var aboutTextViewPlaceholder: UILabel = {
+        let label = UILabel()
+        label.text = "About user info"
+        label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        label.sizeToFit()
+        label.textColor = .gray
+        label.frame.origin = CGPoint(x: 5, y: (self.aboutUserTextView.font?.pointSize)! / 2)
+        label.isHidden = true
+        return label
+    }()
+    
     private lazy var cancelButton: UIBarButtonItem = {
         return UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.cancel))
     }()
     
-    private var previousImage: Data?
     private let imagePicker = ImagePicker()
-    private let profileModel: ProfileModel = ProfileModel()
+    private var profileModel: ProfileModel?
+    
+    init(model: ProfileModel) {
+        self.profileModel = model
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         imagePicker.delegate = self
         imagePicker.viewController = self
-        profileModel.delegate = self
+        profileModel?.delegate = self
+        usernameTextField.delegate = self
         
         view.backgroundColor = .white
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -185,38 +205,24 @@ class ProfileViewController: UIViewController {
         profileImageEditButton.addTarget(self, action: #selector(editProfilePhoto), for: .touchUpInside)
         
         usernameTextField.addTarget(self, action: #selector(usernameTextFieldDidChange(_:)), for: .editingChanged)
-        
-        backdrop.isHidden = false
-        
-        profileModel.load {[weak self] profile, error in
-            if let self = self {
-                if let _ = error {
-                    DispatchQueue.main.async {
-                        self.backdrop.isHidden = true
-                        let ac = UIAlertController(title: "Error", message: "Failed to read your data from disk", preferredStyle: .alert)
-                        
-                        ac.addAction(UIAlertAction(title: "Ok", style: .default){ _ in
-                            ac.dismiss(animated: true, completion: nil)
-                        })
-                        
-                        self.present(ac, animated: true, completion: nil)
-                    }
-                } else if let profile = profile{
-                    DispatchQueue.main.async {
-                        self.updateProfileData(profile: profile)
-                        
-                        self.backdrop.isHidden = true
-                    }
-                }
-            }
-        }
-        
+
+        updateProfile(username: profileModel?.username, about: profileModel?.about, photoData: profileModel?.photoData)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
     
         view.backgroundColor = ThemeManager.shared.currentTheme.backgroundColor
+    }
+    
+    private func updateProfile(username: String?, about: String?, photoData: Data?) {
+        usernameLabel.text = username
+        aboutUserLabel.text = about
+        if let photoData = photoData {
+            profileImageView.image = UIImage.init(data: photoData)
+        } else if let username = username {
+            profileImageView.setInitials(username: username)
+        }
     }
     
     private func updateProfileData(profile: UserProfile) {
@@ -227,8 +233,6 @@ class ProfileViewController: UIViewController {
         } else {
             profileImageView.setInitials(username: profile.username)
         }
-        
-        previousImage = profile.photoData
     }
     
     @objc func toggleMode() {
@@ -268,8 +272,8 @@ class ProfileViewController: UIViewController {
     @objc func cancel() {
         DispatchQueue.main.async {[weak self] in
             if let self = self {
-                if let _ = self.profileModel.changedData[.photoData] {
-                    if let data = self.profileModel.photoData {
+                if let _ = self.profileModel?.changedData[.photoData] {
+                    if let data = self.profileModel?.photoData {
                         self.profileImageView.image = UIImage(data: data)
                     } else if let text = self.usernameLabel.text {
                         self.profileImageView.setInitials(username: text)
@@ -279,6 +283,7 @@ class ProfileViewController: UIViewController {
         }
         
         toggleMode()
+        view.endEditing(true)
     }
 
     @objc func saveChanges(_ button: UIButton) {
@@ -288,16 +293,16 @@ class ProfileViewController: UIViewController {
             return
         }
         
-        profileModel.save(with: title == "GCD" ? .GCD : .operations)
+        profileModel?.save(with: title == "GCD" ? .GCD : .operations)
     }
     
     @objc func usernameTextFieldDidChange(_ textField: UITextField) {
         if (usernameLabel.text != textField.text) {
-            profileModel.changedData[.username] = textField.text?.data(using: .utf8)
+            profileModel?.changedData[.username] = textField.text?.data(using: .utf8)
         } else {
-            profileModel.changedData.removeValue(forKey: .username)
+            profileModel?.changedData.removeValue(forKey: .username)
         }
-        
+
         if let text = textField.text, text.count > 0 {
             textField.layer.borderColor = ThemeManager.shared.currentTheme.inputFieldBorderBackgroundColor.cgColor
         } else {
@@ -371,6 +376,7 @@ class ProfileViewController: UIViewController {
         aboutUserLabel.widthAnchor.constraint(equalTo: profileImageContainer.widthAnchor).isActive = true
         aboutUserLabel.bottomAnchor.constraint(lessThanOrEqualTo: editButton.topAnchor, constant: -32).isActive = true
         
+        aboutUserTextView.addSubview(aboutTextViewPlaceholder)
         aboutUserTextView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
         aboutUserTextView.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 32).isActive = true
         aboutUserTextView.widthAnchor.constraint(equalTo: profileImageContainer.widthAnchor).isActive = true
@@ -411,14 +417,13 @@ class ProfileViewController: UIViewController {
         backdrop.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         backdrop.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         backdrop.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        
-//        self.navigationItem.rightBarButtonItem = cancelButton
     }
 }
 
 extension ProfileViewController {
     
     func updateProfileImage(url: URL?) {
+        guard let profileModel = profileModel else {return}
         if let url = url {
             do {
                 let data = try Data(contentsOf: url)
@@ -428,7 +433,6 @@ extension ProfileViewController {
                     profileModel.changedData.removeValue(forKey: .photoData)
                 }
                 
-                previousImage = profileImageView.image?.pngData()
                 profileImageView.image = UIImage(data: data)
             } catch {
                 let ac = UIAlertController(title: "Ошибка", message: "Произошла ошибка при загрузке изображения.", preferredStyle: .alert)
@@ -486,11 +490,22 @@ extension ProfileViewController {
 extension ProfileViewController: UITextViewDelegate {
     
     func textViewDidChange(_ textView: UITextView) {
+        aboutTextViewPlaceholder.isHidden = !textView.text.isEmpty
+        
         if (textView.text != aboutUserLabel.text) {
-            profileModel.changedData[.about] = textView.text?.data(using: .utf8)
+            profileModel?.changedData[.about] = textView.text?.data(using: .utf8)
         } else {
-            profileModel.changedData.removeValue(forKey: .about)
+            profileModel?.changedData.removeValue(forKey: .about)
         }
+    }
+    
+}
+
+extension ProfileViewController: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        view.endEditing(true)
+        return false
     }
     
 }
@@ -507,8 +522,8 @@ extension ProfileViewController: ProfileModelDelegate {
     
     func didUpdate(provider: ManagerType, userProfile: UserProfile, failToUpdateProperties: [UserProfile.Keys:Error]?) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
-            
-            self?.updateProfileData(profile: userProfile)
+            print(userProfile)
+            self?.updateProfile(username: userProfile.username, about: userProfile.about, photoData: userProfile.photoData)
             if let props = failToUpdateProperties, !props.isEmpty {
                 var message = "Cannot update some properties:\n"
                 props.forEach { message = message + "\($0.key)" }
@@ -516,12 +531,11 @@ extension ProfileViewController: ProfileModelDelegate {
                 
                 ac.addAction(UIAlertAction(title: "Ok", style: .default){ _ in
                     ac.dismiss(animated: true, completion: nil)
-                    self?.toggleMode()
                     self?.backdrop.isHidden = true
                 })
                 
-                ac.addAction(UIAlertAction(title: "Повторить", style: .default){ _ in
-                    self?.profileModel.save(with: provider)
+                ac.addAction(UIAlertAction(title: "Repeat", style: .default){ _ in
+                    self?.profileModel?.save(with: provider)
                     ac.dismiss(animated: true, completion: nil)
                 })
                     

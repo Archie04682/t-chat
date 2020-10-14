@@ -19,6 +19,14 @@ class ProfileModel {
         return userProfile.photoData
     }
     
+    var username: String {
+        return userProfile.username
+    }
+    
+    var about: String {
+        return userProfile.about
+    }
+    
     var changedData: [UserProfile.Keys : Data?] = [:] {
         didSet {
             var changed = !changedData.isEmpty
@@ -57,6 +65,7 @@ class ProfileModel {
                         self.userProfile.setValue(forKey: item.key, value: item.value)
                         self.changedData.removeValue(forKey: item.key)
                     }
+                    print(self.userProfile)
                     self.delegate?.didUpdate(provider: type, userProfile: self.userProfile, failToUpdateProperties: failedProperties)
                 }
             }

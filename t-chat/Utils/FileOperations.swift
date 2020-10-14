@@ -72,6 +72,7 @@ class FileWriteOperation: Operation {
     override func main() {
         do {
             try contents.write(to: url, options: .atomicWrite)
+//            try contents.write(to: URL(string: "Broken")!, options: .atomicWrite)
         } catch {
             self.error = error
         }

@@ -11,9 +11,11 @@ import UIKit
 class ConversationsListViewController: UIViewController {
     
     private var sampleData: [(String, [ConversationCellModel])]
-    private var myProfile = UserProfile(username: "Marina Dudarenko", about: "UX/UI designer, web-designer Moscow, Russia.")
+//    private var myProfile = UserProfile(username: "Marina Dudarenko", about: "UX/UI designer, web-designer Moscow, Russia.")
     
     private var theme = ThemeManager.shared.currentTheme
+    
+    private let profileModel = ProfileModel()
     
     private lazy var conversationsTable: UITableView = {
         let tableView = UITableView.init(frame: .zero, style: .grouped)
@@ -82,7 +84,7 @@ class ConversationsListViewController: UIViewController {
     }
     
     @objc func goToProfile() {
-        let vc = ProfileViewController()
+        let vc = ProfileViewController(model: profileModel)
 
         vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(closeProfilePage))
         vc.title = "My profile"
@@ -97,18 +99,19 @@ class ConversationsListViewController: UIViewController {
     
     @objc func closeProfilePage() {
         self.dismiss(animated: true) {[weak self] in
-            // Сделано для демо загрузки из файлов
-            ProfileModel().load {[weak self] profile, error in
-                if let profile = profile {
-                    DispatchQueue.main.async {
-                        if let imageData = profile.photoData {
-                            self?.profileImageView.image = UIImage(data: imageData)
-                        } else {
-                            self?.profileImageView.setInitials(username: profile.username)
-                        }
-                    }
+            DispatchQueue.main.async {
+                if let imageData = self?.profileModel.photoData {
+                    self?.profileImageView.image = UIImage(data: imageData)
+                } else if let username = self?.profileModel.username {
+                    self?.profileImageView.setInitials(username: username)
                 }
             }
+//            // Сделано для демо загрузки из файлов
+//            ProfileModel().load {[weak self] profile, error in
+//                if let profile = profile {
+//
+//                }
+//            }
         }
     }
 
@@ -125,7 +128,8 @@ extension ConversationsListViewController: UINavigationControllerDelegate {
             theme = ThemeManager.shared.currentTheme
         }
         
-        ProfileModel().load {[weak self] profile, error in
+        // Сделано для демо загрузки из файлов
+        profileModel.load {[weak self] profile, error in
             if let profile = profile {
                 DispatchQueue.main.async {
                     if let imageData = profile.photoData {
