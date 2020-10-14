@@ -106,12 +106,6 @@ class ConversationsListViewController: UIViewController {
                     self?.profileImageView.setInitials(username: username)
                 }
             }
-//            // Сделано для демо загрузки из файлов
-//            ProfileModel().load {[weak self] profile, error in
-//                if let profile = profile {
-//
-//                }
-//            }
         }
     }
 
