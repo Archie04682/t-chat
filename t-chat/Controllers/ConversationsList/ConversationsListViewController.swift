@@ -23,6 +23,15 @@ class ConversationsListViewController: UIViewController {
         return tableView
     }()
     
+    private lazy var profileImageView: ProfileImageView = {
+        let profileImageView = ProfileImageView(frame: CGRect.init(origin: CGPoint.zero, size: CGSize(width: 32, height: 32)))
+        profileImageView.backgroundColor = UIColor(red: 0.89, green: 0.91, blue: 0.17, alpha: 1.00)
+        profileImageView.widthAnchor.constraint(equalToConstant: 32).isActive = true
+        profileImageView.heightAnchor.constraint(equalToConstant: 32).isActive = true
+        
+        return profileImageView
+    }()
+    
     init() {
         let gen = DataGen().generateConversationsList(count: 30)
         sampleData = [
@@ -55,12 +64,6 @@ class ConversationsListViewController: UIViewController {
         conversationsTable.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         conversationsTable.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         
-        let profileImageView = ProfileImageView(frame: CGRect.init(origin: CGPoint.zero, size: CGSize(width: 32, height: 32)))
-        profileImageView.initials = "MD"
-        profileImageView.backgroundColor = UIColor(red: 0.89, green: 0.91, blue: 0.17, alpha: 1.00)
-        profileImageView.widthAnchor.constraint(equalToConstant: 32).isActive = true
-        profileImageView.heightAnchor.constraint(equalToConstant: 32).isActive = true
-        
         let usernavigationItem = UIBarButtonItem(customView: profileImageView)
         navigationItem.rightBarButtonItem = usernavigationItem
         
@@ -79,7 +82,7 @@ class ConversationsListViewController: UIViewController {
     }
     
     @objc func goToProfile() {
-        let vc = ProfileViewController(user: myProfile)
+        let vc = ProfileViewController()
 
         vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(closeProfilePage))
         vc.title = "My profile"
@@ -93,7 +96,20 @@ class ConversationsListViewController: UIViewController {
     }
     
     @objc func closeProfilePage() {
-        self.dismiss(animated: true, completion: nil)
+        self.dismiss(animated: true) {[weak self] in
+            // Сделано для демо загрузки из файлов
+            ProfileModel().load {[weak self] profile, error in
+                if let profile = profile {
+                    DispatchQueue.main.async {
+                        if let imageData = profile.photoData {
+                            self?.profileImageView.image = UIImage(data: imageData)
+                        } else {
+                            self?.profileImageView.setInitials(username: profile.username)
+                        }
+                    }
+                }
+            }
+        }
     }
 
 }
@@ -107,6 +123,18 @@ extension ConversationsListViewController: UINavigationControllerDelegate {
             // перезагружаем данные, чтобы таблица заново вызвала cellForRowAt. Если использовать метод делегата willDisplayCell при навигации назад с экрана выбора тем, уже видимые ячейки не поменяют тему и таблица обновит ячейки при скролле.
             conversationsTable.reloadData()
             theme = ThemeManager.shared.currentTheme
+        }
+        
+        ProfileModel().load {[weak self] profile, error in
+            if let profile = profile {
+                DispatchQueue.main.async {
+                    if let imageData = profile.photoData {
+                        self?.profileImageView.image = UIImage(data: imageData)
+                    } else {
+                        self?.profileImageView.setInitials(username: profile.username)
+                    }
+                }
+            }
         }
     }
 }

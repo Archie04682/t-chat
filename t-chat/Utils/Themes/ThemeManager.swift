@@ -9,6 +9,7 @@
 import UIKit
 
 class ThemeManager: NSObject {
+    private let dispatchQueue: DispatchQueue
     
     weak var delegate: ThemePickerDelegate?
     var didPickTheme: ((Theme) -> ())?
@@ -31,6 +32,8 @@ class ThemeManager: NSObject {
         } else {
             theme = .classic
         }
+        
+        dispatchQueue = DispatchQueue(label: "ThemeManager", qos: .userInitiated, attributes: [], autoreleaseFrequency: .inherit, target: nil)
     }
     
     func apply(theme: Theme) {
@@ -47,12 +50,17 @@ class ThemeManager: NSObject {
         }
     }
     
-    func save(theme: Theme) {
+    func save(theme: Theme, completion: @escaping () -> ()) {
         if self.theme != theme {
-            // iOS 13+ вылазит ошибка описанная тут https://developer.apple.com/forums/thread/121527.
-            // Как я понимаю, это какой то баг платформы.
-            UserDefaults.standard.set(theme.rawValue, forKey: themeKey)
-            self.theme = theme
+            dispatchQueue.async {[weak self] in
+                if let self = self {
+                    // iOS 13+ вылазит ошибка описанная тут https://developer.apple.com/forums/thread/121527.
+                    // Как я понимаю, это какой то баг платформы.
+                    UserDefaults.standard.set(theme.rawValue, forKey: self.themeKey)
+                    self.theme = theme
+                    completion()
+                }
+            }
         }
     }
 }
