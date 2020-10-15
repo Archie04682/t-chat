@@ -281,7 +281,7 @@ class ProfileViewController: UIViewController {
                 }
             }
         }
-        
+        profileModel?.changedData = [:]
         toggleMode()
         view.endEditing(true)
     }
