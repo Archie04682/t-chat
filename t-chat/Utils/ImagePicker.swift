@@ -47,6 +47,7 @@ class ImagePicker: NSObject {
     }
     
     private func showImagePicker(for sourceType: UIImagePickerController.SourceType) {
+        self.imagePickerController.view.subviews[0].backgroundColor = ThemeManager.shared.currentTheme.backgroundColor
         self.imagePickerController.sourceType = sourceType
         self.imagePickerController.allowsEditing = false
         self.viewController?.present(self.imagePickerController, animated: true)
@@ -65,6 +66,7 @@ class ImagePicker: NSObject {
                 UIApplication.shared.open(settingsUrl, completionHandler: nil)
             }
         }
+        
         alertController.addAction(settingsAction)
         let cancelAction = UIAlertAction(title: "Отмена", style: .default, handler: nil)
         alertController.addAction(cancelAction)

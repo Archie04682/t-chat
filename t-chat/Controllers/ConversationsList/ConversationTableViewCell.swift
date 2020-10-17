@@ -13,13 +13,12 @@ class ConversationTableViewCell: UITableViewCell {
     private lazy var usernameLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
-        
+
         return label
     }()
     
     private lazy var lastMessageLabel: UILabel = {
         let label = UILabel()
-        label.textColor = UIColor(red: 0.24, green: 0.24, blue: 0.26, alpha: 0.60)
         label.numberOfLines = 2
         
         return label
@@ -28,7 +27,7 @@ class ConversationTableViewCell: UITableViewCell {
     private lazy var lastMessageLabelDate: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 15, weight: .regular)
-        label.textColor = UIColor(red: 0.24, green: 0.24, blue: 0.26, alpha: 0.60)
+        label.textColor = ThemeManager.shared.currentTheme.subtitleColor
         
         return label
     }()
@@ -81,6 +80,10 @@ extension ConversationTableViewCell: ConfigurableView {
     
     func configure(with model: ConversationCellModel) {
         usernameLabel.text = model.name
+        usernameLabel.textColor = ThemeManager.shared.currentTheme.textColor
+        lastMessageLabel.textColor = ThemeManager.shared.currentTheme.subtitleColor
+        lastMessageLabelDate.textColor = ThemeManager.shared.currentTheme.subtitleColor
+        
         configureMessageLabel(with: model.message, hasUnreadMessages: model.hasUnreadMessages)
         if !model.message.isEmpty {
             configureMessageDateLabel(with: model.date)
@@ -88,7 +91,7 @@ extension ConversationTableViewCell: ConfigurableView {
             lastMessageLabelDate.text = ""
         }
         
-        backgroundColor = model.isOnline ? UIColor(red: 0.98, green: 0.99, blue: 0.67, alpha: 1.00) : .white
+        backgroundColor = model.isOnline ? ThemeManager.shared.currentTheme.onlineCellColor : .clear
     }
     
     private func configureMessageLabel(with message: String, hasUnreadMessages: Bool) {

@@ -15,7 +15,6 @@ class ConversationViewController: UIViewController {
     
     private lazy var conversationTable: UITableView = {
         let tableView = UITableView.init(frame: .zero, style: .plain)
-        tableView.backgroundColor = .white
         tableView.dataSource = self
         tableView.delegate = self
         
@@ -27,7 +26,7 @@ class ConversationViewController: UIViewController {
         label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
         label.text = "No messages yet."
         label.textAlignment = .center
-        
+        label.textColor = ThemeManager.shared.currentTheme.textColor
         return label
     }()
     
@@ -43,7 +42,6 @@ class ConversationViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
         setupViews()
         conversationTable.register(ConversationMessageTableViewCell.self, forCellReuseIdentifier: String(describing: type(of: ConversationMessageTableViewCell.self)))
     }
@@ -70,6 +68,10 @@ class ConversationViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        view.backgroundColor = ThemeManager.shared.currentTheme.conversationBackgroundColor
+        conversationTable.backgroundColor = ThemeManager.shared.currentTheme.conversationBackgroundColor
+        
         if !conversation.isEmpty {
             // скроллим чат к последнему сообщению в чате
             DispatchQueue.main.async {
@@ -90,6 +92,7 @@ extension ConversationViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: type(of: ConversationMessageTableViewCell.self))) as? ConversationMessageTableViewCell else { return UITableViewCell(style: .default, reuseIdentifier: "default") }
         
         cell.configure(with: conversation[indexPath.row])
+        cell.backgroundColor = .clear
         return cell
     }
 
