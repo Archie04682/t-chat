@@ -14,7 +14,7 @@ class ConversationViewController: UIViewController {
     private let conversation: [MessageCellModel]
     
     private lazy var conversationTable: UITableView = {
-        let tableView = UITableView.init(frame: .zero, style: .plain)
+        let tableView = UITableView(frame: .zero, style: .plain)
         tableView.dataSource = self
         tableView.delegate = self
         
@@ -89,7 +89,8 @@ extension ConversationViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: type(of: ConversationMessageTableViewCell.self))) as? ConversationMessageTableViewCell else { return UITableViewCell(style: .default, reuseIdentifier: "default") }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: type(of: ConversationMessageTableViewCell.self))) as? ConversationMessageTableViewCell
+            else { return UITableViewCell(style: .default, reuseIdentifier: "default") }
         
         cell.configure(with: conversation[indexPath.row])
         cell.backgroundColor = .clear

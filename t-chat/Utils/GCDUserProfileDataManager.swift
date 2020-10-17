@@ -16,7 +16,7 @@ class GCDUserProfileDataManager: UserProfileDataManager {
         applicationFileProvider = ApplicationFileProvider()
     }
     
-    func read(completion: @escaping (UserProfile?, Error?) -> ()){
+    func read(completion: @escaping (UserProfile?, Error?) -> Void) {
         let dispatchGroup = DispatchGroup()
         do {
             let userProfileFolder = try applicationFileProvider.getApplicationFolder()
@@ -40,8 +40,8 @@ class GCDUserProfileDataManager: UserProfileDataManager {
         }
     }
     
-    func write(_ data: [UserProfile.Keys:Data?], completion: @escaping ([UserProfile.Keys : Error]?, Error?) -> ()) {
-        var errors: [UserProfile.Keys : Error] = [:]
+    func write(_ data: [UserProfile.Keys: Data?], completion: @escaping ([UserProfile.Keys: Error]?, Error?) -> Void) {
+        var errors: [UserProfile.Keys: Error] = [:]
         let group = DispatchGroup()
         do {
             let userProfileFolder = try applicationFileProvider.getApplicationFolder()
@@ -77,7 +77,7 @@ class GCDUserProfileDataManager: UserProfileDataManager {
         }
     }
     
-    private func write(contents: Data, atPath url: URL, completion: @escaping (Error?) -> ()) {
+    private func write(contents: Data, atPath url: URL, completion: @escaping (Error?) -> Void) {
         dispatchQueue.async {
             do {
                 try contents.write(to: url, options: .atomicWrite)
@@ -88,7 +88,7 @@ class GCDUserProfileDataManager: UserProfileDataManager {
         }
     }
     
-    private func delete(at url: URL, completion: @escaping (Error?) -> ()) {
+    private func delete(at url: URL, completion: @escaping (Error?) -> Void) {
         do {
             try FileManager.default.removeItem(at: url)
             completion(nil)

@@ -12,7 +12,7 @@ class ThemeManager: NSObject {
     private let dispatchQueue: DispatchQueue
     
     weak var delegate: ThemePickerDelegate?
-    var didPickTheme: ((Theme) -> ())?
+    var didPickTheme: ((Theme) -> Void)?
     
     private let themeKey = "theme"
     
@@ -27,7 +27,7 @@ class ThemeManager: NSObject {
     }
     
     private override init() {
-        if let storedTheme =  (UserDefaults.standard.value(forKey: themeKey) as AnyObject).integerValue {
+        if let storedTheme = (UserDefaults.standard.value(forKey: themeKey) as AnyObject).integerValue {
             theme = Theme(rawValue: storedTheme) ?? .classic
         } else {
             theme = .classic
@@ -50,7 +50,7 @@ class ThemeManager: NSObject {
         }
     }
     
-    func save(theme: Theme, completion: @escaping () -> ()) {
+    func save(theme: Theme, completion: @escaping () -> Void) {
         if self.theme != theme {
             dispatchQueue.async {[weak self] in
                 if let self = self {
@@ -72,4 +72,3 @@ extension ThemeManager: NSCopying {
     }
     
 }
-

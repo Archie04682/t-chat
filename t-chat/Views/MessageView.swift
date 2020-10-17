@@ -71,15 +71,18 @@ extension MessageView: ConfigurableView {
     func configure(with model: MessageCellModel) {
         let largePadding = UIScreen.main.bounds.width * 0.25
         
-        container.backgroundColor = model.isIncomming ? ThemeManager.shared.currentTheme.incommingMessageBackgroundColor : ThemeManager.shared.currentTheme.outcommingMessageBackgroundColor
+        container.backgroundColor = model.isIncomming ? ThemeManager.shared.currentTheme.incommingMessageBackgroundColor
+            : ThemeManager.shared.currentTheme.outcommingMessageBackgroundColor
         messageLabel.textColor = model.isIncomming ? ThemeManager.shared.currentTheme.incommingMessageTextColor : ThemeManager.shared.currentTheme.outcommingMessageTextColor
         
         trailingConstraint?.isActive = false
-        trailingConstraint = model.isIncomming ? container.trailingAnchor.constraint(lessThanOrEqualTo: self.trailingAnchor, constant: -largePadding) : container.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10)
+        trailingConstraint = model.isIncomming ? container.trailingAnchor.constraint(lessThanOrEqualTo: self.trailingAnchor, constant: -largePadding)
+            : container.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10)
         trailingConstraint?.isActive = true
 
         leadingConstraint?.isActive = false
-        leadingConstraint = model.isIncomming ? container.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10) : container.leadingAnchor.constraint(greaterThanOrEqualTo: self.leadingAnchor, constant: largePadding)
+        leadingConstraint = model.isIncomming ? container.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10)
+            : container.leadingAnchor.constraint(greaterThanOrEqualTo: self.leadingAnchor, constant: largePadding)
         leadingConstraint?.isActive = true
         
         container.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner, model.isIncomming ? .layerMaxXMaxYCorner : .layerMinXMaxYCorner]

@@ -40,8 +40,6 @@ class ThemesViewController: UIViewController {
         super.viewDidLoad()
         title = "Settings"
         
-        // И delegate и closure объявлены слабыми ссылками, т.к. ThemeManager синглтон и будет "жить" в приложении дольше нашего ThemesViewController. Retain cycle получаем, если объявляем и dalegate и closure сильными ссылками
-        
          ThemeManager.shared.delegate = self
 //        ThemeManager.shared.didPickTheme = {[weak self] theme in
 //            self?.update(theme: theme)

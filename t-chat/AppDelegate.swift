@@ -15,7 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, StateLoggable {
     
     var currentState: AppState = .notRunning
     
-    func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+    func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         logTransition(nextState: .inactive, in: #function)
         
         let window = UIWindow(frame: UIScreen.main.bounds)

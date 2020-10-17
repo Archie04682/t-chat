@@ -18,7 +18,7 @@ class ConversationsListViewController: UIViewController {
     private let profileModel = ProfileModel()
     
     private lazy var conversationsTable: UITableView = {
-        let tableView = UITableView.init(frame: .zero, style: .grouped)
+        let tableView = UITableView(frame: .zero, style: .grouped)
         tableView.dataSource = self
         tableView.delegate = self
         
@@ -26,7 +26,7 @@ class ConversationsListViewController: UIViewController {
     }()
     
     private lazy var profileImageView: ProfileImageView = {
-        let profileImageView = ProfileImageView(frame: CGRect.init(origin: CGPoint.zero, size: CGSize(width: 32, height: 32)))
+        let profileImageView = ProfileImageView(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: 32, height: 32)))
         profileImageView.backgroundColor = UIColor(red: 0.89, green: 0.91, blue: 0.17, alpha: 1.00)
         profileImageView.widthAnchor.constraint(equalToConstant: 32).isActive = true
         profileImageView.heightAnchor.constraint(equalToConstant: 32).isActive = true
@@ -117,13 +117,12 @@ extension ConversationsListViewController: UINavigationControllerDelegate {
         viewController.navigationItem.backBarButtonItem = item
         
         if theme != ThemeManager.shared.currentTheme {
-            // перезагружаем данные, чтобы таблица заново вызвала cellForRowAt. Если использовать метод делегата willDisplayCell при навигации назад с экрана выбора тем, уже видимые ячейки не поменяют тему и таблица обновит ячейки при скролле.
             conversationsTable.reloadData()
             theme = ThemeManager.shared.currentTheme
         }
         
         // Сделано для демо загрузки из файлов
-        profileModel.load {[weak self] profile, error in
+        profileModel.load {[weak self] profile, _ in
             if let profile = profile {
                 DispatchQueue.main.async {
                     if let imageData = profile.photoData {
@@ -152,7 +151,8 @@ extension ConversationsListViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: type(of: ConversationTableViewCell.self))) as? ConversationTableViewCell else { return UITableViewCell(style: .default, reuseIdentifier: "default") }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: type(of: ConversationTableViewCell.self))) as? ConversationTableViewCell
+            else { return UITableViewCell(style: .default, reuseIdentifier: "default") }
         
         cell.configure(with: sampleData[indexPath.section].1[indexPath.row])
         cell.accessoryType = .disclosureIndicator
@@ -161,7 +161,8 @@ extension ConversationsListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let firstMessage = sampleData[indexPath.section].1[indexPath.row].message
-        let vc = ConversationViewController(username: sampleData[indexPath.section].1[indexPath.row].name, messages: firstMessage.isEmpty ? [] : DataGen().generateMessages(firstMessage: firstMessage))
+        let vc = ConversationViewController(username: sampleData[indexPath.section].1[indexPath.row].name,
+                                            messages: firstMessage.isEmpty ? [] : DataGen().generateMessages(firstMessage: firstMessage))
         navigationController?.pushViewController(vc, animated: true)
     }
 

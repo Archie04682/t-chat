@@ -10,9 +10,9 @@ import Foundation
 
 protocol UserProfileDataManager {
     
-    func write(_ data: [UserProfile.Keys:Data?], completion: @escaping ([UserProfile.Keys : Error]?, Error?) -> ())
+    func write(_ data: [UserProfile.Keys: Data?], completion: @escaping ([UserProfile.Keys: Error]?, Error?) -> Void)
     
-    func read(completion: @escaping (UserProfile?, Error?) -> ())  
+    func read(completion: @escaping (UserProfile?, Error?) -> Void)  
 }
 
 class UserProfileDataManagerFactory {

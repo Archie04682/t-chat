@@ -10,7 +10,7 @@ import UIKit
 
 class ThemeView: UIView {
     
-    var selected: ((Theme) -> ())?
+    var selected: ((Theme) -> Void)?
     
     private var theme: Theme?
     
@@ -47,14 +47,14 @@ class ThemeView: UIView {
     }()
     
     private lazy var incommingMessageView: MessageView = {
-        let view = MessageView(frame: CGRect.init(x: 0, y: 0, width: self.frame.width, height: self.frame.width))
+        let view = MessageView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.width))
         view.translatesAutoresizingMaskIntoConstraints = false
     
         return view
     }()
     
     private lazy var outcommingMessageView: MessageView = {
-        let view = MessageView(frame: CGRect.init(x: 0, y: 0, width: self.frame.width, height: self.frame.width))
+        let view = MessageView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.width))
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -94,7 +94,6 @@ class ThemeView: UIView {
         
         themeNameLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
         themeNameLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        
         
     }
     

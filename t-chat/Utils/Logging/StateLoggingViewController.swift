@@ -37,12 +37,12 @@ class StateLoggingViewController: UIViewController, StateLoggable {
     }
 
     override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+        super.viewWillDisappear(animated)
         self.logTransition(nextState: .disapearing, in: #function)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+        super.viewDidDisappear(animated)
         self.logTransition(nextState: .disapeared, in: #function)
     }
 }

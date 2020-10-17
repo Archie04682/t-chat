@@ -1,15 +1,14 @@
-////
-////  UpdatedProfileViewController.swift
-////  t-chat
-////
-////  Created by Артур Гнедой on 27.09.2020.
-////  Copyright © 2020 Артур Гнедой. All rights reserved.
-////
+//
+//  ProfileViewController.swift
+//  t-chat
+//
+//  Created by Артур Гнедой on 27.09.2020.
+//  Copyright © 2020 Артур Гнедой. All rights reserved.
+//
 
 import UIKit
 
 class ProfileViewController: UIViewController {
-    
     private lazy var backdrop: Backdrop = {
         let view = Backdrop()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -35,22 +34,19 @@ class ProfileViewController: UIViewController {
     private lazy var containerView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        
         return view
     }()
     
     private lazy var profileImageContainer: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        
         return view
     }()
     
     private lazy var profileImageView: ProfileImageView = {
-        let view = ProfileImageView(frame: CGRect.init(origin: CGPoint.zero, size: CGSize(width: 240, height: 240)))
+        let view = ProfileImageView(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: 240, height: 240)))
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = UIColor(red: 0.89, green: 0.91, blue: 0.17, alpha: 1.00)
-        
         return view
     }()
     
@@ -60,7 +56,6 @@ class ProfileViewController: UIViewController {
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.isHidden = true
-        
         return button
     }()
     
@@ -71,7 +66,6 @@ class ProfileViewController: UIViewController {
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = ThemeManager.shared.currentTheme.textColor
-        
         return label
     }()
     
@@ -86,7 +80,6 @@ class ProfileViewController: UIViewController {
         view.layer.cornerRadius = 4.0
         view.textColor = ThemeManager.shared.currentTheme.textColor
         view.isHidden = true
-        
         return view
     }()
     
@@ -96,13 +89,12 @@ class ProfileViewController: UIViewController {
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = ThemeManager.shared.currentTheme.textColor
-        
         return label
     }()
     
     private lazy var aboutUserTextView: UITextView = {
         let view = UITextView()
-        view.layer.borderColor = UIColor(red: 224/255, green: 224/255, blue: 224/255, alpha: 1).cgColor
+        view.layer.borderColor = UIColor(red: 224 / 255, green: 224 / 255, blue: 224 / 255, alpha: 1).cgColor
         view.layer.borderWidth = 1.5
         view.layer.cornerRadius = 4.0
         view.layer.masksToBounds = true
@@ -134,7 +126,6 @@ class ProfileViewController: UIViewController {
         button.distribution = .fillEqually
         button.spacing = 16
         button.isHidden = true
-        
         return button
     }()
     
@@ -155,7 +146,6 @@ class ProfileViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.isEnabled = false
         button.backgroundColor = ThemeManager.shared.currentTheme.filledButtonColor
-        
         return button
     }()
     
@@ -194,7 +184,8 @@ class ProfileViewController: UIViewController {
         profileModel?.delegate = self
         usernameTextField.delegate = self
         
-        view.backgroundColor = .white
+        view.backgroundColor = ThemeManager.shared.currentTheme.backgroundColor
+        
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
@@ -203,84 +194,54 @@ class ProfileViewController: UIViewController {
         saveWithGCDButton.addTarget(self, action: #selector(saveChanges(_:)), for: .touchUpInside)
         saveWithOperationButton.addTarget(self, action: #selector(saveChanges(_:)), for: .touchUpInside)
         profileImageEditButton.addTarget(self, action: #selector(editProfilePhoto), for: .touchUpInside)
-        
         usernameTextField.addTarget(self, action: #selector(usernameTextFieldDidChange(_:)), for: .editingChanged)
 
         updateProfile(username: profileModel?.username, about: profileModel?.about, photoData: profileModel?.photoData)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    
-        view.backgroundColor = ThemeManager.shared.currentTheme.backgroundColor
-    }
-    
     private func updateProfile(username: String?, about: String?, photoData: Data?) {
         usernameLabel.text = username
         aboutUserLabel.text = about
+    
         if let photoData = photoData {
-            profileImageView.image = UIImage.init(data: photoData)
+            profileImageView.image = UIImage(data: photoData)
         } else if let username = username {
             profileImageView.setInitials(username: username)
         }
     }
     
-    private func updateProfileData(profile: UserProfile) {
-        usernameLabel.text = profile.username
-        aboutUserLabel.text = profile.about
-        if let photoData = profile.photoData {
-            profileImageView.image = UIImage.init(data: photoData)
-        } else {
-            profileImageView.setInitials(username: profile.username)
-        }
-    }
-    
     @objc func toggleMode() {
         DispatchQueue.main.async {
-            UIView.transition(with: self.view,
-              duration: 0.3,
-              options: [.curveEaseInOut],
+            UIView.transition(with: self.view, duration: 0.3, options: [.curveEaseInOut],
               animations: {
-                self.usernameLabel.alpha = !self.usernameLabel.isHidden ? 0 : 1
-                self.usernameTextField.alpha = !self.usernameTextField.isHidden ? 0 : 1
-                
-                self.aboutUserLabel.alpha = !self.aboutUserLabel.isHidden ? 0 : 1
-                self.aboutUserTextView.alpha = !self.aboutUserTextView.isHidden ? 0 : 1
-                
-                self.profileImageEditButton.alpha = !self.profileImageEditButton.isHidden ? 0 : 1
-                
-                self.editButton.alpha = !self.editButton.isHidden ? 0 : 1
-                self.saveButtonsContainer.alpha = !self.saveButtonsContainer.isHidden ? 0 : 1
-            }) { _ in
-                self.usernameLabel.isHidden = !self.usernameLabel.isHidden
-                self.usernameTextField.isHidden = !self.usernameTextField.isHidden
+                [self.usernameLabel, self.usernameTextField, self.aboutUserLabel, self.aboutUserTextView,
+                 self.profileImageEditButton, self.editButton, self.saveButtonsContainer].forEach {
+                    $0.alpha = !$0.isHidden ? 0 : 1
+                }
+            }, completion: { _ in
+                [self.usernameLabel, self.usernameTextField, self.aboutUserLabel, self.aboutUserTextView,
+                 self.profileImageEditButton, self.editButton, self.saveButtonsContainer].forEach {
+                    $0.isHidden = !$0.isHidden
+                }
                 self.usernameTextField.text = self.usernameLabel.text
-                
-                self.aboutUserLabel.isHidden = !self.aboutUserLabel.isHidden
-                self.aboutUserTextView.isHidden = !self.aboutUserTextView.isHidden
                 self.aboutUserTextView.text = self.aboutUserLabel.text
                 
-                self.editButton.isHidden = !self.editButton.isHidden
-                self.saveButtonsContainer.isHidden = !self.saveButtonsContainer.isHidden
-                
-                self.profileImageEditButton.isHidden = !self.profileImageEditButton.isHidden
                 self.navigationItem.rightBarButtonItem = !self.saveButtonsContainer.isHidden ? self.cancelButton : nil
-            }
+            })
         }
     }
     
     @objc func cancel() {
         DispatchQueue.main.async {[weak self] in
-            if let self = self {
-                if let _ = self.profileModel?.changedData[.photoData] {
-                    if let data = self.profileModel?.photoData {
-                        self.profileImageView.image = UIImage(data: data)
-                    } else if let text = self.usernameLabel.text {
-                        self.profileImageView.setInitials(username: text)
-                    }
+            if self?.profileModel?.changedData[.photoData] != nil {
+                if let data = self?.profileModel?.photoData {
+                    self?.profileImageView.image = UIImage(data: data)
+                } else if let text = self?.usernameLabel.text {
+                    self?.profileImageView.setInitials(username: text)
                 }
             }
         }
+        
         profileModel?.changedData = [:]
         toggleMode()
         view.endEditing(true)
@@ -289,15 +250,13 @@ class ProfileViewController: UIViewController {
     @objc func saveChanges(_ button: UIButton) {
         backdrop.isHidden = false
         view.endEditing(true)
-        guard let title = button.titleLabel?.text else {
-            return
-        }
+        guard let title = button.titleLabel?.text else {return}
         
         profileModel?.save(with: title == "GCD" ? .GCD : .operations)
     }
     
     @objc func usernameTextFieldDidChange(_ textField: UITextField) {
-        if (usernameLabel.text != textField.text) {
+        if usernameLabel.text != textField.text {
             profileModel?.changedData[.username] = textField.text?.data(using: .utf8)
         } else {
             profileModel?.changedData.removeValue(forKey: .username)
@@ -311,38 +270,30 @@ class ProfileViewController: UIViewController {
     }
     
     @objc func keyboardWillShow(notification: NSNotification) {
-        guard let userInfo = notification.userInfo else { return }
-        var keyboardFrame:CGRect = (userInfo[UIResponder.keyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
-        keyboardFrame = self.view.convert(keyboardFrame, from: nil)
+        guard let userInfo = notification.userInfo, let value = userInfo[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue else { return }
 
-        var contentInset:UIEdgeInsets = self.scrollView.contentInset
-        contentInset.bottom = keyboardFrame.size.height + 40
+        var contentInset: UIEdgeInsets = scrollView.contentInset
+        contentInset.bottom = view.convert(value.cgRectValue, from: nil).size.height + 40
         scrollView.contentInset = contentInset
     }
 
     @objc func keyboardWillHide(notification: NSNotification) {
-        let contentInset:UIEdgeInsets = UIEdgeInsets.zero
-        scrollView.contentInset = contentInset
+        scrollView.contentInset = UIEdgeInsets.zero
     }
     
     private func layoutSubviews() {
         profileImageContainer.addSubview(profileImageView)
         profileImageContainer.addSubview(profileImageEditButton)
-        
         containerView.addSubview(profileImageContainer)
         containerView.addSubview(usernameLabel)
         containerView.addSubview(usernameTextField)
         containerView.addSubview(aboutUserLabel)
         containerView.addSubview(aboutUserTextView)
-        
         saveButtonsContainer.addArrangedSubview(saveWithGCDButton)
         saveButtonsContainer.addArrangedSubview(saveWithOperationButton)
-        
         containerView.addSubview(editButton)
         containerView.addSubview(saveButtonsContainer)
-        
         scrollView.addSubview(containerView)
-        
         backdrop.addSubview(activityIndicator)
         
         view.addSubview(scrollView)
@@ -352,41 +303,33 @@ class ProfileViewController: UIViewController {
         profileImageView.heightAnchor.constraint(equalTo: profileImageContainer.heightAnchor).isActive = true
         profileImageView.centerXAnchor.constraint(equalTo: profileImageContainer.centerXAnchor).isActive = true
         profileImageView.centerYAnchor.constraint(equalTo: profileImageContainer.centerYAnchor).isActive = true
-
         profileImageEditButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
         profileImageEditButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         profileImageEditButton.trailingAnchor.constraint(equalTo: profileImageContainer.trailingAnchor).isActive = true
         profileImageEditButton.bottomAnchor.constraint(equalTo: profileImageContainer.bottomAnchor, constant: 14).isActive = true
-        
         profileImageContainer.widthAnchor.constraint(equalToConstant: 240).isActive = true
         profileImageContainer.heightAnchor.constraint(equalToConstant: 240).isActive = true
         profileImageContainer.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 45).isActive = true
         profileImageContainer.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
         
-        usernameLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
-        usernameLabel.topAnchor.constraint(equalTo: profileImageContainer.bottomAnchor, constant: 32).isActive = true
-        usernameLabel.widthAnchor.constraint(equalTo: profileImageContainer.widthAnchor).isActive = true
-        
-        usernameTextField.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
-        usernameTextField.topAnchor.constraint(equalTo: profileImageContainer.bottomAnchor, constant: 32).isActive = true
-        usernameTextField.widthAnchor.constraint(equalTo: profileImageContainer.widthAnchor).isActive = true
-        
-        aboutUserLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
-        aboutUserLabel.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 32).isActive = true
-        aboutUserLabel.widthAnchor.constraint(equalTo: profileImageContainer.widthAnchor).isActive = true
-        aboutUserLabel.bottomAnchor.constraint(lessThanOrEqualTo: editButton.topAnchor, constant: -32).isActive = true
+        [usernameLabel, usernameTextField].forEach {
+            $0.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
+            $0.topAnchor.constraint(equalTo: profileImageContainer.bottomAnchor, constant: 32).isActive = true
+            $0.widthAnchor.constraint(equalTo: profileImageContainer.widthAnchor).isActive = true
+        }
         
         aboutUserTextView.addSubview(aboutTextViewPlaceholder)
-        aboutUserTextView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
-        aboutUserTextView.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 32).isActive = true
-        aboutUserTextView.widthAnchor.constraint(equalTo: profileImageContainer.widthAnchor).isActive = true
-        aboutUserTextView.bottomAnchor.constraint(lessThanOrEqualTo: editButton.topAnchor, constant: -32).isActive = true
+        [aboutUserLabel, aboutUserTextView].forEach {
+            $0.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
+            $0.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 32).isActive = true
+            $0.widthAnchor.constraint(equalTo: profileImageContainer.widthAnchor).isActive = true
+            $0.bottomAnchor.constraint(lessThanOrEqualTo: editButton.topAnchor, constant: -32).isActive = true
+        }
         
         editButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -56).isActive = true
         editButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 56).isActive = true
         editButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -30).isActive = true
         editButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        
         saveButtonsContainer.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16).isActive = true
         saveButtonsContainer.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16).isActive = true
         saveButtonsContainer.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -30).isActive = true
@@ -421,13 +364,12 @@ class ProfileViewController: UIViewController {
 }
 
 extension ProfileViewController {
-    
     func updateProfileImage(url: URL?) {
         guard let profileModel = profileModel else {return}
         if let url = url {
             do {
                 let data = try Data(contentsOf: url)
-                if (!profileModel.photoIsSame(with: data)) {
+                if !profileModel.photoIsSame(with: data) {
                     profileModel.changedData[.photoData] = data
                 } else {
                     profileModel.changedData.removeValue(forKey: .photoData)
@@ -441,9 +383,8 @@ extension ProfileViewController {
                     self.profileImageView.setInitials(username: self.usernameLabel.text ?? "")
                 }
             }
-            
         } else {
-            if (!profileModel.photoIsSame(with: nil)) {
+            if !profileModel.photoIsSame(with: nil) {
                 profileModel.changedData.updateValue(nil, forKey: .photoData)
             } else {
                 profileModel.changedData.removeValue(forKey: .photoData)
@@ -454,12 +395,7 @@ extension ProfileViewController {
     }
     
     @objc func editProfilePhoto() {
-        /*
-            При вызове UIAlertController в консоль вылазит ошибка лейаута.
-            Как написано на SO это давний баг https://stackoverflow.com/questions/55372093/uialertcontrollers-actionsheet-gives-constraint-error-on-ios-12-2-12-3
-        */
         let ac = UIAlertController(title: "Изменить фото", message: nil, preferredStyle: .actionSheet)
-        
         ac.addAction(UIAlertAction(title: "Выбрать из галлереи", style: .default) { _ in
             self.imagePicker.pickImage(with: .photoLibrary)
         })
@@ -484,57 +420,46 @@ extension ProfileViewController {
     @objc func dismissAlertController() {
         self.dismiss(animated: true, completion: nil)
     }
-    
 }
 
 extension ProfileViewController: UITextViewDelegate {
-    
     func textViewDidChange(_ textView: UITextView) {
         aboutTextViewPlaceholder.isHidden = !textView.text.isEmpty
-        
-        if (textView.text != aboutUserLabel.text) {
+        if textView.text != aboutUserLabel.text {
             profileModel?.changedData[.about] = textView.text?.data(using: .utf8)
         } else {
             profileModel?.changedData.removeValue(forKey: .about)
         }
     }
-    
 }
 
 extension ProfileViewController: UITextFieldDelegate {
-    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         view.endEditing(true)
         return false
     }
-    
 }
 
 extension ProfileViewController: ImagePickerDelegate {
-    
     func didSelectImage(url: URL?) {
         updateProfileImage(url: url)
     }
-    
 }
 
 extension ProfileViewController: ProfileModelDelegate {
-    
-    func didUpdate(provider: ManagerType, userProfile: UserProfile, failToUpdateProperties: [UserProfile.Keys:Error]?) {
+    func didUpdate(provider: ManagerType, userProfile: UserProfile, failToUpdateProperties: [UserProfile.Keys: Error]?) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
-            print(userProfile)
             self?.updateProfile(username: userProfile.username, about: userProfile.about, photoData: userProfile.photoData)
             if let props = failToUpdateProperties, !props.isEmpty {
                 var message = "Cannot update some properties:\n"
                 props.forEach { message = message + "\($0.key)" }
                 let ac = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
-                
-                ac.addAction(UIAlertAction(title: "Ok", style: .default){ _ in
+                ac.addAction(UIAlertAction(title: "Ok", style: .default) { _ in
                     ac.dismiss(animated: true, completion: nil)
                     self?.backdrop.isHidden = true
                 })
                 
-                ac.addAction(UIAlertAction(title: "Repeat", style: .default){ _ in
+                ac.addAction(UIAlertAction(title: "Repeat", style: .default) { _ in
                     self?.profileModel?.save(with: provider)
                     ac.dismiss(animated: true, completion: nil)
                 })
@@ -542,13 +467,11 @@ extension ProfileViewController: ProfileModelDelegate {
                 self?.present(ac, animated: true, completion: nil)
             } else {
                 let ac = UIAlertController(title: "Saved with \(provider)", message: "Profile data updated successfully", preferredStyle: .alert)
-                
-                ac.addAction(UIAlertAction(title: "Ok", style: .default){ _ in
+                ac.addAction(UIAlertAction(title: "Ok", style: .default) { _ in
                     ac.dismiss(animated: true, completion: nil)
                 })
                     
                 self?.present(ac, animated: true, completion: nil)
-                
                 self?.toggleMode()
                 self?.backdrop.isHidden = true
             }
@@ -560,14 +483,11 @@ extension ProfileViewController: ProfileModelDelegate {
             self?.view.endEditing(true)
             self?.backdrop.isHidden = true
             let ac = UIAlertController(title: "Error happend", message: "Failed to save your data", preferredStyle: .alert)
-            
-            ac.addAction(UIAlertAction(title: "Ok", style: .default){ _ in
+            ac.addAction(UIAlertAction(title: "Ok", style: .default) { _ in
                 ac.dismiss(animated: true, completion: nil)
             })
             
             self?.present(ac, animated: true, completion: nil)
-            
-            print(error)
         }
     }
     
@@ -577,5 +497,4 @@ extension ProfileViewController: ProfileModelDelegate {
             self?.saveWithOperationButton.isEnabled = value
         }
     }
-    
 }

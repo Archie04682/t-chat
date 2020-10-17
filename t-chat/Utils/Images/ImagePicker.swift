@@ -54,7 +54,9 @@ class ImagePicker: NSObject {
     }
     
     private func showGoToSettingsAlert() {
-        let alertController = UIAlertController(title: "Нет разрешения", message: "Чтобы использовать фотографии из галереи или сделать фото, приложению необходим доступ к Фото и Камере.", preferredStyle: .alert)
+        let alertController = UIAlertController(title: "Нет разрешения",
+                                                message: "Чтобы использовать фотографии из галереи или сделать фото, приложению необходим доступ к Фото и Камере.",
+                                                preferredStyle: .alert)
 
         let settingsAction = UIAlertAction(title: "К настройкам", style: .default) { (_) -> Void in
 
@@ -83,7 +85,7 @@ class ImagePicker: NSObject {
 }
 
 extension ImagePicker: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    @objc func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    @objc func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         if let url = info[.imageURL] as? URL {
             self.didSelectImage(picker, url: url)
         } else if let image = info[.originalImage] as? UIImage {

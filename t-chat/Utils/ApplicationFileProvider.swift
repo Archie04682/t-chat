@@ -48,6 +48,8 @@ final class ApplicationFileProvider {
     
     static func isFirstLaunch() -> Bool {
         var dir = ObjCBool(true)
-        return !FileManager.default.fileExists(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(ApplicationFileProvider.folderName).path, isDirectory: &dir)
+        return !FileManager.default.fileExists(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])
+            .appendingPathComponent(ApplicationFileProvider.folderName).path,
+                                               isDirectory: &dir)
     }
 }
