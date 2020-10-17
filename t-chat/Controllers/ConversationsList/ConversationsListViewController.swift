@@ -7,11 +7,11 @@
 //
 
 import UIKit
+import Firebase
 
 class ConversationsListViewController: UIViewController {
     
     private var sampleData: [(String, [ConversationCellModel])]
-//    private var myProfile = UserProfile(username: "Marina Dudarenko", about: "UX/UI designer, web-designer Moscow, Russia.")
     
     private var theme = ThemeManager.shared.currentTheme
     
@@ -51,7 +51,7 @@ class ConversationsListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationItem.backBarButtonItem?.title = ""
-        title = "Tinkoff Chat"
+        title = "Channels"
         setupViews()
         navigationController?.delegate = self
         conversationsTable.register(ConversationTableViewCell.self, forCellReuseIdentifier: String(describing: type(of: ConversationTableViewCell.self)))
@@ -121,7 +121,6 @@ extension ConversationsListViewController: UINavigationControllerDelegate {
             theme = ThemeManager.shared.currentTheme
         }
         
-        // Сделано для демо загрузки из файлов
         profileModel.load {[weak self] profile, _ in
             if let profile = profile {
                 DispatchQueue.main.async {
