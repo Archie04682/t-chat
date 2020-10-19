@@ -73,12 +73,14 @@ class ProfileViewController: UIViewController {
         let view = UITextField()
         view.borderStyle = .roundedRect
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.placeholder = "Username"
+        view.attributedPlaceholder = NSAttributedString(string: "Username",
+                                                        attributes: [NSAttributedString.Key.foregroundColor:
+                                                            ThemeManager.shared.currentTheme.textColor.withAlphaComponent(0.7)])
+        view.textColor = ThemeManager.shared.currentTheme.textColor
         view.backgroundColor = ThemeManager.shared.currentTheme.inputFieldBackgroundColor
         view.layer.borderColor = ThemeManager.shared.currentTheme.inputFieldBorderBackgroundColor.cgColor
         view.layer.borderWidth = 1.5
         view.layer.cornerRadius = 4.0
-        view.textColor = ThemeManager.shared.currentTheme.textColor
         view.isHidden = true
         return view
     }()
@@ -94,18 +96,17 @@ class ProfileViewController: UIViewController {
     
     private lazy var aboutUserTextView: UITextView = {
         let view = UITextView()
-        view.layer.borderColor = UIColor(red: 224 / 255, green: 224 / 255, blue: 224 / 255, alpha: 1).cgColor
-        view.layer.borderWidth = 1.5
-        view.layer.cornerRadius = 4.0
-        view.layer.masksToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false
         view.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        view.textColor = ThemeManager.shared.currentTheme.textColor
         view.isScrollEnabled = false
         view.isHidden = true
         view.delegate = self
         view.backgroundColor = ThemeManager.shared.currentTheme.inputFieldBackgroundColor
         view.layer.borderColor = ThemeManager.shared.currentTheme.inputFieldBorderBackgroundColor.cgColor
-        view.textColor = ThemeManager.shared.currentTheme.textColor
+        view.layer.borderWidth = 1.5
+        view.layer.cornerRadius = 4.0
+        view.layer.masksToBounds = true
         return view
     }()
     
@@ -458,7 +459,6 @@ extension ProfileViewController: ProfileModelDelegate {
                     ac.dismiss(animated: true, completion: nil)
                     self?.backdrop.isHidden = true
                 })
-                
                 ac.addAction(UIAlertAction(title: "Repeat", style: .default) { _ in
                     self?.profileModel?.save(with: provider)
                     ac.dismiss(animated: true, completion: nil)

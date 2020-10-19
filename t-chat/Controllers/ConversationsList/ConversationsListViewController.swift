@@ -35,6 +35,7 @@ class ConversationsListViewController: UIViewController {
     
     private let firestoreProvider = FirestoreProvider()
     private var listener: ListenerRegistration?
+    private var alert: UIAlertController?
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -62,8 +63,9 @@ class ConversationsListViewController: UIViewController {
         conversationsTable.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         conversationsTable.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         
-        let usernavigationItem = UIBarButtonItem(customView: profileImageView)
-        navigationItem.rightBarButtonItem = usernavigationItem
+        let userNavigationItem = UIBarButtonItem(customView: profileImageView)
+        let addNewChannelItem = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(self.showAddNewChannelPopup))
+        navigationItem.rightBarButtonItems = [userNavigationItem, addNewChannelItem]
         
         let profileTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.goToProfile))
         profileImageView.addGestureRecognizer(profileTapGestureRecognizer)
@@ -89,6 +91,31 @@ class ConversationsListViewController: UIViewController {
         }
     }
     
+    @objc func showAddNewChannelPopup() {
+        let ac = UIAlertController(title: "Start new channel", message: nil, preferredStyle: UIAlertController.Style.alert)
+        ac.addTextField { textField in
+            textField.borderStyle = .roundedRect
+            textField.attributedPlaceholder = NSAttributedString(string: "Channel name",
+                                                                 attributes: [NSAttributedString.Key.foregroundColor:
+                                                                    ThemeManager.shared.currentTheme.textColor.withAlphaComponent(0.7)])
+            textField.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+            textField.backgroundColor = ThemeManager.shared.currentTheme.inputFieldBackgroundColor
+            textField.layer.borderColor = ThemeManager.shared.currentTheme.inputFieldBorderBackgroundColor.cgColor
+            textField.layer.borderWidth = 1.5
+            textField.layer.cornerRadius = 4.0
+            textField.textColor = ThemeManager.shared.currentTheme.textColor
+            textField.returnKeyType = .go
+            textField.enablesReturnKeyAutomatically = true
+            textField.addTarget(self, action: #selector(self.saveNewChannel(textField:)), for: .primaryActionTriggered)
+        }
+        
+        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        
+        present(ac, animated: true) {[weak self] in
+            self?.alert = ac
+        }
+    }
+    
     @objc func goToProfile() {
         let vc = ProfileViewController(model: profileModel)
 
@@ -111,6 +138,17 @@ class ConversationsListViewController: UIViewController {
                 } else if let username = self?.profileModel.username {
                     self?.profileImageView.setInitials(username: username)
                 }
+            }
+        }
+    }
+    
+    @objc func saveNewChannel(textField: UITextField) {
+        if let text = textField.text {
+            firestoreProvider.createChannel(withName: text) {[weak self] error in
+                guard error == nil else { return }
+                
+                self?.alert?.dismiss(animated: true)
+                self?.alert = nil
             }
         }
     }

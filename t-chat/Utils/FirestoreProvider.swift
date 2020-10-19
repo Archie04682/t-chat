@@ -33,6 +33,12 @@ class FirestoreProvider {
         }
     }
     
+    func createChannel(withName name: String, completion: @escaping (Error?) -> Void) {
+        db.collection("channels").addDocument(data: ["name": name]) { error in
+            completion(error)
+        }
+    }
+    
     func getMessages(forChannel channelId: String, completion: @escaping ([Message]?, Error?) -> Void) -> ListenerRegistration {
         return db.collection("channels").document(channelId).collection("messages").addSnapshotListener { snapshot, error in
             if let error = error {
