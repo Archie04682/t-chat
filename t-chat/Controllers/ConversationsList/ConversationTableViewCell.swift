@@ -10,7 +10,7 @@ import UIKit
 
 class ConversationTableViewCell: UITableViewCell {
     
-    private lazy var usernameLabel: UILabel = {
+    private lazy var channelName: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
 
@@ -24,7 +24,7 @@ class ConversationTableViewCell: UITableViewCell {
         return label
     }()
     
-    private lazy var lastMessageLabelDate: UILabel = {
+    private lazy var lastActivityLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 15, weight: .regular)
         label.textColor = ThemeManager.shared.currentTheme.subtitleColor
@@ -55,8 +55,8 @@ class ConversationTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         self.selectionStyle = .none
-        headerStackView.addArrangedSubview(usernameLabel)
-        headerStackView.addArrangedSubview(lastMessageLabelDate)
+        headerStackView.addArrangedSubview(channelName)
+        headerStackView.addArrangedSubview(lastActivityLabel)
         parentStackView.addArrangedSubview(headerStackView)
         parentStackView.addArrangedSubview(lastMessageLabel)
         contentView.addSubview(parentStackView)
@@ -76,27 +76,23 @@ class ConversationTableViewCell: UITableViewCell {
 
 extension ConversationTableViewCell: ConfigurableView {
     
-    typealias ConfigurationModel = ConversationCellModel
+    typealias ConfigurationModel = Channel
     
-    func configure(with model: ConversationCellModel) {
-        usernameLabel.text = model.name
-        usernameLabel.textColor = ThemeManager.shared.currentTheme.textColor
+    func configure(with model: Channel) {
+        channelName.text = model.name
+        channelName.textColor = ThemeManager.shared.currentTheme.textColor
         lastMessageLabel.textColor = ThemeManager.shared.currentTheme.subtitleColor
-        lastMessageLabelDate.textColor = ThemeManager.shared.currentTheme.subtitleColor
+        lastActivityLabel.textColor = ThemeManager.shared.currentTheme.subtitleColor
         
-        configureMessageLabel(with: model.message, hasUnreadMessages: model.hasUnreadMessages)
-        if !model.message.isEmpty {
-            configureMessageDateLabel(with: model.date)
-        } else {
-            lastMessageLabelDate.text = ""
-        }
+        configureMessageLabel(with: model.lastMessage)
+        configureMessageDateLabel(with: model.lastActivity)
         
-        backgroundColor = model.isOnline ? ThemeManager.shared.currentTheme.onlineCellColor : .clear
+        backgroundColor = .clear
     }
     
-    private func configureMessageLabel(with message: String, hasUnreadMessages: Bool) {
-        if !message.isEmpty {
-            lastMessageLabel.font = UIFont.systemFont(ofSize: 13, weight: hasUnreadMessages ? .bold :.regular)
+    private func configureMessageLabel(with message: String?) {
+        if let message = message, message.count > 0 {
+            lastMessageLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
             lastMessageLabel.text = message
             lastMessageLabel.numberOfLines = 2
         } else {
@@ -105,11 +101,14 @@ extension ConversationTableViewCell: ConfigurableView {
         }
     }
     
-    private func configureMessageDateLabel(with date: Date) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = Calendar.current.isDateInToday(date) ? "hh:mm" : "dd MMM"
+    private func configureMessageDateLabel(with date: Date?) {
+        if let date = date {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = Calendar.current.isDateInToday(date) ? "hh:mm" : "dd MMM"
 
-        lastMessageLabelDate.text = dateFormatter.string(from: date)
+            lastActivityLabel.text = dateFormatter.string(from: date)
+        } else {
+            lastActivityLabel.text = ""
+        }
     }
-    
 }

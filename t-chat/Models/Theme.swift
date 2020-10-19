@@ -133,4 +133,11 @@ enum Theme: Int, CaseIterable {
         case .night: return UIColor.black
         }
     }
+    
+    var tableViewSeparatorColor: UIColor {
+        switch self {
+        case .classic, .day: return .gray
+        case .night: return UIColor(red: 224 / 255, green: 224 / 255, blue: 224 / 255, alpha: 1)
+        }
+    }
 }

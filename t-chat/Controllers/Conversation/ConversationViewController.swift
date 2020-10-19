@@ -7,17 +7,21 @@
 //
 
 import UIKit
+import Firebase
 
 class ConversationViewController: UIViewController {
     
-    private let username: String
-    private let conversation: [MessageCellModel]
+    private let channelName: String
+    private let channelId: String
+    private var conversation: [Message] = []
+    private var listener: ListenerRegistration?
+    private let firebaseProvider = FirestoreProvider()
     
     private lazy var conversationTable: UITableView = {
         let tableView = UITableView(frame: .zero, style: .plain)
         tableView.dataSource = self
         tableView.delegate = self
-        
+        tableView.isHidden = true
         return tableView
     }()
     
@@ -30,9 +34,9 @@ class ConversationViewController: UIViewController {
         return label
     }()
     
-    init(username: String, messages: [MessageCellModel]?) {
-        self.username = username
-        self.conversation = messages ?? []
+    init(channelId: String, channelName: String) {
+        self.channelName = channelName
+        self.channelId = channelId
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -47,23 +51,20 @@ class ConversationViewController: UIViewController {
     }
     
     private func setupViews() {
-        title = username
-        if conversation.isEmpty {
-            view.addSubview(noMessagesLabel)
-            noMessagesLabel.translatesAutoresizingMaskIntoConstraints = false
-            noMessagesLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
-            noMessagesLabel.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor).isActive = true
-        } else {
-            view.addSubview(conversationTable)
-            conversationTable.translatesAutoresizingMaskIntoConstraints = false
-            conversationTable.clipsToBounds = true
-            conversationTable.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
-            conversationTable.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
-            conversationTable.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-            conversationTable.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
-            conversationTable.separatorStyle = .none
-        }
-        
+        title = channelName
+        view.addSubview(noMessagesLabel)
+        noMessagesLabel.translatesAutoresizingMaskIntoConstraints = false
+        noMessagesLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
+        noMessagesLabel.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor).isActive = true
+
+        view.addSubview(conversationTable)
+        conversationTable.translatesAutoresizingMaskIntoConstraints = false
+        conversationTable.clipsToBounds = true
+        conversationTable.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
+        conversationTable.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
+        conversationTable.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        conversationTable.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        conversationTable.separatorStyle = .none
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -72,12 +73,26 @@ class ConversationViewController: UIViewController {
         view.backgroundColor = ThemeManager.shared.currentTheme.conversationBackgroundColor
         conversationTable.backgroundColor = ThemeManager.shared.currentTheme.conversationBackgroundColor
         
-        if !conversation.isEmpty {
-            // скроллим чат к последнему сообщению в чате
-            DispatchQueue.main.async {
-                self.conversationTable.scrollToRow(at: IndexPath(row: self.conversation.count - 1, section: 0), at: .bottom, animated: false)
+        listener = firebaseProvider.getMessages(forChannel: channelId) {[weak self] messages, error in
+            guard error == nil, let messages = messages else {return}
+            self?.conversation = messages
+            
+            if !messages.isEmpty {
+                DispatchQueue.main.async {[weak self] in
+                    self?.conversationTable.isHidden = false
+                    self?.noMessagesLabel.isHidden = true
+                    self?.conversationTable.reloadData()
+                    self?.conversationTable.scrollToRow(at: IndexPath(row: messages.count - 1, section: 0), at: .bottom, animated: false)
+                }
+            } else {
+                self?.conversationTable.isHidden = true
+                self?.noMessagesLabel.isHidden = false
             }
         }
+    }
+    
+    deinit {
+        listener?.remove()
     }
 
 }

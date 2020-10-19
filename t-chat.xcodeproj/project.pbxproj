@@ -27,6 +27,7 @@
 		FC5370362520B58700653A19 /* ConversationMessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC5370352520B58700653A19 /* ConversationMessageTableViewCell.swift */; };
 		FC5370382520D42300653A19 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC5370372520D42300653A19 /* ProfileViewController.swift */; };
 		FC61DC23253B6CE0009B6223 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FC61DC22253B6CE0009B6223 /* GoogleService-Info.plist */; };
+		FC61DC25253B7342009B6223 /* FirestoreProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC61DC24253B7342009B6223 /* FirestoreProvider.swift */; };
 		FC694F232531D9A100256A32 /* ApplicationFileProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC694F222531D9A100256A32 /* ApplicationFileProvider.swift */; };
 		FC7C00D8253211A700C3DCAE /* FileOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7C00D7253211A700C3DCAE /* FileOperations.swift */; };
 		FC7C00DA2532144700C3DCAE /* OperationsUserProfileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7C00D92532144700C3DCAE /* OperationsUserProfileManager.swift */; };
@@ -72,6 +73,7 @@
 		FC5370352520B58700653A19 /* ConversationMessageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationMessageTableViewCell.swift; sourceTree = "<group>"; };
 		FC5370372520D42300653A19 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		FC61DC22253B6CE0009B6223 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		FC61DC24253B7342009B6223 /* FirestoreProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreProvider.swift; sourceTree = "<group>"; };
 		FC694F222531D9A100256A32 /* ApplicationFileProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationFileProvider.swift; sourceTree = "<group>"; };
 		FC7C00D7253211A700C3DCAE /* FileOperations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileOperations.swift; sourceTree = "<group>"; };
 		FC7C00D92532144700C3DCAE /* OperationsUserProfileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationsUserProfileManager.swift; sourceTree = "<group>"; };
@@ -227,6 +229,7 @@
 				FC694F222531D9A100256A32 /* ApplicationFileProvider.swift */,
 				FC7C00D7253211A700C3DCAE /* FileOperations.swift */,
 				FC7C00DB253236D000C3DCAE /* UserProfileDataManager.swift */,
+				FC61DC24253B7342009B6223 /* FirestoreProvider.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -430,6 +433,7 @@
 				FC3811C22530E23F00AB796C /* Backdrop.swift in Sources */,
 				FC32038F2519E394000C2DD9 /* UserProfile.swift in Sources */,
 				FC94E5EC25286999000F09BE /* ThemesViewController.swift in Sources */,
+				FC61DC25253B7342009B6223 /* FirestoreProvider.swift in Sources */,
 				FC0BA0ED250B8911005AE946 /* AppState.swift in Sources */,
 				FC7C00D8253211A700C3DCAE /* FileOperations.swift in Sources */,
 				FC694F232531D9A100256A32 /* ApplicationFileProvider.swift in Sources */,

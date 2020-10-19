@@ -10,12 +10,11 @@ import UIKit
 import Firebase
 
 class ConversationsListViewController: UIViewController {
-    
-    private var sampleData: [(String, [ConversationCellModel])]
-    
     private var theme = ThemeManager.shared.currentTheme
     
     private let profileModel = ProfileModel()
+    
+    private lazy var channels: [Channel] = []
     
     private lazy var conversationsTable: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
@@ -34,13 +33,10 @@ class ConversationsListViewController: UIViewController {
         return profileImageView
     }()
     
+    private let firestoreProvider = FirestoreProvider()
+    private var listener: ListenerRegistration?
+    
     init() {
-        let gen = DataGen().generateConversationsList(count: 30)
-        sampleData = [
-            ("Online", gen.filter { $0.isOnline }),
-            ("History", gen.filter { !$0.message.isEmpty && !$0.isOnline })
-        ]
-        
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -80,7 +76,17 @@ class ConversationsListViewController: UIViewController {
         super.viewWillAppear(animated)
         
         view.backgroundColor = ThemeManager.shared.currentTheme.backgroundColor
-        conversationsTable.backgroundColor = ThemeManager.shared.currentTheme.backgroundColor
+        conversationsTable.backgroundColor = .clear
+        conversationsTable.separatorColor = ThemeManager.shared.currentTheme.tableViewSeparatorColor
+        
+        listener = firestoreProvider.getChannels {[weak self] channels, error in
+            guard let channels = channels, error == nil else {
+                return
+            }
+            
+            self?.channels = channels
+            self?.conversationsTable.reloadData()
+        }
     }
     
     @objc func goToProfile() {
@@ -108,7 +114,10 @@ class ConversationsListViewController: UIViewController {
             }
         }
     }
-
+    
+    deinit {
+        listener?.remove()
+    }
 }
 
 extension ConversationsListViewController: UINavigationControllerDelegate {
@@ -136,32 +145,26 @@ extension ConversationsListViewController: UINavigationControllerDelegate {
 }
 
 extension ConversationsListViewController: UITableViewDataSource {
-    
     func numberOfSections(in tableView: UITableView) -> Int {
-        return sampleData.count
-    }
-    
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return sampleData[section].0
+        return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return sampleData[section].1.count
+        return channels.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: type(of: ConversationTableViewCell.self))) as? ConversationTableViewCell
             else { return UITableViewCell(style: .default, reuseIdentifier: "default") }
         
-        cell.configure(with: sampleData[indexPath.section].1[indexPath.row])
+        cell.configure(with: channels[indexPath.row])
         cell.accessoryType = .disclosureIndicator
+        cell.tintColor = .white
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let firstMessage = sampleData[indexPath.section].1[indexPath.row].message
-        let vc = ConversationViewController(username: sampleData[indexPath.section].1[indexPath.row].name,
-                                            messages: firstMessage.isEmpty ? [] : DataGen().generateMessages(firstMessage: firstMessage))
+        let vc = ConversationViewController(channelId: channels[indexPath.row].identifier, channelName: channels[indexPath.row].name)
         navigationController?.pushViewController(vc, animated: true)
     }
 

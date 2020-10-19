@@ -71,8 +71,14 @@ class ThemeView: UIView {
     }
     
     private func setupView() {
-        incommingMessageView.configure(with: MessageCellModel(text: "Hello, how are u?", isIncomming: true))
-        outcommingMessageView.configure(with: MessageCellModel(text: "Hello there! Fine!", isIncomming: false))
+        incommingMessageView.configure(with: Message(content: "Hello! How r u?",
+                                                     created: Date(),
+                                                     senderId: "sender",
+                                                     senderName: ""))
+        outcommingMessageView.configure(with: Message(content: "Hi! Fine!",
+                                                      created: Date(),
+                                                      senderId: UIDevice.current.identifierForVendor!.uuidString,
+                                                      senderName: ""))
         
         dialogSampleView.addArrangedSubview(incommingMessageView)
         dialogSampleView.addArrangedSubview(outcommingMessageView)
@@ -117,11 +123,11 @@ extension ThemeView: ConfigurableView {
         theme = model
         themeNameLabel.text = model.themeName
         incommingMessageView.setBackgroundColor(model.incommingMessageBackgroundColor)
-        incommingMessageView.setMessageColor(model.incommingMessageTextColor)
+        incommingMessageView.setTextColor(model.incommingMessageTextColor)
         selectionButton.backgroundColor = model.conversationBackgroundColor
         
         outcommingMessageView.setBackgroundColor(model.outcommingMessageBackgroundColor)
-        outcommingMessageView.setMessageColor(model.outcommingMessageTextColor)
+        outcommingMessageView.setTextColor(model.outcommingMessageTextColor)
         selectionButton.backgroundColor = model.conversationBackgroundColor
     }
 }
