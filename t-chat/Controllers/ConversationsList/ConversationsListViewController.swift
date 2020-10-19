@@ -202,7 +202,7 @@ extension ConversationsListViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vc = ConversationViewController(channelId: channels[indexPath.row].identifier, channelName: channels[indexPath.row].name)
+        let vc = ConversationViewController(channelId: channels[indexPath.row].identifier, channelName: channels[indexPath.row].name, username: profileModel.username)
         navigationController?.pushViewController(vc, animated: true)
     }
 

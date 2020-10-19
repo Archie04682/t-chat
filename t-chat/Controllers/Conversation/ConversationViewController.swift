@@ -13,6 +13,7 @@ class ConversationViewController: UIViewController {
     
     private let channelName: String
     private let channelId: String
+    private let username: String
     private var conversation: [Message] = []
     private var listener: ListenerRegistration?
     private let firebaseProvider = FirestoreProvider()
@@ -22,6 +23,9 @@ class ConversationViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.isHidden = true
+        tableView.keyboardDismissMode = .interactive
+        tableView.transform = CGAffineTransform(scaleX: 1, y: -1)
+        
         return tableView
     }()
     
@@ -34,9 +38,56 @@ class ConversationViewController: UIViewController {
         return label
     }()
     
-    init(channelId: String, channelName: String) {
+    private lazy var toolbar: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = ThemeManager.shared.currentTheme.inputFieldBackgroundColor
+        
+        return view
+    }()
+    
+    private lazy var sendButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("Send", for: .normal)
+        button.isEnabled = false
+        return button
+    }()
+    
+    private lazy var messageTextView: UITextView = {
+        let view = UITextView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        view.textColor = ThemeManager.shared.currentTheme.textColor
+        view.isScrollEnabled = false
+        view.delegate = self
+        view.backgroundColor = ThemeManager.shared.currentTheme.inputFieldBackgroundColor
+        view.layer.borderColor = ThemeManager.shared.currentTheme.inputFieldBorderBackgroundColor.cgColor
+        view.layer.borderWidth = 1.5
+        view.layer.cornerRadius = 4.0
+        view.layer.masksToBounds = true
+        
+        return view
+    }()
+    
+    private lazy var messageTextViewPlaceholder: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "Message"
+        label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        label.sizeToFit()
+        label.textColor = ThemeManager.shared.currentTheme.textColor
+        
+        return label
+    }()
+    
+    private var toolbarBottomConstraint: NSLayoutConstraint?
+    private let maxHeight: CGFloat = 100
+    
+    init(channelId: String, channelName: String, username: String) {
         self.channelName = channelName
         self.channelId = channelId
+        self.username = username
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -56,15 +107,55 @@ class ConversationViewController: UIViewController {
         noMessagesLabel.translatesAutoresizingMaskIntoConstraints = false
         noMessagesLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
         noMessagesLabel.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor).isActive = true
+        
+        messageTextView.addSubview(messageTextViewPlaceholder)
+        messageTextViewPlaceholder.leadingAnchor.constraint(equalTo: messageTextView.leadingAnchor, constant: 4).isActive = true
+        messageTextViewPlaceholder.centerYAnchor.constraint(equalTo: messageTextView.centerYAnchor).isActive = true
+        
+        toolbar.addSubview(messageTextView)
+        toolbar.addSubview(sendButton)
+        
+        sendButton.trailingAnchor.constraint(equalTo: toolbar.trailingAnchor, constant: -8).isActive = true
+        sendButton.bottomAnchor.constraint(equalTo: toolbar.bottomAnchor, constant: -2).isActive = true
 
+        messageTextView.topAnchor.constraint(equalTo: toolbar.topAnchor, constant: 2).isActive = true
+        messageTextView.bottomAnchor.constraint(equalTo: toolbar.bottomAnchor, constant: -2).isActive = true
+        messageTextView.leadingAnchor.constraint(equalTo: toolbar.leadingAnchor, constant: 8).isActive = true
+        messageTextView.trailingAnchor.constraint(equalTo: sendButton.leadingAnchor, constant: -8).isActive = true
+        
         view.addSubview(conversationTable)
+        view.addSubview(toolbar)
+        
         conversationTable.translatesAutoresizingMaskIntoConstraints = false
         conversationTable.clipsToBounds = true
         conversationTable.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
         conversationTable.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
         conversationTable.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-        conversationTable.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        conversationTable.bottomAnchor.constraint(equalTo: toolbar.topAnchor, constant: -8).isActive = true
+        
+        toolbar.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
+        toolbar.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
+        toolbarBottomConstraint = toolbar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        toolbarBottomConstraint?.isActive = true
+        
         conversationTable.separatorStyle = .none
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        sendButton.addTarget(self, action: #selector(sendMessage), for: .touchUpInside)
+    }
+    
+    @objc func sendMessage() {
+        firebaseProvider.sendMessage(toChannel: channelId, text: messageTextView.text.trimmingCharacters(in: .whitespacesAndNewlines), senderName: username) {[weak self] error in
+            guard error == nil else {
+                return
+            }
+
+            self?.messageTextView.text = String()
+            // добавлено, чтобы стриггерить textViewDidChange
+            self?.messageTextView.insertText(String())
+        }
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -82,11 +173,35 @@ class ConversationViewController: UIViewController {
                     self?.conversationTable.isHidden = false
                     self?.noMessagesLabel.isHidden = true
                     self?.conversationTable.reloadData()
-                    self?.conversationTable.scrollToRow(at: IndexPath(row: messages.count - 1, section: 0), at: .bottom, animated: false)
                 }
             } else {
                 self?.conversationTable.isHidden = true
                 self?.noMessagesLabel.isHidden = false
+            }
+        }
+    }
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue,
+            let duration = (notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double) {
+            
+            UIView.animate(withDuration: duration) { () -> Void in
+                self.toolbarBottomConstraint?.isActive = false
+                self.toolbarBottomConstraint? = self.toolbar.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -(keyboardSize.height + 2))
+                self.toolbarBottomConstraint?.isActive = true
+                self.view.layoutIfNeeded()
+
+            }
+        }
+    }
+
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if let duration = (notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double) {
+            UIView.animate(withDuration: duration) { () -> Void in
+                self.toolbarBottomConstraint?.isActive = false
+                self.toolbarBottomConstraint = self.toolbar.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
+                self.toolbarBottomConstraint?.isActive = true
+                self.view.layoutIfNeeded()
             }
         }
     }
@@ -109,6 +224,7 @@ extension ConversationViewController: UITableViewDataSource {
         
         cell.configure(with: conversation[indexPath.row])
         cell.backgroundColor = .clear
+        cell.contentView.transform = CGAffineTransform(scaleX: 1, y: -1)
         return cell
     }
 
@@ -116,4 +232,12 @@ extension ConversationViewController: UITableViewDataSource {
 
 extension ConversationViewController: UITableViewDelegate {
     
+}
+
+extension ConversationViewController: UITextViewDelegate {
+    func textViewDidChange(_ textView: UITextView) {
+        print(textView.text.isEmpty)
+        messageTextViewPlaceholder.isHidden = !textView.text.isEmpty
+        sendButton.isEnabled = !textView.text.isEmpty
+    }
 }

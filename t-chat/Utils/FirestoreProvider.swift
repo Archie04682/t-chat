@@ -49,10 +49,19 @@ class FirestoreProvider {
                             created: ($0["created"] as? Timestamp)?.dateValue() ?? Date(),
                             senderId: $0["senderId"] as? String ?? "",
                             senderName: $0["senderName"] as? String ?? "")
-                }.sorted(by: { $0.created < $1.created })
-
+                }.sorted(by: { $0.created > $1.created })
                 completion(messages, nil)
             }
+        }
+    }
+    
+    func sendMessage(toChannel channelId: String, text: String, senderName: String, completion: @escaping (Error?) -> Void) {
+        db.collection("channels").document(channelId).collection("messages")
+            .addDocument(data: ["content": text,
+                                "created": Timestamp(date: Date()),
+                                "senderId": UIDevice.current.identifierForVendor!.uuidString,
+                                "senderName": senderName]) { error in
+                                    completion(error)
         }
     }
 }
