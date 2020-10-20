@@ -17,12 +17,11 @@ class FirestoreProvider {
             if let error = error {
                 completion(nil, error)
             } else if let documents = snapshot?.documents {
-                let channels = documents.map {
-                    Channel(identifier: $0.documentID,
-                            name: $0["name"] as? String ?? "",
-                            lastMessage: $0["lastMessage"] as? String ?? "",
-                            lastActivity: ($0["lastActivity"] as? Timestamp)?.dateValue())
-                }.filter { $0.name.count > 0 }.sorted(by: { first, second in
+                let channels = documents.compactMap { document -> Channel? in
+                    var dict = document.data()
+                    dict["documentID"] = document.documentID
+                    return Channel(dict)
+                }.sorted(by: { first, second in
                     guard let firstDate = first.lastActivity else { return false }
                     guard let secondDate = second.lastActivity else { return true }
                     return firstDate > secondDate
@@ -43,24 +42,15 @@ class FirestoreProvider {
         return db.collection("channels").document(channelId).collection("messages").addSnapshotListener { snapshot, error in
             if let error = error {
                 completion(nil, error)
-            } else if let messages = snapshot?.documents {
-                let messages = messages.map {
-                    Message(content: $0["content"] as? String ?? "",
-                            created: ($0["created"] as? Timestamp)?.dateValue() ?? Date(),
-                            senderId: $0["senderId"] as? String ?? "",
-                            senderName: $0["senderName"] as? String ?? "")
-                }.sorted(by: { $0.created > $1.created })
-                completion(messages, nil)
+            } else if let documents = snapshot?.documents {
+                completion(documents.compactMap { Message($0.data()) }.sorted(by: { $0.created > $1.created }), nil)
             }
         }
     }
     
-    func sendMessage(toChannel channelId: String, text: String, senderName: String, completion: @escaping (Error?) -> Void) {
+    func sendMessage(toChannel channelId: String, message: Message, completion: @escaping (Error?) -> Void) {
         db.collection("channels").document(channelId).collection("messages")
-            .addDocument(data: ["content": text,
-                                "created": Timestamp(date: Date()),
-                                "senderId": UIDevice.current.identifierForVendor!.uuidString,
-                                "senderName": senderName]) { error in
+            .addDocument(data: message.toDictionary()) { error in
                                     completion(error)
         }
     }

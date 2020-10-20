@@ -11,12 +11,13 @@ import Firebase
 
 class ConversationViewController: UIViewController {
     
-    private let channelName: String
-    private let channelId: String
-    private let username: String
+    private let channel: Channel
+    private let profile: ProfileModel
+    
     private var conversation: [Message] = []
     private var listener: ListenerRegistration?
-    private let firebaseProvider = FirestoreProvider()
+    private var toolbarBottomConstraint: NSLayoutConstraint?
+    private let firestoreProvider: FirestoreProvider
     
     private lazy var conversationTable: UITableView = {
         let tableView = UITableView(frame: .zero, style: .plain)
@@ -64,7 +65,7 @@ class ConversationViewController: UIViewController {
         view.backgroundColor = ThemeManager.shared.currentTheme.inputFieldBackgroundColor
         view.layer.borderColor = ThemeManager.shared.currentTheme.inputFieldBorderBackgroundColor.cgColor
         view.layer.borderWidth = 1.5
-        view.layer.cornerRadius = 4.0
+        view.layer.cornerRadius = 16
         view.layer.masksToBounds = true
         
         return view
@@ -76,18 +77,15 @@ class ConversationViewController: UIViewController {
         label.text = "Message"
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.sizeToFit()
-        label.textColor = ThemeManager.shared.currentTheme.textColor
+        label.textColor = ThemeManager.shared.currentTheme.textColor.withAlphaComponent(0.6)
         
         return label
     }()
     
-    private var toolbarBottomConstraint: NSLayoutConstraint?
-    private let maxHeight: CGFloat = 100
-    
-    init(channelId: String, channelName: String, username: String) {
-        self.channelName = channelName
-        self.channelId = channelId
-        self.username = username
+    init(channel: Channel, profile: ProfileModel, firestoreProvider: FirestoreProvider) {
+        self.channel = channel
+        self.profile = profile
+        self.firestoreProvider = firestoreProvider
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -102,7 +100,7 @@ class ConversationViewController: UIViewController {
     }
     
     private func setupViews() {
-        title = channelName
+        title = channel.name
         view.addSubview(noMessagesLabel)
         noMessagesLabel.translatesAutoresizingMaskIntoConstraints = false
         noMessagesLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
@@ -146,7 +144,11 @@ class ConversationViewController: UIViewController {
     }
     
     @objc func sendMessage() {
-        firebaseProvider.sendMessage(toChannel: channelId, text: messageTextView.text.trimmingCharacters(in: .whitespacesAndNewlines), senderName: username) {[weak self] error in
+        firestoreProvider.sendMessage(toChannel: channel.identifier,
+                                     message: Message(content: messageTextView.text.trimmingCharacters(in: .whitespacesAndNewlines),
+                                                      created: Date(),
+                                                      senderId: profile.identifier,
+                                                      senderName: profile.username)) {[weak self] error in
             guard error == nil else {
                 return
             }
@@ -164,7 +166,7 @@ class ConversationViewController: UIViewController {
         view.backgroundColor = ThemeManager.shared.currentTheme.conversationBackgroundColor
         conversationTable.backgroundColor = ThemeManager.shared.currentTheme.conversationBackgroundColor
         
-        listener = firebaseProvider.getMessages(forChannel: channelId) {[weak self] messages, error in
+        listener = firestoreProvider.getMessages(forChannel: channel.identifier) {[weak self] messages, error in
             guard error == nil, let messages = messages else {return}
             self?.conversation = messages
             
@@ -236,7 +238,6 @@ extension ConversationViewController: UITableViewDelegate {
 
 extension ConversationViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
-        print(textView.text.isEmpty)
         messageTextViewPlaceholder.isHidden = !textView.text.isEmpty
         sendButton.isEnabled = !textView.text.isEmpty
     }

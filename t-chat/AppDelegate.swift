@@ -27,12 +27,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, StateLoggable {
         let navigationController = UINavigationController()
         let conversationsListViewController = ConversationsListViewController()
         navigationController.viewControllers = [conversationsListViewController]
-        if ApplicationFileProvider.isFirstLaunch() {
-            let model = ProfileModel()
-            model.changedData[.username] = "Artur Gnedoy".data(using: .utf8)
-            model.changedData[.about] = "Some description".data(using: .utf8)
-            model.save(with: .GCD)
-        }
+//        if ApplicationFileProvider.isFirstLaunch() {
+//            let model = ProfileModel()
+//            model.changedData[.username] = "Artur Gnedoy".data(using: .utf8)
+//            model.changedData[.about] = "Some description".data(using: .utf8)
+//            model.save(with: .GCD)
+//        }
         
         navigationController.viewControllers = [conversationsListViewController]
         window.rootViewController = navigationController

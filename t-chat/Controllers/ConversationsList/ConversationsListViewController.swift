@@ -35,7 +35,6 @@ class ConversationsListViewController: UIViewController {
     
     private let firestoreProvider = FirestoreProvider()
     private var listener: ListenerRegistration?
-    private var alert: UIAlertController?
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -72,6 +71,15 @@ class ConversationsListViewController: UIViewController {
         
         let settingsNavigationItem = UIBarButtonItem(image: UIImage(named: "settings_light"), style: .plain, target: self, action: #selector(openSettings))
         navigationItem.leftBarButtonItem = settingsNavigationItem
+        
+        listener = firestoreProvider.getChannels {[weak self] channels, error in
+            guard let channels = channels, error == nil else {
+                return
+            }
+
+            self?.channels = channels
+            self?.conversationsTable.reloadData()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -80,40 +88,15 @@ class ConversationsListViewController: UIViewController {
         view.backgroundColor = ThemeManager.shared.currentTheme.backgroundColor
         conversationsTable.backgroundColor = .clear
         conversationsTable.separatorColor = ThemeManager.shared.currentTheme.tableViewSeparatorColor
-        
-        listener = firestoreProvider.getChannels {[weak self] channels, error in
-            guard let channels = channels, error == nil else {
-                return
-            }
-            
-            self?.channels = channels
-            self?.conversationsTable.reloadData()
-        }
     }
     
     @objc func showAddNewChannelPopup() {
-        let ac = UIAlertController(title: "Start new channel", message: nil, preferredStyle: UIAlertController.Style.alert)
-        ac.addTextField { textField in
-            textField.borderStyle = .roundedRect
-            textField.attributedPlaceholder = NSAttributedString(string: "Channel name",
-                                                                 attributes: [NSAttributedString.Key.foregroundColor:
-                                                                    ThemeManager.shared.currentTheme.textColor.withAlphaComponent(0.7)])
-            textField.font = UIFont.systemFont(ofSize: 16, weight: .regular)
-            textField.backgroundColor = ThemeManager.shared.currentTheme.inputFieldBackgroundColor
-            textField.layer.borderColor = ThemeManager.shared.currentTheme.inputFieldBorderBackgroundColor.cgColor
-            textField.layer.borderWidth = 1.5
-            textField.layer.cornerRadius = 4.0
-            textField.textColor = ThemeManager.shared.currentTheme.textColor
-            textField.returnKeyType = .go
-            textField.enablesReturnKeyAutomatically = true
-            textField.addTarget(self, action: #selector(self.saveNewChannel(textField:)), for: .primaryActionTriggered)
+        let ac = AddNewChannelViewController(title: "Start new channel", message: nil, preferredStyle: UIAlertController.Style.alert)
+        ac.nameEntered = {[weak self] name in
+            self?.saveNewChannel(name: name)
         }
-        
-        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        
-        present(ac, animated: true) {[weak self] in
-            self?.alert = ac
-        }
+
+        present(ac, animated: true)
     }
     
     @objc func goToProfile() {
@@ -142,13 +125,12 @@ class ConversationsListViewController: UIViewController {
         }
     }
     
-    @objc func saveNewChannel(textField: UITextField) {
-        if let text = textField.text {
-            firestoreProvider.createChannel(withName: text) {[weak self] error in
-                guard error == nil else { return }
-                
-                self?.alert?.dismiss(animated: true)
-                self?.alert = nil
+    func saveNewChannel(name: String) {
+        firestoreProvider.createChannel(withName: name) {[weak self] error in
+            if let error = error {
+                let ac = UIAlertController(title: "Error occured", message: error.localizedDescription, preferredStyle: .alert)
+                ac.addAction(UIAlertAction(title: "Ok", style: .cancel))
+                self?.present(ac, animated: true)
             }
         }
     }
@@ -202,7 +184,7 @@ extension ConversationsListViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vc = ConversationViewController(channelId: channels[indexPath.row].identifier, channelName: channels[indexPath.row].name, username: profileModel.username)
+        let vc = ConversationViewController(channel: channels[indexPath.row], profile: profileModel, firestoreProvider: firestoreProvider)
         navigationController?.pushViewController(vc, animated: true)
     }
 

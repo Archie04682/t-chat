@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 class ProfileModel {
     
@@ -14,6 +15,7 @@ class ProfileModel {
     
     private let factory: UserProfileDataManagerFactory
     private var userProfile: UserProfile = UserProfile(username: "", about: "", photoURL: nil, photoData: nil)
+    private(set) var identifier: String
     
     var photoData: Data? {
         return userProfile.photoData
@@ -40,6 +42,7 @@ class ProfileModel {
     }
     
     init() {
+        identifier = UIDevice.current.identifierForVendor!.uuidString
         factory = UserProfileDataManagerFactory()
     }
     
