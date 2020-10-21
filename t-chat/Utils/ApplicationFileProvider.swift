@@ -34,7 +34,6 @@ final class ApplicationFileProvider {
             if !FileManager.default.fileExists(atPath: userProfileFolder.path, isDirectory: &dir) {
                 do {
                     try FileManager.default.createDirectory(at: userProfileFolder, withIntermediateDirectories: true, attributes: nil)
-                    
                 } catch {
                     throw error
                 }

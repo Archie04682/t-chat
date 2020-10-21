@@ -13,8 +13,8 @@ class AddNewChannelViewController: UIAlertController {
     var nameEntered: ((String) -> Void)?
     
     private lazy var saveAction: UIAlertAction = {
-        let action = UIAlertAction(title: "Create", style: .default) { _ in
-            self.textFieldSubmitted()
+        let action = UIAlertAction(title: "Create", style: .default) {[weak self] _ in
+            self?.textFieldSubmitted()
         }
         
         action.isEnabled = false
@@ -37,6 +37,7 @@ class AddNewChannelViewController: UIAlertController {
             textField.layer.cornerRadius = 4.0
             textField.textColor = ThemeManager.shared.currentTheme.textColor
             textField.returnKeyType = .go
+            textField.delegate = self
             textField.enablesReturnKeyAutomatically = true
             textField.addTarget(self, action: #selector(self.channelNameDidChanged(_:)), for: .editingChanged)
         }
@@ -55,8 +56,8 @@ class AddNewChannelViewController: UIAlertController {
     
     private func textFieldSubmitted() {
         if let textField = self.textFields?.first, let name = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines), name.count > 0 {
-            self.nameEntered?(name)
-            self.dismiss(animated: true)
+            nameEntered?(name)
+            dismiss(animated: true)
         }
     }
 
