@@ -17,7 +17,7 @@ class ConversationsListViewController: UIViewController {
     private lazy var channels: [Channel] = []
     
     private lazy var conversationsTable: UITableView = {
-        let tableView = UITableView(frame: .zero, style: .grouped)
+        let tableView = UITableView(frame: .zero, style: .plain)
         tableView.dataSource = self
         tableView.delegate = self
         

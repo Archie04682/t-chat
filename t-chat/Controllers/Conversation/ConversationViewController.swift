@@ -42,7 +42,7 @@ class ConversationViewController: UIViewController {
     private lazy var toolbar: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = ThemeManager.shared.currentTheme.inputFieldBackgroundColor
+        view.backgroundColor = .clear
         
         return view
     }()
@@ -50,7 +50,7 @@ class ConversationViewController: UIViewController {
     private lazy var sendButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Send", for: .normal)
+        button.setImage(UIImage(named: "up-arrow"), for: .normal)
         button.isEnabled = false
         return button
     }()
@@ -114,7 +114,7 @@ class ConversationViewController: UIViewController {
         toolbar.addSubview(sendButton)
         
         sendButton.trailingAnchor.constraint(equalTo: toolbar.trailingAnchor, constant: -8).isActive = true
-        sendButton.bottomAnchor.constraint(equalTo: toolbar.bottomAnchor, constant: -2).isActive = true
+        sendButton.bottomAnchor.constraint(equalTo: toolbar.bottomAnchor, constant: -4).isActive = true
 
         messageTextView.topAnchor.constraint(equalTo: toolbar.topAnchor, constant: 2).isActive = true
         messageTextView.bottomAnchor.constraint(equalTo: toolbar.bottomAnchor, constant: -2).isActive = true
