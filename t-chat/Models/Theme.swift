@@ -119,4 +119,18 @@ enum Theme: Int, CaseIterable {
         case .night: return navigationBarColor
         }
     }
+    
+    var inputFieldBorderBackgroundColor: UIColor {
+        switch self {
+        case .classic, .day: return UIColor(red: 204.0/255.0, green: 204.0/255.0, blue: 204.0/255.0, alpha: 1.0)
+        case .night: return .gray
+        }
+    }
+    
+    var inputFieldBackgroundColor: UIColor {
+        switch self {
+        case .classic, .day: return .white
+        case .night: return UIColor.black
+        }
+    }
 }
