@@ -12,20 +12,26 @@ struct UserProfile {
     var username: String
     var about: String
     var photoURL: URL?
+    var photoData: Data?
     
-    var initials: String {
-        let components = username.components(separatedBy: " ").filter { !$0.isEmpty }
-        if components.count <= 0 { return "" }
-        if components.count <= 2 {
-            return components.map { word in
-                if let firstLetter = word.first {
-                    return String(firstLetter)
+    enum Keys: CaseIterable {
+        case username, about, photoData
+    }
+    
+    mutating func setValue(forKey key: Keys, value: Data?) {
+            switch key {
+            case .username:
+                if let data = value {
+                    self.username = String(data: data, encoding: .utf8) ?? ""
                 }
-
-                return ""
-            }.joined()
-        }
-        
-        return "\(components.first ?? "")\(components.last ?? "")"
+            case .about:
+                if let data = value {
+                    self.about = String(data: data, encoding: .utf8) ?? ""
+                }
+            case .photoData:
+                self.photoData = value
+            }
     }
 }
+
+

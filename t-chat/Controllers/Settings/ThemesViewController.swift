@@ -17,7 +17,9 @@ class ThemesViewController: UIViewController {
         for theme in Theme.allCases {
             let view = ThemeView()
 
-            view.selected = themeDidChange(theme:)
+            view.selected = {[weak self] theme in
+                self?.themeDidChange(theme: theme)
+            }
             view.configure(with: theme)
             views.append(view)
         }
@@ -40,8 +42,11 @@ class ThemesViewController: UIViewController {
         
         // И delegate и closure объявлены слабыми ссылками, т.к. ThemeManager синглтон и будет "жить" в приложении дольше нашего ThemesViewController. Retain cycle получаем, если объявляем и dalegate и closure сильными ссылками
         
-        // ThemeManager.shared.delegate = self
-        ThemeManager.shared.didPickTheme = update(theme:)
+         ThemeManager.shared.delegate = self
+//        ThemeManager.shared.didPickTheme = {[weak self] theme in
+//            self?.update(theme: theme)
+//        }
+        
         view.backgroundColor = selectedTheme.conversationBackgroundColor
         themeViews.forEach {
             $0.checkIfButtonSelected(selectedTheme)
@@ -62,8 +67,6 @@ class ThemesViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
-        ThemeManager.shared.save(theme: selectedTheme)
     }
     
     private func update(theme: Theme) {
@@ -87,7 +90,11 @@ class ThemesViewController: UIViewController {
 extension ThemesViewController: ThemePickerDelegate {
     
     func didSelectTheme(theme: Theme) {
-        update(theme: theme)
+        ThemeManager.shared.save(theme: theme) {[weak self] in
+            DispatchQueue.main.async {
+                self?.update(theme: theme)
+            }
+        }
     }
     
 }
