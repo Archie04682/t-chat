@@ -28,7 +28,7 @@ class ConversationTableViewCell: UITableViewCell {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 15, weight: .regular)
         label.textColor = ThemeManager.shared.currentTheme.subtitleColor
-        
+        label.textAlignment = .right
         return label
     }()
     
@@ -37,7 +37,6 @@ class ConversationTableViewCell: UITableViewCell {
         stackView.axis = .vertical
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.distribution = .fill
-        stackView.spacing = 4
         
         return stackView
     }()
@@ -45,7 +44,7 @@ class ConversationTableViewCell: UITableViewCell {
     private lazy var headerStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.distribution = .equalCentering
+        stackView.distribution = .fill
         stackView.spacing = 8
 
         return stackView
@@ -68,7 +67,7 @@ class ConversationTableViewCell: UITableViewCell {
         parentStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16.0).isActive = true
         parentStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16.0).isActive = true
         
-        channelNameLabel.widthAnchor.constraint(equalTo: headerStackView.widthAnchor, multiplier: 0.75).isActive = true
+        channelNameLabel.widthAnchor.constraint(equalTo: headerStackView.widthAnchor, multiplier: 0.8).isActive = true
     }
     
     required init?(coder: NSCoder) {
