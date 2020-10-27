@@ -10,7 +10,6 @@
 import Foundation
 import CoreData
 
-
 extension MessageEntity {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<MessageEntity> {
