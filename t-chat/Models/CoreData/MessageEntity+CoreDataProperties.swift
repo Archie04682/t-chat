@@ -16,11 +16,11 @@ extension MessageEntity {
         return NSFetchRequest<MessageEntity>(entityName: "MessageEntity")
     }
 
-    @NSManaged public var uid: String?
     @NSManaged public var content: String?
     @NSManaged public var created: Date?
     @NSManaged public var senderId: String?
     @NSManaged public var senderName: String?
+    @NSManaged public var uid: String?
     @NSManaged public var channel: ChannelEntity?
 
 }

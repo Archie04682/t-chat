@@ -24,8 +24,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, StateLoggable {
         
         ThemeManager.shared.apply(theme: ThemeManager.shared.currentTheme)
         
+        var coreDataStack: CoreDataStack = OldSchoolStack(withModel: "Chats")
+        coreDataStack.didUpdateDatabase = { stack in
+            stack.printStatictics()
+        }
+        
+        coreDataStack.enableObservers()
+        
         let navigationController = UINavigationController()
-        let conversationsListViewController = ConversationsListViewController()
+        let conversationsListViewController = ConversationsListViewController(coreDataStack: coreDataStack)
         navigationController.viewControllers = [conversationsListViewController]
         
         if ApplicationFileProvider.isFirstLaunch() {

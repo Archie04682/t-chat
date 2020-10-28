@@ -16,8 +16,8 @@ extension ChannelEntity {
         return NSFetchRequest<ChannelEntity>(entityName: "ChannelEntity")
     }
 
-    @NSManaged public var uid: String?
-    @NSManaged public var name: String?
+    @NSManaged public var uid: String
+    @NSManaged public var name: String
     @NSManaged public var lastMessage: String?
     @NSManaged public var lastActivity: Date?
     @NSManaged public var messages: NSSet?

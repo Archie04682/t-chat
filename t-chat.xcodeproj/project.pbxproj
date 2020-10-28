@@ -32,6 +32,9 @@
 		FC6D49502547E9DE00DA09B7 /* MessageEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC6D494C2547E9DE00DA09B7 /* MessageEntity+CoreDataProperties.swift */; };
 		FC6D49512547E9DE00DA09B7 /* ChannelEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC6D494D2547E9DE00DA09B7 /* ChannelEntity+CoreDataClass.swift */; };
 		FC6D49522547E9DE00DA09B7 /* ChannelEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC6D494E2547E9DE00DA09B7 /* ChannelEntity+CoreDataProperties.swift */; };
+		FC6D49542547F16A00DA09B7 /* ChannelEntityExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC6D49532547F16A00DA09B7 /* ChannelEntityExtensions.swift */; };
+		FC6D49562547F27200DA09B7 /* MessageEntityExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC6D49552547F27200DA09B7 /* MessageEntityExtensions.swift */; };
+		FC6D49582548281700DA09B7 /* ChannelsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC6D49572548281700DA09B7 /* ChannelsRepository.swift */; };
 		FC77CCD22542BC3A00B08061 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC77CCD12542BC3A00B08061 /* CoreDataStack.swift */; };
 		FC77CCD62542C1D700B08061 /* OldSchoolStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC77CCD52542C1D700B08061 /* OldSchoolStack.swift */; };
 		FC7C00D8253211A700C3DCAE /* FileOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7C00D7253211A700C3DCAE /* FileOperations.swift */; };
@@ -83,6 +86,9 @@
 		FC6D494C2547E9DE00DA09B7 /* MessageEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MessageEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		FC6D494D2547E9DE00DA09B7 /* ChannelEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
 		FC6D494E2547E9DE00DA09B7 /* ChannelEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		FC6D49532547F16A00DA09B7 /* ChannelEntityExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelEntityExtensions.swift; sourceTree = "<group>"; };
+		FC6D49552547F27200DA09B7 /* MessageEntityExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageEntityExtensions.swift; sourceTree = "<group>"; };
+		FC6D49572548281700DA09B7 /* ChannelsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsRepository.swift; sourceTree = "<group>"; };
 		FC77CCD12542BC3A00B08061 /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		FC77CCD52542C1D700B08061 /* OldSchoolStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OldSchoolStack.swift; sourceTree = "<group>"; };
 		FC7C00D7253211A700C3DCAE /* FileOperations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileOperations.swift; sourceTree = "<group>"; };
@@ -139,6 +145,7 @@
 				FC77CCD12542BC3A00B08061 /* CoreDataStack.swift */,
 				FC77CCD52542C1D700B08061 /* OldSchoolStack.swift */,
 				FC6D49482547E7DA00DA09B7 /* Chats.xcdatamodeld */,
+				FC6D49572548281700DA09B7 /* ChannelsRepository.swift */,
 			);
 			path = Persistance;
 			sourceTree = "<group>";
@@ -260,6 +267,8 @@
 				FC6D494C2547E9DE00DA09B7 /* MessageEntity+CoreDataProperties.swift */,
 				FC6D494D2547E9DE00DA09B7 /* ChannelEntity+CoreDataClass.swift */,
 				FC6D494E2547E9DE00DA09B7 /* ChannelEntity+CoreDataProperties.swift */,
+				FC6D49532547F16A00DA09B7 /* ChannelEntityExtensions.swift */,
+				FC6D49552547F27200DA09B7 /* MessageEntityExtensions.swift */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -430,7 +439,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/SwiftLint/swiftlint\"\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nif which \"${PODS_ROOT}/SwiftLint/swiftlint\" >/dev/null; then\n  \"${PODS_ROOT}/SwiftLint/swiftlint\"\nelse\n  echo \"error: SwiftLint does not exist, download it from https://github.com/realm/SwiftLint\"\n  exit 1\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -446,7 +455,9 @@
 				FC1C9A2D253B6A0100CC9A42 /* Message.swift in Sources */,
 				FC0BA0EF250B9675005AE946 /* ViewControllerState.swift in Sources */,
 				FC4C599625208654008F72C2 /* ConversationViewController.swift in Sources */,
+				FC6D49542547F16A00DA09B7 /* ChannelEntityExtensions.swift in Sources */,
 				FC82CC742519D9DE0041DFAE /* ProfileImageView.swift in Sources */,
+				FC6D49582548281700DA09B7 /* ChannelsRepository.swift in Sources */,
 				FCC7DA332529B45F006B5A71 /* ThemeManager.swift in Sources */,
 				FC6D494A2547E7DA00DA09B7 /* Chats.xcdatamodeld in Sources */,
 				FC94E5FB2528B8B9000F09BE /* ThemePickerDelegate.swift in Sources */,
@@ -466,6 +477,7 @@
 				FC0BA0F4250B9DEA005AE946 /* StateLoggable.swift in Sources */,
 				FC3811C22530E23F00AB796C /* Backdrop.swift in Sources */,
 				FC6D494F2547E9DE00DA09B7 /* MessageEntity+CoreDataClass.swift in Sources */,
+				FC6D49562547F27200DA09B7 /* MessageEntityExtensions.swift in Sources */,
 				FC32038F2519E394000C2DD9 /* UserProfile.swift in Sources */,
 				FC94E5EC25286999000F09BE /* ThemesViewController.swift in Sources */,
 				FC61DC25253B7342009B6223 /* FirestoreProvider.swift in Sources */,

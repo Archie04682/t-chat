@@ -10,7 +10,13 @@ import CoreData
 import Foundation
 
 protocol CoreDataStack {
-    var managedContext: NSManagedObjectContext { get }
+    var didUpdateDatabase: ((CoreDataStack) -> Void)? { get set }
     
-//    func saveContext()
+    var mainContext: NSManagedObjectContext { get }
+    
+    func save(_ block: @escaping (NSManagedObjectContext) -> Void)
+    
+    func enableObservers()
+    
+    func printStatictics()
 }

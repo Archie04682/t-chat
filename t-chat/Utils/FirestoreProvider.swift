@@ -43,7 +43,11 @@ class FirestoreProvider {
             if let error = error {
                 completion(nil, error)
             } else if let documents = snapshot?.documents {
-                completion(documents.compactMap { Message($0.data()) }.sorted(by: { $0.created > $1.created }), nil)
+                completion(documents.compactMap { document -> Message? in
+                    var dict = document.data()
+                    dict["uid"] = document.documentID
+                    return Message(dict)
+                }.sorted(by: { $0.created > $1.created }), nil)
             }
         }
     }

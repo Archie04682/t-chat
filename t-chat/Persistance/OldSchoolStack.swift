@@ -10,6 +10,9 @@ import CoreData
 import Foundation
 
 class OldSchoolStack: CoreDataStack {
+    
+    var didUpdateDatabase: ((CoreDataStack) -> Void)?
+    
     private let modelName: String
     
     init(withModel modelName: String) {
@@ -46,47 +49,84 @@ class OldSchoolStack: CoreDataStack {
         return coordinator
     }()
     
-    private(set) lazy var managedContext: NSManagedObjectContext = {
+    private(set) lazy var mainContext: NSManagedObjectContext = {
         let context = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
-        context.persistentStoreCoordinator = self.storeCoordinator
-        context.mergePolicy = NSOverwriteMergePolicy
-        context.parent = self.writerContext
+        context.parent = writerContext
+        context.automaticallyMergesChangesFromParent = true
+        context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        
         return context
     }()
     
     private lazy var writerContext: NSManagedObjectContext = {
         let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-        context.persistentStoreCoordinator = self.storeCoordinator
-        context.mergePolicy = NSOverwriteMergePolicy
+        context.persistentStoreCoordinator = storeCoordinator
+        context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         
         return context
     }()
     
     private func saveContext() -> NSManagedObjectContext {
         let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-        context.parent = self.managedContext
+        context.parent = mainContext
         context.automaticallyMergesChangesFromParent = true
         context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         
         return context
     }
     
-    func save(_ block: (NSManagedObjectContext) -> Void) {
+    func save(_ block: @escaping (NSManagedObjectContext) -> Void) {
         let context = saveContext()
-        context.performAndWait {
+        context.perform {
             block(context)
             if context.hasChanges {
-                do {
-                    try doSave(in: context)
-                } catch {
-                    print(error.localizedDescription)
-                }
+                self.doSave(in: context)
             }
         }
     }
     
-    private func doSave(in context: NSManagedObjectContext) throws {
-        try context.save()
-        if let parent = context.parent { try doSave(in: parent) }
+    private func doSave(in context: NSManagedObjectContext) {
+        context.perform {
+            do {
+                try context.save()
+                if let parent = context.parent {
+                    self.doSave(in: parent)
+                }
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    func enableObservers() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(contextObjectsDidChange(notification:)),
+                                               name: NSNotification.Name.NSManagedObjectContextObjectsDidChange,
+                                               object: mainContext)
+    }
+    
+    @objc private func contextObjectsDidChange(notification: NSNotification) {
+        guard let userInfo = notification.userInfo else { return }
+        
+        didUpdateDatabase?(self)
+        
+        [NSInsertedObjectsKey: "Added", NSUpdatedObjectsKey: "Updated", NSDeletedObjectsKey: "Deleted"].forEach { key, description in
+            if let objects = userInfo[key] as? Set<NSManagedObject>, !objects.isEmpty {
+                print("⚠️ \(description): \(objects.count) objects" )
+            }
+        }
+    }
+    
+    func printStatictics() {
+        mainContext.perform {
+            do {
+                let channelCount = try self.mainContext.count(for: ChannelEntity.fetchRequest())
+                print("📗 \(channelCount) channels")
+                let messagesCount = try self.mainContext.count(for: MessageEntity.fetchRequest())
+                print("📗 \(messagesCount) messages")
+            } catch {
+                fatalError(error.localizedDescription)
+            }
+        }
     }
 }
