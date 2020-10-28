@@ -235,6 +235,26 @@
 			path = Profile;
 			sourceTree = "<group>";
 		};
+		FC4C1EB62549632000F76A6B /* ProfileManagement */ = {
+			isa = PBXGroup;
+			children = (
+				FC694F222531D9A100256A32 /* ApplicationFileProvider.swift */,
+				FC3811C72530F3DF00AB796C /* GCDUserProfileDataManager.swift */,
+				FC7C00D92532144700C3DCAE /* OperationsUserProfileManager.swift */,
+				FC7C00D7253211A700C3DCAE /* FileOperations.swift */,
+				FC7C00DB253236D000C3DCAE /* UserProfileDataManager.swift */,
+			);
+			path = ProfileManagement;
+			sourceTree = "<group>";
+		};
+		FC4C1EB72549637800F76A6B /* Firebase */ = {
+			isa = PBXGroup;
+			children = (
+				FC61DC24253B7342009B6223 /* FirestoreProvider.swift */,
+			);
+			path = Firebase;
+			sourceTree = "<group>";
+		};
 		FC4C59922520854B008F72C2 /* Conversation */ = {
 			isa = PBXGroup;
 			children = (
@@ -247,15 +267,11 @@
 		FC4F20BF251FB6FC00F0A8AB /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				FC4C1EB72549637800F76A6B /* Firebase */,
+				FC4C1EB62549632000F76A6B /* ProfileManagement */,
 				FC249E2E2535E41D00DE093E /* Themes */,
 				FC249E2D2535E40800DE093E /* Images */,
 				FC249E2C2535E3FB00DE093E /* Logging */,
-				FC3811C72530F3DF00AB796C /* GCDUserProfileDataManager.swift */,
-				FC7C00D92532144700C3DCAE /* OperationsUserProfileManager.swift */,
-				FC694F222531D9A100256A32 /* ApplicationFileProvider.swift */,
-				FC7C00D7253211A700C3DCAE /* FileOperations.swift */,
-				FC7C00DB253236D000C3DCAE /* UserProfileDataManager.swift */,
-				FC61DC24253B7342009B6223 /* FirestoreProvider.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
