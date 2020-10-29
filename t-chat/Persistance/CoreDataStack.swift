@@ -20,3 +20,20 @@ protocol CoreDataStack {
     
     func printStatictics()
 }
+
+extension CoreDataStack {
+    
+    func printStatictics() {
+        mainContext.perform {
+            do {
+                let channelCount = try self.mainContext.count(for: ChannelEntity.fetchRequest())
+                print("☎️ \(channelCount) channels")
+                let messagesCount = try self.mainContext.count(for: MessageEntity.fetchRequest())
+                print("✉️ \(messagesCount) messages")
+            } catch {
+                fatalError(error.localizedDescription)
+            }
+        }
+    }
+    
+}

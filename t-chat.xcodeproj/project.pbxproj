@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		BC49E34E795F92A1362850A1 /* Pods_t_chat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 521A26DB20E122E0ABC55BD8 /* Pods_t_chat.framework */; };
+		FC080064254B04C900A23FF4 /* NewWaveStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC080063254B04C900A23FF4 /* NewWaveStack.swift */; };
 		FC0BA0D9250B7A68005AE946 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0BA0D8250B7A68005AE946 /* AppDelegate.swift */; };
 		FC0BA0E2250B7A69005AE946 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FC0BA0E1250B7A69005AE946 /* Assets.xcassets */; };
 		FC0BA0E5250B7A69005AE946 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FC0BA0E3250B7A69005AE946 /* LaunchScreen.storyboard */; };
@@ -60,6 +61,7 @@
 		4F025F7F1F448820860C5050 /* Pods-t-chat.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-t-chat.debug.xcconfig"; path = "Target Support Files/Pods-t-chat/Pods-t-chat.debug.xcconfig"; sourceTree = "<group>"; };
 		521A26DB20E122E0ABC55BD8 /* Pods_t_chat.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_t_chat.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED375F2916F152718D98BD78 /* Pods-t-chat.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-t-chat.release.xcconfig"; path = "Target Support Files/Pods-t-chat/Pods-t-chat.release.xcconfig"; sourceTree = "<group>"; };
+		FC080063254B04C900A23FF4 /* NewWaveStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewWaveStack.swift; sourceTree = "<group>"; };
 		FC0BA0D5250B7A68005AE946 /* t-chat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "t-chat.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC0BA0D8250B7A68005AE946 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FC0BA0E1250B7A69005AE946 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -146,6 +148,7 @@
 				FC77CCD52542C1D700B08061 /* OldSchoolStack.swift */,
 				FC6D49482547E7DA00DA09B7 /* Chats.xcdatamodeld */,
 				FC6D49572548281700DA09B7 /* ChannelsRepository.swift */,
+				FC080063254B04C900A23FF4 /* NewWaveStack.swift */,
 			);
 			path = Persistance;
 			sourceTree = "<group>";
@@ -484,6 +487,7 @@
 				FCEE4B3D251D151A00911B5C /* ConversationsListViewController.swift in Sources */,
 				FC6D49502547E9DE00DA09B7 /* MessageEntity+CoreDataProperties.swift in Sources */,
 				FC77CCD22542BC3A00B08061 /* CoreDataStack.swift in Sources */,
+				FC080064254B04C900A23FF4 /* NewWaveStack.swift in Sources */,
 				FC6D49512547E9DE00DA09B7 /* ChannelEntity+CoreDataClass.swift in Sources */,
 				FC5370382520D42300653A19 /* ProfileViewController.swift in Sources */,
 				FC82CC6E2519C9190041DFAE /* ImagePicker.swift in Sources */,

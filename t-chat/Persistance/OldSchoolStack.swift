@@ -9,7 +9,7 @@
 import CoreData
 import Foundation
 
-class OldSchoolStack: CoreDataStack {
+final class OldSchoolStack: CoreDataStack {
     
     var didUpdateDatabase: ((CoreDataStack) -> Void)?
     
@@ -118,19 +118,6 @@ class OldSchoolStack: CoreDataStack {
         [NSInsertedObjectsKey: "Added", NSUpdatedObjectsKey: "Updated", NSDeletedObjectsKey: "Deleted"].forEach { key, description in
             if let objects = userInfo[key] as? Set<NSManagedObject>, objects.count > 0 {
                 print("⚠️ \(description): \(objects.count) objects" )
-            }
-        }
-    }
-    
-    func printStatictics() {
-        mainContext.perform {
-            do {
-                let channelCount = try self.mainContext.count(for: ChannelEntity.fetchRequest())
-                print("☎️ \(channelCount) channels")
-                let messagesCount = try self.mainContext.count(for: MessageEntity.fetchRequest())
-                print("✉️ \(messagesCount) messages")
-            } catch {
-                fatalError(error.localizedDescription)
             }
         }
     }
