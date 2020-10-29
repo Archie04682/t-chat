@@ -13,10 +13,13 @@ class OldSchoolStack: CoreDataStack {
     
     var didUpdateDatabase: ((CoreDataStack) -> Void)?
     
+    private let dateFormatter = DateFormatter()
+    
     private let modelName: String
     
     init(withModel modelName: String) {
         self.modelName = modelName
+        self.dateFormatter.dateFormat = "HH:mm:ss.SSSS"
     }
     
     private lazy var objectModel: NSManagedObjectModel = {
@@ -53,7 +56,7 @@ class OldSchoolStack: CoreDataStack {
         let context = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
         context.parent = writerContext
         context.automaticallyMergesChangesFromParent = true
-        context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        context.mergePolicy = NSMergeByPropertyStoreTrumpMergePolicy
         
         return context
     }()
@@ -61,7 +64,7 @@ class OldSchoolStack: CoreDataStack {
     private lazy var writerContext: NSManagedObjectContext = {
         let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         context.persistentStoreCoordinator = storeCoordinator
-        context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        context.mergePolicy = NSOverwriteMergePolicy
         
         return context
     }()
@@ -89,9 +92,11 @@ class OldSchoolStack: CoreDataStack {
         context.perform {
             do {
                 try context.save()
+                
                 if let parent = context.parent {
                     self.doSave(in: parent)
                 }
+                
             } catch {
                 print(error.localizedDescription)
             }
@@ -111,7 +116,7 @@ class OldSchoolStack: CoreDataStack {
         didUpdateDatabase?(self)
         
         [NSInsertedObjectsKey: "Added", NSUpdatedObjectsKey: "Updated", NSDeletedObjectsKey: "Deleted"].forEach { key, description in
-            if let objects = userInfo[key] as? Set<NSManagedObject>, !objects.isEmpty {
+            if let objects = userInfo[key] as? Set<NSManagedObject>, objects.count > 0 {
                 print("⚠️ \(description): \(objects.count) objects" )
             }
         }
@@ -121,9 +126,9 @@ class OldSchoolStack: CoreDataStack {
         mainContext.perform {
             do {
                 let channelCount = try self.mainContext.count(for: ChannelEntity.fetchRequest())
-                print("📗 \(channelCount) channels")
+                print("☎️ \(channelCount) channels")
                 let messagesCount = try self.mainContext.count(for: MessageEntity.fetchRequest())
-                print("📗 \(messagesCount) messages")
+                print("✉️ \(messagesCount) messages")
             } catch {
                 fatalError(error.localizedDescription)
             }

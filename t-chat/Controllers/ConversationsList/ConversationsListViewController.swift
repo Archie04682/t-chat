@@ -11,7 +11,7 @@ import Firebase
 
 class ConversationsListViewController: UIViewController {
     private var theme = ThemeManager.shared.currentTheme
-    private var coreDataStack: CoreDataStack
+    private var channelRepository: ChannelRepository
     private let profileModel = ProfileModel()
     
     private lazy var channels: [Channel] = []
@@ -36,8 +36,8 @@ class ConversationsListViewController: UIViewController {
     private let firestoreProvider = FirestoreProvider()
     private var listener: ListenerRegistration?
     
-    init(coreDataStack: CoreDataStack) {
-        self.coreDataStack = coreDataStack
+    init(channelRepository: ChannelRepository) {
+        self.channelRepository = channelRepository
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -81,9 +81,7 @@ class ConversationsListViewController: UIViewController {
             self?.channels = channels
             self?.conversationsTable.reloadData()
             
-            self?.coreDataStack.save { context in
-                channels.forEach { ChannelEntity(with: $0, in: context) }
-            }
+            self?.channelRepository.add(channels: channels)
         }
     }
     
@@ -192,7 +190,7 @@ extension ConversationsListViewController: UITableViewDataSource {
         let vc = ConversationViewController(channel: channels[indexPath.row],
                                             profile: profileModel,
                                             firestoreProvider: firestoreProvider,
-                                            channelRepository: ChannelRepository(coreDataStack: coreDataStack))
+                                            channelRepository: channelRepository)
         navigationController?.pushViewController(vc, animated: true)
     }
 

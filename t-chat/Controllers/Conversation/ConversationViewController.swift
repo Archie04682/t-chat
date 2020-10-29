@@ -173,8 +173,9 @@ class ConversationViewController: UIViewController {
             self?.conversation = messages
             
             if !messages.isEmpty {
-                self?.channelRepository.addMessages(messages: messages, to: channel)
                 
+                self?.channelRepository.addMessages(messages: messages, to: channel)
+
                 DispatchQueue.main.async {[weak self] in
                     self?.conversationTable.isHidden = false
                     self?.noMessagesLabel.isHidden = true

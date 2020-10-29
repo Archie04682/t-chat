@@ -31,8 +31,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, StateLoggable {
         
         coreDataStack.enableObservers()
         
+        let channelRepository = ChannelRepository(coreDataStack: coreDataStack)
         let navigationController = UINavigationController()
-        let conversationsListViewController = ConversationsListViewController(coreDataStack: coreDataStack)
+        let conversationsListViewController = ConversationsListViewController(channelRepository: channelRepository)
         navigationController.viewControllers = [conversationsListViewController]
         
         if ApplicationFileProvider.isFirstLaunch() {
