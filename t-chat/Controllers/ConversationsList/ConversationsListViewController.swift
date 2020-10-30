@@ -92,9 +92,6 @@ class ConversationsListViewController: UIViewController {
                 return
             }
 
-            self?.channels = channels
-            self?.conversationsTable.reloadData()
-
             self?.channelRepository.add(channels: channels)
         }
     }
