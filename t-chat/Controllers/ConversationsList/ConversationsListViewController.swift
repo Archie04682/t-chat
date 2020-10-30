@@ -15,8 +15,6 @@ class ConversationsListViewController: UIViewController {
     private var channelRepository: ChannelRepository
     private let profileModel = ProfileModel()
     
-    private lazy var channels: [Channel] = []
-    
     private lazy var fetchedResultsController: NSFetchedResultsController<ChannelEntity> = {
         let request: NSFetchRequest<ChannelEntity> = ChannelEntity.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(key: "lastActivity", ascending: false)]
