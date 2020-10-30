@@ -14,7 +14,7 @@ class ConversationsListViewController: UIViewController {
     private var theme = ThemeManager.shared.currentTheme
     private var channelRepository: ChannelRepository
     private let profileModel = ProfileModel()
-    
+    private var isVisible = true
     private lazy var fetchedResultsController: NSFetchedResultsController<ChannelEntity> = {
         let request: NSFetchRequest<ChannelEntity> = ChannelEntity.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(key: "lastActivity", ascending: false)]
@@ -22,7 +22,7 @@ class ConversationsListViewController: UIViewController {
         let controller = NSFetchedResultsController(fetchRequest: request,
                                                     managedObjectContext: channelRepository.viewContext,
                                                     sectionNameKeyPath: nil,
-                                                    cacheName: nil)
+                                                    cacheName: "ChannelsCache")
         controller.delegate = self
         
         return controller
@@ -64,8 +64,6 @@ class ConversationsListViewController: UIViewController {
         setupViews()
         navigationController?.delegate = self
         conversationsTable.register(ConversationTableViewCell.self, forCellReuseIdentifier: String(describing: type(of: ConversationTableViewCell.self)))
-        
-        try? fetchedResultsController.performFetch()
     }
     
     private func setupViews() {
@@ -86,14 +84,6 @@ class ConversationsListViewController: UIViewController {
         
         let settingsNavigationItem = UIBarButtonItem(image: UIImage(named: "settings_light"), style: .plain, target: self, action: #selector(openSettings))
         navigationItem.leftBarButtonItem = settingsNavigationItem
-        
-        listener = firestoreProvider.getChannels {[weak self] channels, error in
-            guard let channels = channels, error == nil else {
-                return
-            }
-
-            self?.channelRepository.add(channels: channels)
-        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -102,6 +92,26 @@ class ConversationsListViewController: UIViewController {
         view.backgroundColor = ThemeManager.shared.currentTheme.backgroundColor
         conversationsTable.backgroundColor = .clear
         conversationsTable.separatorColor = ThemeManager.shared.currentTheme.tableViewSeparatorColor
+        
+        if listener == nil {
+            listener = firestoreProvider.getChannels {[weak self] channels, error in
+                guard let channels = channels, error == nil else {
+                    return
+                }
+
+                self?.channelRepository.add(channels: channels)
+            }
+        }
+        
+        try? fetchedResultsController.performFetch()
+        
+        isVisible = true
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        isVisible = false
     }
     
     @objc func showAddNewChannelPopup() {
@@ -232,7 +242,15 @@ extension ConversationsListViewController: UITableViewDelegate {
 }
 
 extension ConversationsListViewController: NSFetchedResultsControllerDelegate {
+    // isVisible добавлено из-за появления ошибки
+    // [TableView] Warning once only: UITableView was told to layout its visible cells and other contents without
+    // being in the view hierarchy (the table view or one of its superviews has not been added to a window).
+    // This may cause bugs by forcing views inside the table view to load and perform layout without accurate information
+    // (e.g. table view bounds, trait collection, layout margins, safe area insets, etc),
+    // and will also cause unnecessary performance overhead due to extra layout passes.
+    
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        if !isVisible { return }
         conversationsTable.beginUpdates()
     }
 
@@ -241,6 +259,7 @@ extension ConversationsListViewController: NSFetchedResultsControllerDelegate {
                     at indexPath: IndexPath?,
                     for type: NSFetchedResultsChangeType,
                     newIndexPath: IndexPath?) {
+        if !isVisible { return }
         switch type {
         case .insert:
             if let indexPath = newIndexPath {
@@ -269,6 +288,7 @@ extension ConversationsListViewController: NSFetchedResultsControllerDelegate {
     }
 
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        if !isVisible { return }
         conversationsTable.endUpdates()
     }
 }
