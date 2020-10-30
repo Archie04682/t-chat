@@ -38,6 +38,14 @@ class FirestoreProvider {
         }
     }
     
+    func deleteChannel(atPath path: String) {
+        db.collection("channels").document(path).delete { error in
+            if let error = error {
+                print(error)
+            }
+        }
+    }
+    
     func getMessages(forChannel channelId: String, completion: @escaping ([Message]?, Error?) -> Void) -> ListenerRegistration {
         return db.collection("channels").document(channelId).collection("messages").addSnapshotListener { snapshot, error in
             if let error = error {

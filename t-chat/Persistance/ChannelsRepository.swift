@@ -16,6 +16,10 @@ class ChannelRepository {
         self.coreDataStack = coreDataStack
     }
     
+    private(set) lazy var viewContext: NSManagedObjectContext = {
+        return coreDataStack.mainContext
+    }()
+    
     func fetchBy(uid: String) throws -> ChannelEntity? {
         let fetchRequest: NSFetchRequest<ChannelEntity> = ChannelEntity.fetchRequest()
         fetchRequest.fetchLimit = 1
@@ -31,7 +35,49 @@ class ChannelRepository {
     
     func add(channels: [Channel]) {
         coreDataStack.save { context in
-            channels.forEach { ChannelEntity(with: $0, in: context) }
+            let existingUIDRequest: NSFetchRequest<NSFetchRequestResult> = ChannelEntity.fetchRequest()
+            existingUIDRequest.propertiesToFetch = ["uid"]
+            existingUIDRequest.resultType = .dictionaryResultType
+            
+            do {
+                var uids = try context.fetch(existingUIDRequest) as? [[String: String]]
+                channels.forEach { channel in
+                    let fetchRequest: NSFetchRequest<ChannelEntity> = ChannelEntity.fetchRequest()
+                    fetchRequest.fetchLimit = 1
+                    fetchRequest.predicate = NSPredicate(format: "uid == %@", channel.identifier)
+                    if let existing = try? context.fetch(fetchRequest).first {
+                        if existing.name != channel.name { existing.name = channel.name }
+                        if existing.lastMessage != channel.lastMessage { existing.lastMessage = channel.lastMessage }
+                        if existing.lastActivity != channel.lastActivity { existing.lastActivity = channel.lastActivity }
+                        if let index = uids?.firstIndex(where: { $0["uid"] == existing.uid }) {
+                            uids?.remove(at: index)
+                        }
+                    } else {
+                        ChannelEntity(with: channel, in: context)
+                    }
+                }
+                
+                if let uids = uids, !uids.isEmpty {
+                    uids.forEach { dict in
+                        guard let uid = dict["uid"] else { return }
+                        let fetchRequest: NSFetchRequest<ChannelEntity> = ChannelEntity.fetchRequest()
+                        fetchRequest.fetchLimit = 1
+                        fetchRequest.predicate = NSPredicate(format: "uid == %@", uid)
+                        if let object = try? context.fetch(fetchRequest).first {
+                            context.delete(object)
+                        }
+                    }
+                }
+            } catch {
+                print(error)
+            }
+        }
+    }
+    
+    func delete(with id: NSManagedObjectID) {
+        coreDataStack.save { context in
+            guard let existing = try? context.existingObject(with: id) else { return }
+            context.delete(existing)
         }
     }
     

@@ -24,7 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, StateLoggable {
         
         ThemeManager.shared.apply(theme: ThemeManager.shared.currentTheme)
         
-        var coreDataStack: CoreDataStack = OldSchoolStack(withModel: "Chats")
+        var coreDataStack: CoreDataStack = NewWaveStack(withModel: "Chats")
         coreDataStack.didUpdateDatabase = { stack in
             stack.printStatictics()
         }
