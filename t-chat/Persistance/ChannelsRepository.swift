@@ -20,13 +20,6 @@ class ChannelRepository {
         return coreDataStack.mainContext
     }()
     
-    func fetchBy(uid: String) throws -> ChannelEntity? {
-        let fetchRequest: NSFetchRequest<ChannelEntity> = ChannelEntity.fetchRequest()
-        fetchRequest.fetchLimit = 1
-        fetchRequest.predicate = NSPredicate(format: "uid = \"\(uid)\"")
-        return (try coreDataStack.mainContext.fetch(fetchRequest) as [ChannelEntity]).first
-    }
-    
     func add(channel: Channel) {
         coreDataStack.save { context in
             ChannelEntity(with: channel, in: context)
@@ -85,24 +78,16 @@ class ChannelRepository {
         coreDataStack.save { context in
             do {
                 if let existingChannel = try context.existingObject(with: channelID) as? ChannelEntity {
-                    messages.compactMap { MessageEntity(with: $0, in: context) }.forEach { existingChannel.addToMessages($0) }
+                    for message in messages {
+                        if let uid = message.uid {
+                            let fetchRequest: NSFetchRequest<MessageEntity> = MessageEntity.fetchRequest()
+                            fetchRequest.predicate = NSPredicate(format: "uid == %@", uid)
+                            if let count = try? context.count(for: fetchRequest), count == 0, let entity = MessageEntity(with: message, in: context) {
+                                existingChannel.addToMessages(entity)
+                            }
+                        }
+                    }
                 }
-            } catch {
-                print(error.localizedDescription)
-            }
-        }
-    }
-    
-    func addMessages(messages: [Message], to channel: Channel) {
-        let fetchRequest: NSFetchRequest<ChannelEntity> = ChannelEntity.fetchRequest()
-        fetchRequest.fetchLimit = 1
-        fetchRequest.predicate = NSPredicate(format: "uid = \"\(channel.identifier)\"")
-        coreDataStack.save { context in
-            do {
-                if let channel = (try context.fetch(fetchRequest) as [ChannelEntity]).first {
-                    messages.compactMap { MessageEntity(with: $0, in: context) }.forEach { channel.addToMessages($0) }
-                }
-                
             } catch {
                 print(error.localizedDescription)
             }

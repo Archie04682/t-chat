@@ -9,9 +9,6 @@
 import Foundation
 import Firebase
 
-// Я так и не понял, как можно реализовать через Codable конвертацию из [String: Any] в модели. Проблема в FIRTimestamp, который нужно как то сереализовать перед декодингом.
-// Я не нашел как это сделать без пакета FirebaseFirestore.
-
 struct Message {
     let uid: String?
     let content: String
@@ -34,6 +31,14 @@ struct Message {
             let senderId = dictionary["senderId"] as? String,
             let senderName = dictionary["senderName"] as? String else { return nil }
         self.init(content: content, created: created.dateValue(), senderId: senderId, senderName: senderName, uid: uid)
+    }
+    
+    init(from entity: MessageEntity) {
+        self.uid = entity.uid
+        self.content = entity.content
+        self.created = entity.created
+        self.senderId = entity.senderId
+        self.senderName = entity.senderName
     }
     
     func toDictionary() -> [String: Any] {

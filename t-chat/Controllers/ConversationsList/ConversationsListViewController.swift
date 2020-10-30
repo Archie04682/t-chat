@@ -205,10 +205,10 @@ extension ConversationsListViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vc = ConversationViewController(channel: Channel(from: fetchedResultsController.object(at: indexPath)),
-                                            profile: profileModel,
+        let vc = ConversationViewController(profile: profileModel,
                                             firestoreProvider: firestoreProvider,
-                                            channelRepository: channelRepository)
+                                            channelRepository: channelRepository,
+                                            channel: fetchedResultsController.object(at: indexPath))
         navigationController?.pushViewController(vc, animated: true)
     }
     

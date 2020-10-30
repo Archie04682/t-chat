@@ -13,13 +13,10 @@ final class OldSchoolStack: CoreDataStack {
     
     var didUpdateDatabase: ((CoreDataStack) -> Void)?
     
-    private let dateFormatter = DateFormatter()
-    
     private let modelName: String
     
     init(withModel modelName: String) {
         self.modelName = modelName
-        self.dateFormatter.dateFormat = "HH:mm:ss.SSSS"
     }
     
     private lazy var objectModel: NSManagedObjectModel = {
