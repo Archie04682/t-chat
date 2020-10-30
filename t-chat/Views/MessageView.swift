@@ -129,7 +129,7 @@ extension MessageView: ConfigurableView {
         senderNameLabel.text = model.senderName
 
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = Calendar.current.isDateInToday(model.created) ? "hh:mm" : "dd MMM hh:mm"
+        dateFormatter.dateFormat = Calendar.current.isDateInToday(model.created) ? "HH:mm" : "dd MMM HH:mm"
         
         createdLabel.text = dateFormatter.string(from: model.created)
     }
