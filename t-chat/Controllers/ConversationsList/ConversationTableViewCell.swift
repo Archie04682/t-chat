@@ -106,7 +106,7 @@ extension ConversationTableViewCell: ConfigurableView {
     private func configureMessageDateLabel(with date: Date?) {
         if let date = date {
             let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = Calendar.current.isDateInToday(date) ? "hh:mm" : "dd MMM"
+            dateFormatter.dateFormat = Calendar.current.isDateInToday(date) ? "HH:mm" : "dd MMM"
 
             lastActivityLabel.text = dateFormatter.string(from: date)
         } else {
