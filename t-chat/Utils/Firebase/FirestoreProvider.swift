@@ -38,11 +38,9 @@ class FirestoreProvider {
         }
     }
     
-    func deleteChannel(atPath path: String) {
+    func deleteChannel(atPath path: String, completion: @escaping (Error?) -> Void) {
         db.collection("channels").document(path).delete { error in
-            if let error = error {
-                print(error)
-            }
+            completion(error)
         }
     }
     

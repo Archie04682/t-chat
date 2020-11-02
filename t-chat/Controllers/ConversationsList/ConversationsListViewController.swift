@@ -15,18 +15,7 @@ class ConversationsListViewController: UIViewController {
     private var channelRepository: ChannelRepository
     private let profileModel = ProfileModel()
     private var isVisible = true
-    private lazy var fetchedResultsController: NSFetchedResultsController<ChannelEntity> = {
-        let request: NSFetchRequest<ChannelEntity> = ChannelEntity.fetchRequest()
-        request.sortDescriptors = [NSSortDescriptor(key: "lastActivity", ascending: false)]
-        request.fetchBatchSize = 20
-        let controller = NSFetchedResultsController(fetchRequest: request,
-                                                    managedObjectContext: channelRepository.viewContext,
-                                                    sectionNameKeyPath: nil,
-                                                    cacheName: "ChannelsCache")
-        controller.delegate = self
-        
-        return controller
-    }()
+    private let fetchedResultsController: NSFetchedResultsController<ChannelEntity>
     
     private lazy var conversationsTable: UITableView = {
         let tableView = UITableView(frame: .zero, style: .plain)
@@ -50,6 +39,10 @@ class ConversationsListViewController: UIViewController {
     
     init(channelRepository: ChannelRepository) {
         self.channelRepository = channelRepository
+        self.fetchedResultsController = channelRepository.createChannelsFetchResultsController(sortBy: #keyPath(ChannelEntity.lastActivity),
+                                                                                               ascending: false,
+                                                                                               fetchBatchSize: 20,
+                                                                                               withCache: false)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -63,6 +56,7 @@ class ConversationsListViewController: UIViewController {
         title = "Channels"
         setupViews()
         navigationController?.delegate = self
+        fetchedResultsController.delegate = self
         conversationsTable.register(ConversationTableViewCell.self, forCellReuseIdentifier: String(describing: type(of: ConversationTableViewCell.self)))
     }
     
@@ -99,7 +93,11 @@ class ConversationsListViewController: UIViewController {
                     return
                 }
 
-                self?.channelRepository.add(channels: channels)
+                self?.channelRepository.add(channels: channels) { error in
+                    if error != nil {
+                        self?.showError(with: "Failed to update channels")
+                    }
+                }
             }
         }
         
@@ -152,15 +150,22 @@ class ConversationsListViewController: UIViewController {
     func saveNewChannel(name: String) {
         firestoreProvider.createChannel(withName: name) {[weak self] error in
             if let error = error {
-                let ac = UIAlertController(title: "Error occured", message: error.localizedDescription, preferredStyle: .alert)
-                ac.addAction(UIAlertAction(title: "Ok", style: .cancel))
-                self?.present(ac, animated: true)
+                self?.showError(with: error.localizedDescription)
             }
         }
     }
     
     deinit {
         listener?.remove()
+    }
+    
+    func showError(with message: String) {
+        DispatchQueue.main.async {
+            if self.presentedViewController == nil {
+                let ac = ErrorOccuredView(message: message)
+                self.present(ac, animated: true)
+            }
+        }
     }
 }
 
@@ -225,7 +230,11 @@ extension ConversationsListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let object = fetchedResultsController.object(at: indexPath)
-            firestoreProvider.deleteChannel(atPath: object.uid)
+            firestoreProvider.deleteChannel(atPath: object.uid) {[weak self] error in
+                if error != nil {
+                    self?.showError(with: "Failed to remove channel. Try again")
+                }
+            }
         }
     }
 

@@ -20,19 +20,7 @@ class ConversationViewController: UIViewController {
     private var toolbarBottomConstraint: NSLayoutConstraint?
     private let firestoreProvider: FirestoreProvider
     
-    private lazy var fetchedResultsController: NSFetchedResultsController<MessageEntity> = {
-        let request: NSFetchRequest<MessageEntity> = MessageEntity.fetchRequest()
-        request.predicate = NSPredicate(format: "%K == %@", #keyPath(MessageEntity.channel), channel.objectID)
-        request.sortDescriptors = [NSSortDescriptor(key: "created", ascending: false)]
-        request.fetchBatchSize = 20
-        let controller = NSFetchedResultsController(fetchRequest: request,
-                                                    managedObjectContext: channelRepository.viewContext,
-                                                    sectionNameKeyPath: nil,
-                                                    cacheName: nil)
-        controller.delegate = self
-        
-        return controller
-    }()
+    private let fetchedResultsController: NSFetchedResultsController<MessageEntity>
     
     private lazy var conversationTable: UITableView = {
         let tableView = UITableView(frame: .zero, style: .plain)
@@ -102,6 +90,11 @@ class ConversationViewController: UIViewController {
         self.profile = profile
         self.firestoreProvider = firestoreProvider
         self.channel = channel
+        self.fetchedResultsController = channelRepository.createMessagesFetchResultsController(forChannel: channel.objectID,
+                                                                                               sortBy: #keyPath(MessageEntity.created),
+                                                                                               ascending: false,
+                                                                                               fetchBatchSize: 20,
+                                                                                               withCache: false)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -113,6 +106,7 @@ class ConversationViewController: UIViewController {
         super.viewDidLoad()
         setupViews()
         conversationTable.register(ConversationMessageTableViewCell.self, forCellReuseIdentifier: String(describing: type(of: ConversationMessageTableViewCell.self)))
+        fetchedResultsController.delegate = self
         
         do {
             try fetchedResultsController.performFetch()
@@ -172,6 +166,8 @@ class ConversationViewController: UIViewController {
                                                       senderId: profile.identifier,
                                                       senderName: profile.username)) {[weak self] error in
             guard error == nil else {
+                self?.showError(with: "Failed to send message")
+                
                 return
             }
 
@@ -192,7 +188,11 @@ class ConversationViewController: UIViewController {
             guard error == nil, let messages = messages, let channelId = self?.channel.objectID else {return}
             
             if !messages.isEmpty {
-                self?.channelRepository.addMessages(messages: messages, toObjectWithID: channelId)
+                self?.channelRepository.addMessages(messages: messages, toObjectWithID: channelId) { error in
+                    if error != nil {
+                        self?.showError(with: "Failed to save cache")
+                    }
+                }
 
                 DispatchQueue.main.async {[weak self] in
                     self?.conversationTable.isHidden = false
@@ -232,6 +232,15 @@ class ConversationViewController: UIViewController {
     
     deinit {
         listener?.remove()
+    }
+    
+    func showError(with message: String) {
+        DispatchQueue.main.async {
+            if self.presentedViewController == nil {
+                let ac = ErrorOccuredView(message: message)
+                self.present(ac, animated: true)
+            }
+        }
     }
 
 }
@@ -277,7 +286,7 @@ extension ConversationViewController: UITableViewDelegate {
 extension ConversationViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         messageTextViewPlaceholder.isHidden = !textView.text.isEmpty
-        sendButton.isEnabled = !textView.text.isEmpty
+        sendButton.isEnabled = !textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 }
 

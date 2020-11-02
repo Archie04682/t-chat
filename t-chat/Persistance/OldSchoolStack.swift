@@ -9,6 +9,7 @@
 import CoreData
 import Foundation
 
+@available(*, deprecated, message: "Пока нет ясности, что делать с дублированием оповещений при обновлении контескта, использовать NewWaveStack")
 final class OldSchoolStack: CoreDataStack {
     
     var didUpdateDatabase: ((CoreDataStack) -> Void)?
@@ -75,27 +76,28 @@ final class OldSchoolStack: CoreDataStack {
         return context
     }
     
-    func save(_ block: @escaping (NSManagedObjectContext) -> Void) {
+    func save(_ block: @escaping (NSManagedObjectContext) -> Void, completion: @escaping (Error?) -> Void) {
         let context = saveContext()
         context.perform {
             block(context)
             if context.hasChanges {
-                self.doSave(in: context)
+                self.doSave(in: context, completion: completion)
             }
         }
     }
     
-    private func doSave(in context: NSManagedObjectContext) {
+    private func doSave(in context: NSManagedObjectContext, completion: @escaping (Error?) -> Void) {
         context.perform {
             do {
                 try context.save()
                 
                 if let parent = context.parent {
-                    self.doSave(in: parent)
+                    self.doSave(in: parent, completion: completion)
+                } else {
+                    completion(nil)
                 }
-                
             } catch {
-                print(error.localizedDescription)
+                completion(nil)
             }
         }
     }
@@ -114,7 +116,7 @@ final class OldSchoolStack: CoreDataStack {
         
         [NSInsertedObjectsKey: "Added", NSUpdatedObjectsKey: "Updated", NSDeletedObjectsKey: "Deleted"].forEach { key, description in
             if let objects = userInfo[key] as? Set<NSManagedObject>, objects.count > 0 {
-                print("⚠️ \(description): \(objects.count) objects" )
+                print("\(getIconForEvent(eventName: key)) \(description): \(objects.count) objects" )
             }
         }
     }

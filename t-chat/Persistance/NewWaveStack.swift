@@ -37,7 +37,7 @@ final class NewWaveStack: CoreDataStack {
         return context
     }()
     
-    func save(_ block: @escaping (NSManagedObjectContext) -> Void) {
+    func save(_ block: @escaping (NSManagedObjectContext) -> Void, completion: @escaping (Error?) -> Void) {
         container.performBackgroundTask { context in
             context.mergePolicy = NSOverwriteMergePolicy
             
@@ -46,7 +46,7 @@ final class NewWaveStack: CoreDataStack {
             do {
                 try context.save()
             } catch {
-                print(error.localizedDescription)
+                completion(error)
             }
         }
     }
@@ -65,7 +65,7 @@ final class NewWaveStack: CoreDataStack {
         
         [NSInsertedObjectsKey: "Added", NSUpdatedObjectsKey: "Updated", NSDeletedObjectsKey: "Deleted"].forEach { key, description in
             if let objects = userInfo[key] as? Set<NSManagedObject>, objects.count > 0 {
-                print("⚠️ \(description): \(objects.count) objects" )
+                print("\(getIconForEvent(eventName: key)) \(description): \(objects.count) objects" )
             }
         }
     }

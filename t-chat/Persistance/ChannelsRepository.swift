@@ -9,29 +9,19 @@
 import CoreData
 import Foundation
 
-class ChannelRepository {
+final class ChannelRepository {
     private let coreDataStack: CoreDataStack
     
     init(coreDataStack: CoreDataStack) {
         self.coreDataStack = coreDataStack
     }
     
-    private(set) lazy var viewContext: NSManagedObjectContext = {
-        return coreDataStack.mainContext
-    }()
-    
-    func add(channel: Channel) {
-        coreDataStack.save { context in
-            ChannelEntity(with: channel, in: context)
-        }
-    }
-    
-    func add(channels: [Channel]) {
-        coreDataStack.save { context in
+    func add(channels: [Channel], completion: @escaping (Error?) -> Void) {
+        coreDataStack.save({ context in
             let existingUIDRequest: NSFetchRequest<NSFetchRequestResult> = ChannelEntity.fetchRequest()
             existingUIDRequest.propertiesToFetch = ["uid"]
             existingUIDRequest.resultType = .dictionaryResultType
-            
+
             do {
                 var uids = try context.fetch(existingUIDRequest) as? [[String: String]]
                 channels.forEach { channel in
@@ -49,7 +39,7 @@ class ChannelRepository {
                         ChannelEntity(with: channel, in: context)
                     }
                 }
-                
+
                 if let uids = uids, !uids.isEmpty {
                     uids.forEach { dict in
                         guard let uid = dict["uid"] else { return }
@@ -62,20 +52,15 @@ class ChannelRepository {
                     }
                 }
             } catch {
-                print(error)
+                completion(error)
             }
-        }
+        }, completion: { error in
+            completion(error)
+        })
     }
     
-    func delete(with id: NSManagedObjectID) {
-        coreDataStack.save { context in
-            guard let existing = try? context.existingObject(with: id) else { return }
-            context.delete(existing)
-        }
-    }
-    
-    func addMessages(messages: [Message], toObjectWithID channelID: NSManagedObjectID) {
-        coreDataStack.save { context in
+    func addMessages(messages: [Message], toObjectWithID channelID: NSManagedObjectID, completion: @escaping (Error?) -> Void) {
+        coreDataStack.save({ context in
             do {
                 if let existingChannel = try context.existingObject(with: channelID) as? ChannelEntity {
                     for message in messages {
@@ -91,6 +76,40 @@ class ChannelRepository {
             } catch {
                 print(error.localizedDescription)
             }
-        }
+        }, completion: { error in
+            completion(error)
+        })
+    }
+    
+    func createChannelsFetchResultsController(sortBy sortField: String,
+                                              ascending: Bool,
+                                              fetchBatchSize: Int = 20,
+                                              withCache: Bool = false) -> NSFetchedResultsController<ChannelEntity> {
+        let request: NSFetchRequest<ChannelEntity> = ChannelEntity.fetchRequest()
+        request.sortDescriptors = [NSSortDescriptor(key: sortField, ascending: ascending)]
+        request.fetchBatchSize = fetchBatchSize
+        let controller = NSFetchedResultsController(fetchRequest: request,
+                                                    managedObjectContext: coreDataStack.mainContext,
+                                                    sectionNameKeyPath: nil,
+                                                    cacheName: withCache ? "ChannelsCache" : nil)
+        
+        return controller
+    }
+    
+    func createMessagesFetchResultsController(forChannel channelId: NSManagedObjectID,
+                                              sortBy sortField: String,
+                                              ascending: Bool,
+                                              fetchBatchSize: Int = 20,
+                                              withCache: Bool = false) -> NSFetchedResultsController<MessageEntity> {
+        let request: NSFetchRequest<MessageEntity> = MessageEntity.fetchRequest()
+        request.predicate = NSPredicate(format: "%K == %@", #keyPath(MessageEntity.channel), channelId)
+        request.sortDescriptors = [NSSortDescriptor(key: sortField, ascending: ascending)]
+        request.fetchBatchSize = fetchBatchSize
+        let controller = NSFetchedResultsController(fetchRequest: request,
+                                                    managedObjectContext: coreDataStack.mainContext,
+                                                    sectionNameKeyPath: nil,
+                                                    cacheName: withCache ? "MessagesCache" : nil)
+        
+        return controller
     }
 }

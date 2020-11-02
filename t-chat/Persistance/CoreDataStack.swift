@@ -14,7 +14,7 @@ protocol CoreDataStack {
     
     var mainContext: NSManagedObjectContext { get }
     
-    func save(_ block: @escaping (NSManagedObjectContext) -> Void)
+    func save(_ block: @escaping (NSManagedObjectContext) -> Void, completion: @escaping (Error?) -> Void)
     
     func enableObservers()
     
@@ -33,6 +33,16 @@ extension CoreDataStack {
             } catch {
                 fatalError(error.localizedDescription)
             }
+        }
+    }
+    
+    func getIconForEvent(eventName: String) -> String {
+        switch eventName {
+        case NSInsertedObjectsKey: return "✅"
+        case NSDeletedObjectsKey: return "🔻"
+        case NSUpdatedObjectsKey: return "🔸"
+        default:
+            return "🛑"
         }
     }
     
