@@ -80,7 +80,7 @@ class FileWriteOperation: Operation {
 }
 
 class ProfileWriteCompleteOperation: Operation {
-    var errors: [UserProfile.Keys:Error] {
+    var errors: [UserProfile.Keys: Error] {
         
         if let writeOperations = dependencies.filter({ $0 is FileWriteOperation }) as? [FileWriteOperation], !writeOperations.isEmpty {
             return Dictionary(uniqueKeysWithValues: writeOperations.filter {$0.error != nil}.map {($0.key, $0.error!)})

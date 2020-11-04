@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 class ProfileModel {
     
@@ -14,6 +15,7 @@ class ProfileModel {
     
     private let factory: UserProfileDataManagerFactory
     private var userProfile: UserProfile = UserProfile(username: "", about: "", photoURL: nil, photoData: nil)
+    private(set) var identifier: String
     
     var photoData: Data? {
         return userProfile.photoData
@@ -27,7 +29,7 @@ class ProfileModel {
         return userProfile.about
     }
     
-    var changedData: [UserProfile.Keys : Data?] = [:] {
+    var changedData: [UserProfile.Keys: Data?] = [:] {
         didSet {
             var changed = !changedData.isEmpty
             
@@ -40,10 +42,11 @@ class ProfileModel {
     }
     
     init() {
+        identifier = UIDevice.current.identifierForVendor!.uuidString
         factory = UserProfileDataManagerFactory()
     }
     
-    func load(with type: ManagerType = .GCD, completion: @escaping (UserProfile?, Error?) -> ()) {
+    func load(with type: ManagerType = .GCD, completion: @escaping (UserProfile?, Error?) -> Void) {
         factory.create(ofType: type).read {[weak self] profile, error in
             if let error = error {
                 completion(nil, error)
@@ -61,7 +64,7 @@ class ProfileModel {
                 if let error = error {
                     self.delegate?.didFailUpdate(error)
                 } else {
-                    for item in self.changedData.filter({ key, value in failedProperties?.index(forKey: key) == nil }) {
+                    for item in self.changedData.filter({ key, _ in failedProperties?.index(forKey: key) == nil }) {
                         self.userProfile.setValue(forKey: item.key, value: item.value)
                         self.changedData.removeValue(forKey: item.key)
                     }
@@ -79,7 +82,7 @@ class ProfileModel {
 
 protocol ProfileModelDelegate: class {
     
-    func didUpdate(provider: ManagerType, userProfile: UserProfile, failToUpdateProperties: [UserProfile.Keys:Error]?)
+    func didUpdate(provider: ManagerType, userProfile: UserProfile, failToUpdateProperties: [UserProfile.Keys: Error]?)
     
     func didFailUpdate(_ error: Error)
     

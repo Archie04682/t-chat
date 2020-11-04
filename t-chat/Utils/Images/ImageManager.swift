@@ -21,11 +21,11 @@ class ImageManager {
     }
     
     func saveToCameraRoll(_ image: UIImage, completion: @escaping (URL?) -> Void) {
-        var placeHolder: PHObjectPlaceholder? = nil
+        var placeHolder: PHObjectPlaceholder?
         PHPhotoLibrary.shared().performChanges({
             let creationRequest = PHAssetChangeRequest.creationRequestForAsset(from: image)
             placeHolder = creationRequest.placeholderForCreatedAsset
-        }, completionHandler: { success, error in
+        }, completionHandler: { success, _ in
             guard success, let placeholder = placeHolder else {
                 completion(nil)
                 return

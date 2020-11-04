@@ -40,8 +40,6 @@ class ThemesViewController: UIViewController {
         super.viewDidLoad()
         title = "Settings"
         
-        // И delegate и closure объявлены слабыми ссылками, т.к. ThemeManager синглтон и будет "жить" в приложении дольше нашего ThemesViewController. Retain cycle получаем, если объявляем и dalegate и closure сильными ссылками
-        
          ThemeManager.shared.delegate = self
 //        ThemeManager.shared.didPickTheme = {[weak self] theme in
 //            self?.update(theme: theme)
@@ -55,8 +53,8 @@ class ThemesViewController: UIViewController {
         
         view.addSubview(container)
         
-        container.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 85).isActive = true
-        container.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -85).isActive = true
+        container.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 38).isActive = true
+        container.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -38).isActive = true
         container.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 38).isActive = true
         container.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -38).isActive = true
     }

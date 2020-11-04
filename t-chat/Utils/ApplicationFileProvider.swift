@@ -34,7 +34,6 @@ final class ApplicationFileProvider {
             if !FileManager.default.fileExists(atPath: userProfileFolder.path, isDirectory: &dir) {
                 do {
                     try FileManager.default.createDirectory(at: userProfileFolder, withIntermediateDirectories: true, attributes: nil)
-                    
                 } catch {
                     throw error
                 }
@@ -48,6 +47,8 @@ final class ApplicationFileProvider {
     
     static func isFirstLaunch() -> Bool {
         var dir = ObjCBool(true)
-        return !FileManager.default.fileExists(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]).appendingPathComponent(ApplicationFileProvider.folderName).path, isDirectory: &dir)
+        return !FileManager.default.fileExists(atPath: URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])
+            .appendingPathComponent(ApplicationFileProvider.folderName).path,
+                                               isDirectory: &dir)
     }
 }

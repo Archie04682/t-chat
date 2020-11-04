@@ -47,10 +47,10 @@ enum Theme: Int, CaseIterable {
         }
     }
     
-    var navigationBarTitleTextAttributes: [NSAttributedString.Key : Any] {
+    var navigationBarTitleTextAttributes: [NSAttributedString.Key: Any] {
         switch self {
-        case .classic, .day: return [NSAttributedString.Key.foregroundColor : UIColor.black]
-        case .night: return [NSAttributedString.Key.foregroundColor : UIColor.white]
+        case .classic, .day: return [NSAttributedString.Key.foregroundColor: UIColor.black]
+        case .night: return [NSAttributedString.Key.foregroundColor: UIColor.white]
         }
     }
     
@@ -72,9 +72,9 @@ enum Theme: Int, CaseIterable {
     
     var outcommingMessageBackgroundColor: UIColor {
         switch self {
-            case .classic: return UIColor(red: 0xDC / 0xFF, green: 0xF7 / 0xFF, blue: 0xC5 / 0xFF, alpha: 1.0)
-            case .day: return UIColor(red: 0x43 / 0xFF, green: 0x89 / 0xFF, blue: 0xF9 / 0xFF, alpha: 1.0)
-            case .night: return UIColor(red: 0x5C / 0xFF, green: 0x5C / 0xFF, blue: 0x5C / 0xFF, alpha: 1.0)
+        case .classic: return UIColor(red: 0xDC / 0xFF, green: 0xF7 / 0xFF, blue: 0xC5 / 0xFF, alpha: 1.0)
+        case .day: return UIColor(red: 0x43 / 0xFF, green: 0x89 / 0xFF, blue: 0xF9 / 0xFF, alpha: 1.0)
+        case .night: return UIColor(red: 0x5C / 0xFF, green: 0x5C / 0xFF, blue: 0x5C / 0xFF, alpha: 1.0)
         }
     }
     
@@ -122,7 +122,7 @@ enum Theme: Int, CaseIterable {
     
     var inputFieldBorderBackgroundColor: UIColor {
         switch self {
-        case .classic, .day: return UIColor(red: 204.0/255.0, green: 204.0/255.0, blue: 204.0/255.0, alpha: 1.0)
+        case .classic, .day: return UIColor(red: 204.0 / 255.0, green: 204.0 / 255.0, blue: 204.0 / 255.0, alpha: 1.0)
         case .night: return .gray
         }
     }
@@ -131,6 +131,13 @@ enum Theme: Int, CaseIterable {
         switch self {
         case .classic, .day: return .white
         case .night: return UIColor.black
+        }
+    }
+    
+    var tableViewSeparatorColor: UIColor {
+        switch self {
+        case .classic, .day: return .gray
+        case .night: return UIColor(red: 224 / 255, green: 224 / 255, blue: 224 / 255, alpha: 1)
         }
     }
 }

@@ -7,4 +7,5 @@ target 't-chat' do
 
   # Pods for t-chat
   pod 'Firebase/Firestore'
+  pod 'SwiftLint'
 end

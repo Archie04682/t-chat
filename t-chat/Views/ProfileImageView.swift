@@ -13,25 +13,6 @@ class ProfileImageView: UIView {
     private var initialsLabel: UILabel?
     private var photoImageView: UIImageView?
     
-//    var initials: String? {
-//        didSet {
-//            photoImageView?.removeFromSuperview()
-//            photoImageView = nil
-//            if let l = initialsLabel {
-//                l.text = initials
-//            } else {
-//                let label = UILabel()
-//                label.text = initials
-//                label.font = UIFont.systemFont(ofSize: frame.width / 2)
-//                label.textAlignment = .center
-//                label.textColor = .black
-//                addSubview(label)
-//                center(child: label)
-//                initialsLabel = label
-//            }
-//        }
-//    }
-    
     var image: UIImage? {
         didSet {
             initialsLabel?.removeFromSuperview()

@@ -20,12 +20,39 @@ class MessageView: UIView {
         return view
     }()
     
+    private lazy var stackView: UIStackView = {
+        let view = UIStackView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.axis = .vertical
+        view.spacing = 4
+        
+        return view
+    }()
+    
+    private lazy var senderNameLabel: UILabel = {
+        let label = UILabel()
+        label.text = "username"
+        label.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private lazy var createdLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.italicSystemFont(ofSize: 12)
+        label.textAlignment = .right
+        label.text = "00:00"
+        return label
+    }()
+    
     private lazy var messageLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.text = "message"
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
+        
         return label
     }()
     
@@ -40,16 +67,21 @@ class MessageView: UIView {
     }
     
     private func setupView() {
-        container.addSubview(messageLabel)
+        
+        stackView.addArrangedSubview(senderNameLabel)
+        stackView.addArrangedSubview(messageLabel)
+        stackView.addArrangedSubview(createdLabel)
+        
+        container.addSubview(stackView)
         self.addSubview(container)
 
         container.topAnchor.constraint(equalTo: self.topAnchor, constant: 4.0).isActive = true
         container.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -4.0).isActive = true
         
-        messageLabel.topAnchor.constraint(equalTo: container.topAnchor, constant: 8.0).isActive = true
-        messageLabel.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -8.0).isActive = true
-        messageLabel.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -8.0).isActive = true
-        messageLabel.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 8.0).isActive = true
+        stackView.topAnchor.constraint(equalTo: container.topAnchor, constant: 8.0).isActive = true
+        stackView.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -8.0).isActive = true
+        stackView.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -8.0).isActive = true
+        stackView.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 8.0).isActive = true
         
         container.layer.cornerRadius = 16
     }
@@ -58,32 +90,48 @@ class MessageView: UIView {
         container.backgroundColor = color
     }
     
-    func setMessageColor(_ color: UIColor) {
+    func setTextColor(_ color: UIColor) {
+        senderNameLabel.textColor = color
         messageLabel.textColor = color
+        createdLabel.textColor = color
     }
 
 }
 
 extension MessageView: ConfigurableView {
     
-    typealias ConfigurationModel = MessageCellModel
+    typealias ConfigurationModel = Message
     
-    func configure(with model: MessageCellModel) {
+    func configure(with model: Message) {
+        let deviceId = UIDevice.current.identifierForVendor!.uuidString
+        let isIncomming = deviceId != model.senderId
+        
         let largePadding = UIScreen.main.bounds.width * 0.25
         
-        container.backgroundColor = model.isIncomming ? ThemeManager.shared.currentTheme.incommingMessageBackgroundColor : ThemeManager.shared.currentTheme.outcommingMessageBackgroundColor
-        messageLabel.textColor = model.isIncomming ? ThemeManager.shared.currentTheme.incommingMessageTextColor : ThemeManager.shared.currentTheme.outcommingMessageTextColor
+        container.backgroundColor = isIncomming ? ThemeManager.shared.currentTheme.incommingMessageBackgroundColor
+            : ThemeManager.shared.currentTheme.outcommingMessageBackgroundColor
+        messageLabel.textColor = isIncomming ? ThemeManager.shared.currentTheme.incommingMessageTextColor : ThemeManager.shared.currentTheme.outcommingMessageTextColor
         
         trailingConstraint?.isActive = false
-        trailingConstraint = model.isIncomming ? container.trailingAnchor.constraint(lessThanOrEqualTo: self.trailingAnchor, constant: -largePadding) : container.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10)
+        trailingConstraint = isIncomming ? container.trailingAnchor.constraint(lessThanOrEqualTo: self.trailingAnchor, constant: -largePadding)
+            : container.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10)
         trailingConstraint?.isActive = true
 
         leadingConstraint?.isActive = false
-        leadingConstraint = model.isIncomming ? container.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10) : container.leadingAnchor.constraint(greaterThanOrEqualTo: self.leadingAnchor, constant: largePadding)
+        leadingConstraint = isIncomming ? container.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10)
+            : container.leadingAnchor.constraint(greaterThanOrEqualTo: self.leadingAnchor, constant: largePadding)
         leadingConstraint?.isActive = true
         
-        container.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner, model.isIncomming ? .layerMaxXMaxYCorner : .layerMinXMaxYCorner]
-        messageLabel.text = model.text
+        container.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner, isIncomming ? .layerMaxXMaxYCorner : .layerMinXMaxYCorner]
+        messageLabel.text = model.content
+        
+        senderNameLabel.isHidden = !isIncomming
+        senderNameLabel.text = model.senderName
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = Calendar.current.isDateInToday(model.created) ? "hh:mm" : "dd MMM hh:mm"
+        
+        createdLabel.text = dateFormatter.string(from: model.created)
     }
     
 }

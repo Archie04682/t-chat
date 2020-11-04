@@ -10,7 +10,7 @@ import UIKit
 
 class ThemeView: UIView {
     
-    var selected: ((Theme) -> ())?
+    var selected: ((Theme) -> Void)?
     
     private var theme: Theme?
     
@@ -47,14 +47,14 @@ class ThemeView: UIView {
     }()
     
     private lazy var incommingMessageView: MessageView = {
-        let view = MessageView(frame: CGRect.init(x: 0, y: 0, width: self.frame.width, height: self.frame.width))
+        let view = MessageView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.width))
         view.translatesAutoresizingMaskIntoConstraints = false
     
         return view
     }()
     
     private lazy var outcommingMessageView: MessageView = {
-        let view = MessageView(frame: CGRect.init(x: 0, y: 0, width: self.frame.width, height: self.frame.width))
+        let view = MessageView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.width))
         view.translatesAutoresizingMaskIntoConstraints = false
         
         return view
@@ -71,8 +71,14 @@ class ThemeView: UIView {
     }
     
     private func setupView() {
-        incommingMessageView.configure(with: MessageCellModel(text: "Hello, how are u?", isIncomming: true))
-        outcommingMessageView.configure(with: MessageCellModel(text: "Hello there! Fine!", isIncomming: false))
+        incommingMessageView.configure(with: Message(content: "Hello! How r u?",
+                                                     created: Date(),
+                                                     senderId: "sender",
+                                                     senderName: ""))
+        outcommingMessageView.configure(with: Message(content: "Hi! Fine!",
+                                                      created: Date(),
+                                                      senderId: UIDevice.current.identifierForVendor!.uuidString,
+                                                      senderName: ""))
         
         dialogSampleView.addArrangedSubview(incommingMessageView)
         dialogSampleView.addArrangedSubview(outcommingMessageView)
@@ -94,7 +100,6 @@ class ThemeView: UIView {
         
         themeNameLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
         themeNameLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        
         
     }
     
@@ -118,11 +123,11 @@ extension ThemeView: ConfigurableView {
         theme = model
         themeNameLabel.text = model.themeName
         incommingMessageView.setBackgroundColor(model.incommingMessageBackgroundColor)
-        incommingMessageView.setMessageColor(model.incommingMessageTextColor)
+        incommingMessageView.setTextColor(model.incommingMessageTextColor)
         selectionButton.backgroundColor = model.conversationBackgroundColor
         
         outcommingMessageView.setBackgroundColor(model.outcommingMessageBackgroundColor)
-        outcommingMessageView.setMessageColor(model.outcommingMessageTextColor)
+        outcommingMessageView.setTextColor(model.outcommingMessageTextColor)
         selectionButton.backgroundColor = model.conversationBackgroundColor
     }
 }

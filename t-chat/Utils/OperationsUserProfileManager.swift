@@ -18,7 +18,7 @@ class OperationsUserProfileManager: UserProfileDataManager {
         applicationFileProvider = ApplicationFileProvider()
     }
     
-    func read(completion: @escaping (UserProfile?, Error?) -> ()) {
+    func read(completion: @escaping (UserProfile?, Error?) -> Void) {
         do {
             let userProfileFolder = try applicationFileProvider.getApplicationFolder()
             var operations: [Operation] = UserProfile.Keys.allCases.map {
@@ -43,7 +43,7 @@ class OperationsUserProfileManager: UserProfileDataManager {
         }
     }
     
-    func write(_ data: [UserProfile.Keys:Data?], completion: @escaping ([UserProfile.Keys : Error]?, Error?) -> ()) {
+    func write(_ data: [UserProfile.Keys: Data?], completion: @escaping ([UserProfile.Keys: Error]?, Error?) -> Void) {
         do {
             let userProfileFolder = try applicationFileProvider.getApplicationFolder()
             var operations: [Operation] = []

@@ -22,7 +22,7 @@ class ConversationMessageTableViewCell: UITableViewCell {
         
         self.selectionStyle = .none
         contentView.addSubview(messageView)
-
+        
         messageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5.0).isActive = true
         messageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5.0).isActive = true
         messageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
@@ -37,9 +37,9 @@ class ConversationMessageTableViewCell: UITableViewCell {
 
 extension ConversationMessageTableViewCell: ConfigurableView {
     
-    typealias ConfigurationModel = MessageCellModel
+    typealias ConfigurationModel = Message
     
-    func configure(with model: MessageCellModel) {
+    func configure(with model: Message) {
         messageView.configure(with: model)
     }
     
