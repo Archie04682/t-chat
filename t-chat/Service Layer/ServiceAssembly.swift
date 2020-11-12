@@ -9,7 +9,7 @@
 import Foundation
 
 protocol ServiceAssembly {
-    func messageService(forChannelWithUID uid: String) -> MessageService
+    func messageService(for channel: Channel) -> MessageService
     
     var channelService: ChannelService { get }
     
@@ -25,8 +25,8 @@ final class ServiceAssemblyImplementation: ServiceAssembly {
         self.coreAssembly = coreAssembly
     }
     
-    func messageService(forChannelWithUID uid: String) -> MessageService {
-        return CombinedMessageService(messageProvider: self.coreAssembly.messageProvider, messageRepository: self.coreAssembly.messageRepository, channelUID: uid)
+    func messageService(for channel: Channel) -> MessageService {
+        return CombinedMessageService(messageProvider: self.coreAssembly.messageProvider, messageRepository: self.coreAssembly.messageRepository, channel: channel)
     }
     
     lazy var channelService: ChannelService = CombinedChannelService(channelDataProvider: self.coreAssembly.channelProvider, channelRepository: self.coreAssembly.channelRepository)

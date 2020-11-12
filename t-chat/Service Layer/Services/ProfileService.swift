@@ -15,6 +15,8 @@ protocol ProfileServiceDelegate: AnyObject {
 protocol ProfileService {
     var delegate: ProfileServiceDelegate? { get set }
     
+    var profile: UserProfile? { get }
+    
     func load()
     
     func save(with type: ManagerType, data: [UserProfile.Keys: Data?], completion: @escaping ([UserProfile.Keys: Error]?, Error?) -> Void)
@@ -25,8 +27,12 @@ final class UserProfileService: ProfileService {
     
     weak var delegate: ProfileServiceDelegate?
     
+    private(set) var profile: UserProfile?
+    
     init(profileManagerFactory: ProfileManagerFactory) {
         self.profileManagerFactory = profileManagerFactory
+        
+        self.load()
     }
     
     func load() {
@@ -37,6 +43,7 @@ final class UserProfileService: ProfileService {
             
             if let profile = profile {
                 self?.delegate?.profile(updated: .success(profile))
+                self?.profile = profile
             }
         }
     }

@@ -12,15 +12,13 @@ import Firebase
 
 class ConversationViewController: UIViewController {
     
-    private let profile: ProfileModel
-    private let channelRepository: CoreDataChannelRepository
-    private let channel: ChannelEntity
+    private let profileService: ProfileService
+    private var messageService: MessageService
+    private let themeManager: ThemeManager
     
-    private var listener: ListenerRegistration?
     private var toolbarBottomConstraint: NSLayoutConstraint?
-    private let firestoreProvider: FirestoreProvider
     
-    private let fetchedResultsController: NSFetchedResultsController<MessageEntity>
+    private var messages: [Int: Message] = [:]
     
     private lazy var conversationTable: UITableView = {
         let tableView = UITableView(frame: .zero, style: .plain)
@@ -38,7 +36,7 @@ class ConversationViewController: UIViewController {
         label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
         label.text = "No messages yet."
         label.textAlignment = .center
-        label.textColor = LocalThemeManager.shared.currentTheme.textColor
+        label.textColor = themeManager.currentTheme.textColor
         return label
     }()
     
@@ -62,11 +60,11 @@ class ConversationViewController: UIViewController {
         let view = UITextView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.font = UIFont.systemFont(ofSize: 16, weight: .regular)
-        view.textColor = LocalThemeManager.shared.currentTheme.textColor
+        view.textColor = themeManager.currentTheme.textColor
         view.isScrollEnabled = false
         view.delegate = self
-        view.backgroundColor = LocalThemeManager.shared.currentTheme.inputFieldBackgroundColor
-        view.layer.borderColor = LocalThemeManager.shared.currentTheme.inputFieldBorderBackgroundColor.cgColor
+        view.backgroundColor = themeManager.currentTheme.inputFieldBackgroundColor
+        view.layer.borderColor = themeManager.currentTheme.inputFieldBorderBackgroundColor.cgColor
         view.layer.borderWidth = 1.5
         view.layer.cornerRadius = 16
         view.layer.masksToBounds = true
@@ -80,21 +78,16 @@ class ConversationViewController: UIViewController {
         label.text = "Message"
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.sizeToFit()
-        label.textColor = LocalThemeManager.shared.currentTheme.textColor.withAlphaComponent(0.6)
+        label.textColor = themeManager.currentTheme.textColor.withAlphaComponent(0.6)
         
         return label
     }()
     
-    init(profile: ProfileModel, firestoreProvider: FirestoreProvider, channelRepository: CoreDataChannelRepository, channel: ChannelEntity) {
-        self.channelRepository = channelRepository
-        self.profile = profile
-        self.firestoreProvider = firestoreProvider
-        self.channel = channel
-        self.fetchedResultsController = channelRepository.createMessagesFetchResultsController(forChannel: channel.objectID,
-                                                                                               sortBy: #keyPath(MessageEntity.created),
-                                                                                               ascending: false,
-                                                                                               fetchBatchSize: 20,
-                                                                                               withCache: false)
+    init(profileService: ProfileService, messageService: MessageService, themeManager: ThemeManager) {
+        self.profileService = profileService
+        self.messageService = messageService
+        self.themeManager = themeManager
+        
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -106,17 +99,12 @@ class ConversationViewController: UIViewController {
         super.viewDidLoad()
         setupViews()
         conversationTable.register(ConversationMessageTableViewCell.self, forCellReuseIdentifier: String(describing: type(of: ConversationMessageTableViewCell.self)))
-        fetchedResultsController.delegate = self
         
-        do {
-            try fetchedResultsController.performFetch()
-        } catch {
-            print(error.localizedDescription)
-        }
+        messageService.delegate = self
     }
     
     private func setupViews() {
-        title = channel.name
+        title = messageService.channel.name
         view.addSubview(noMessagesLabel)
         noMessagesLabel.translatesAutoresizingMaskIntoConstraints = false
         noMessagesLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
@@ -160,22 +148,22 @@ class ConversationViewController: UIViewController {
     }
     
     @objc func sendMessage() {
-        firestoreProvider.sendMessage(toChannel: channel.uid,
-                                     message: Message(content: messageTextView.text.trimmingCharacters(in: .whitespacesAndNewlines),
-                                                      created: Date(),
-                                                      senderId: profile.identifier,
-                                                      senderName: profile.username)) {[weak self] error in
-            guard error == nil else {
-                self?.showError(with: "Failed to send message")
-                
-                return
-            }
+        if let profile = profileService.profile {
+            messageService.add(Message(content: messageTextView.text.trimmingCharacters(in: .whitespacesAndNewlines),
+            created: Date(),
+            senderId: UIDevice.current.identifierForVendor!.uuidString,
+            senderName: profile.username)) {[weak self] error in
+                guard error == nil else {
+                    self?.showError(with: "Failed to send message")
+                    
+                    return
+                }
 
-            self?.messageTextView.text = String()
-            // добавлено, чтобы стриггерить textViewDidChange
-            self?.messageTextView.insertText(String())
+                self?.messageTextView.text = String()
+                // добавлено, чтобы стриггерить textViewDidChange
+                self?.messageTextView.insertText(String())
+            }
         }
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -184,25 +172,25 @@ class ConversationViewController: UIViewController {
         view.backgroundColor = LocalThemeManager.shared.currentTheme.conversationBackgroundColor
         conversationTable.backgroundColor = LocalThemeManager.shared.currentTheme.conversationBackgroundColor
         
-        listener = firestoreProvider.getMessages(forChannel: channel.uid) {[weak self] messages, error in
-            guard error == nil, let messages = messages, let channelId = self?.channel.objectID else {return}
-            
-            if !messages.isEmpty {
-                self?.channelRepository.addMessages(messages: messages, toObjectWithID: channelId) { error in
-                    if error != nil {
-                        self?.showError(with: "Failed to save cache")
-                    }
-                }
-
-                DispatchQueue.main.async {[weak self] in
-                    self?.conversationTable.isHidden = false
-                    self?.noMessagesLabel.isHidden = true
-                }
-            } else {
-                self?.conversationTable.isHidden = true
-                self?.noMessagesLabel.isHidden = false
-            }
-        }
+//        listener = firestoreProvider.getMessages(forChannel: channel.uid) {[weak self] messages, error in
+//            guard error == nil, let messages = messages, let channelId = self?.channel.objectID else {return}
+//
+//            if !messages.isEmpty {
+//                self?.channelRepository.addMessages(messages: messages, toObjectWithID: channelId) { error in
+//                    if error != nil {
+//                        self?.showError(with: "Failed to save cache")
+//                    }
+//                }
+//
+//                DispatchQueue.main.async {[weak self] in
+//                    self?.conversationTable.isHidden = false
+//                    self?.noMessagesLabel.isHidden = true
+//                }
+//            } else {
+//                self?.conversationTable.isHidden = true
+//                self?.noMessagesLabel.isHidden = false
+//            }
+//        }
     }
     
     @objc func keyboardWillShow(notification: NSNotification) {
@@ -230,10 +218,6 @@ class ConversationViewController: UIViewController {
         }
     }
     
-    deinit {
-        listener?.remove()
-    }
-    
     func showError(with message: String) {
         DispatchQueue.main.async {
             if self.presentedViewController == nil {
@@ -248,26 +232,21 @@ class ConversationViewController: UIViewController {
 extension ConversationViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        guard let sections = fetchedResultsController.sections else {
-            return 0
-        }
-
-        return sections.count
+        return 0
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let sections = fetchedResultsController.sections else {
-            return 0
-        }
-
-        return sections[section].numberOfObjects
+        return messages.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: type(of: ConversationMessageTableViewCell.self))) as? ConversationMessageTableViewCell
             else { return UITableViewCell(style: .default, reuseIdentifier: "default") }
         
-        configure(cell, with: Message(from: fetchedResultsController.object(at: indexPath)))
+        if let message = messages[indexPath.row] {
+            configure(cell, with: message)
+        }
+    
         return cell
     }
     
@@ -283,51 +262,56 @@ extension ConversationViewController: UITableViewDelegate {
     
 }
 
+extension ConversationViewController: MessageServiceDelegate {
+    
+    func data(_ result: Result<[ObjectChanges<Message>], Error>) {
+        switch result {
+        case .success(let result):
+            conversationTable.beginUpdates()
+            for change in result {
+                switch change.changeType {
+                case .insert:
+                    if let index = change.newIndex {
+                        messages[index] = change.object
+                        conversationTable.insertRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+                    }
+                case .move:
+                    if let index = change.index {
+                        if messages.removeValue(forKey: index) != nil {
+                            conversationTable.deleteRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+                        }
+                    }
+                    if let newIndex = change.newIndex {
+                        messages[newIndex] = change.object
+                        conversationTable.insertRows(at: [IndexPath(row: newIndex, section: 0)], with: .automatic)
+                    }
+                    
+                case .update:
+                    if let index = change.index {
+                        messages[index] = change.object
+                        guard let cell = conversationTable.cellForRow(at: IndexPath(row: index, section: 0)) as? ConversationMessageTableViewCell else { break }
+                        configure(cell, with: change.object)
+                    }
+                    
+                case .delete:
+                    if let index = change.index {
+                        if messages.removeValue(forKey: index) != nil {
+                            conversationTable.deleteRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+                        }
+                    }
+                }
+            }
+            conversationTable.endUpdates()
+            return
+        case .failure(let error):
+            showError(with: error.localizedDescription)
+        }
+    }
+}
+
 extension ConversationViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         messageTextViewPlaceholder.isHidden = !textView.text.isEmpty
         sendButton.isEnabled = !textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-    }
-}
-
-extension ConversationViewController: NSFetchedResultsControllerDelegate {
-    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        conversationTable.beginUpdates()
-    }
-
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
-                    didChange anObject: Any,
-                    at indexPath: IndexPath?,
-                    for type: NSFetchedResultsChangeType,
-                    newIndexPath: IndexPath?) {
-        switch type {
-        case .insert:
-            if let indexPath = newIndexPath {
-                conversationTable.insertRows(at: [indexPath], with: .automatic)
-            }
-        case .delete:
-            if let indexPath = indexPath {
-                conversationTable.deleteRows(at: [indexPath], with: .automatic)
-            }
-        case .move:
-            if let indexPath = indexPath {
-                conversationTable.deleteRows(at: [indexPath], with: .automatic)
-            }
-
-            if let newIndexPath = newIndexPath {
-                conversationTable.insertRows(at: [newIndexPath], with: .automatic)
-            }
-        case .update:
-            if let indexPath = indexPath {
-                guard let cell = conversationTable.cellForRow(at: indexPath) as? ConversationMessageTableViewCell else { break }
-                configure(cell, with: Message(from: fetchedResultsController.object(at: indexPath)))
-            }
-        @unknown default:
-            fatalError("Unknown ResultsChangeType")
-        }
-    }
-
-    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        conversationTable.endUpdates()
     }
 }

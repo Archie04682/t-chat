@@ -14,26 +14,34 @@ protocol MessageServiceDelegate: AnyObject {
 
 protocol MessageService {
     var delegate: MessageServiceDelegate? { get set }
+    
+    var channel: Channel { get }
+    
+    func add(_ message: Message, completion: @escaping (Error?) -> Void)
 }
 
 final class CombinedMessageService: MessageService {
     private var messageProvider: MessageProvider
     private var messageRepository: MessageRepository
     
-    private let channelUID: String
+    let channel: Channel
     
     weak var delegate: MessageServiceDelegate? {
         didSet {
             messageRepository.delegate = self
-            messageRepository.fetch(forChannelWithUID: channelUID)
+            messageRepository.fetch(forChannelWithUID: channel.identifier)
             messageProvider.delegate = self
         }
     }
     
-    init(messageProvider: MessageProvider, messageRepository: MessageRepository, channelUID: String) {
+    init(messageProvider: MessageProvider, messageRepository: MessageRepository, channel: Channel) {
         self.messageProvider = messageProvider
         self.messageRepository = messageRepository
-        self.channelUID = channelUID
+        self.channel = channel
+    }
+    
+    func add(_ message: Message, completion: @escaping (Error?) -> Void) {
+        messageProvider.add(message, inChannelWithUID: channel.identifier, completion: completion)
     }
     
 }
@@ -43,7 +51,7 @@ extension CombinedMessageService: MessageProviderDelegate {
     func fetched(_ result: Result<[Message], Error>) {
         switch result {
         case .success(let messages):
-            messageRepository.add(messages, forChannelWithUID: channelUID) {[weak self] error in
+            messageRepository.add(messages, forChannelWithUID: channel.identifier) {[weak self] error in
                 if let error = error {
                     self?.delegate?.data(.failure(error))
                 }

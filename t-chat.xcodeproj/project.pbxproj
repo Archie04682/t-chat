@@ -323,6 +323,7 @@
 		FC466E90255DF0E000BC1204 /* Presentarion Layer */ = {
 			isa = PBXGroup;
 			children = (
+				FC466E98255DF64600BC1204 /* Conversation */,
 				FC466E91255DF0E900BC1204 /* ConversationsList */,
 				FC466E94255DF41500BC1204 /* PresentaionAssembly.swift */,
 			);
@@ -355,6 +356,31 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		FC466E98255DF64600BC1204 /* Conversation */ = {
+			isa = PBXGroup;
+			children = (
+				FC466E9A255DF67C00BC1204 /* Controller */,
+				FC466E99255DF67500BC1204 /* Views */,
+			);
+			path = Conversation;
+			sourceTree = "<group>";
+		};
+		FC466E99255DF67500BC1204 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				FC5370352520B58700653A19 /* ConversationMessageTableViewCell.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		FC466E9A255DF67C00BC1204 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				FC4C599525208654008F72C2 /* ConversationViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
 		FC4C1EB62549632000F76A6B /* ProfileManagement */ = {
 			isa = PBXGroup;
 			children = (
@@ -370,15 +396,6 @@
 				FC61DC24253B7342009B6223 /* FirestoreProvider.swift */,
 			);
 			path = Firebase;
-			sourceTree = "<group>";
-		};
-		FC4C59922520854B008F72C2 /* Conversation */ = {
-			isa = PBXGroup;
-			children = (
-				FC4C599525208654008F72C2 /* ConversationViewController.swift */,
-				FC5370352520B58700653A19 /* ConversationMessageTableViewCell.swift */,
-			);
-			path = Conversation;
 			sourceTree = "<group>";
 		};
 		FC4F20BF251FB6FC00F0A8AB /* Utils */ = {
@@ -409,8 +426,6 @@
 			isa = PBXGroup;
 			children = (
 				FC94E5ED252869A0000F09BE /* Settings */,
-				FCEE4B39251D14BC00911B5C /* ConversationsList */,
-				FC4C59922520854B008F72C2 /* Conversation */,
 				FC3CA9082514B0C400C7980E /* Profile */,
 			);
 			path = Controllers;
@@ -436,13 +451,6 @@
 				FC94E5F425287DB0000F09BE /* ThemeView.swift */,
 			);
 			path = Settings;
-			sourceTree = "<group>";
-		};
-		FCEE4B39251D14BC00911B5C /* ConversationsList */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = ConversationsList;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
