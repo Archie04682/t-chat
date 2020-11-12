@@ -15,7 +15,13 @@ protocol UserProfileDataManager {
     func read(completion: @escaping (UserProfile?, Error?) -> Void)  
 }
 
-class UserProfileDataManagerFactory {
+protocol ProfileManagerFactory {
+    func getDefault() -> UserProfileDataManager
+    
+    func create(ofType type: ManagerType) -> UserProfileDataManager
+}
+
+class UserProfileDataManagerFactory: ProfileManagerFactory {
     
     func getDefault() -> UserProfileDataManager {
         return create(ofType: .GCD)

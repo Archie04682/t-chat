@@ -11,11 +11,15 @@ import UIKit
 import Firebase
 
 class ConversationsListViewController: UIViewController {
-    private var theme = ThemeManager.shared.currentTheme
-    private var channelRepository: ChannelRepository
+    private var theme = LocalThemeManager.shared.currentTheme
+    private var channelRepository: CoreDataChannelRepository
     private let profileModel = ProfileModel()
     private var isVisible = true
     private let fetchedResultsController: NSFetchedResultsController<ChannelEntity>
+    private lazy var service: ChannelService = CombinedChannelService(channelDataProvider: FirestoreChannelProvider(firestoreProvider: self.firestoreProvider),
+                                                              channelRepository: self.channelRepository)
+    
+    private var channels: [Int: Channel] = [:]
     
     private lazy var conversationsTable: UITableView = {
         let tableView = UITableView(frame: .zero, style: .plain)
@@ -37,7 +41,7 @@ class ConversationsListViewController: UIViewController {
     private let firestoreProvider = FirestoreProvider()
     private var listener: ListenerRegistration?
     
-    init(channelRepository: ChannelRepository) {
+    init(channelRepository: CoreDataChannelRepository) {
         self.channelRepository = channelRepository
         self.fetchedResultsController = channelRepository.createChannelsFetchResultsController(sortBy: #keyPath(ChannelEntity.lastActivity),
                                                                                                ascending: false,
@@ -56,8 +60,8 @@ class ConversationsListViewController: UIViewController {
         title = "Channels"
         setupViews()
         navigationController?.delegate = self
-        fetchedResultsController.delegate = self
         conversationsTable.register(ConversationTableViewCell.self, forCellReuseIdentifier: String(describing: type(of: ConversationTableViewCell.self)))
+        
     }
     
     private func setupViews() {
@@ -83,26 +87,11 @@ class ConversationsListViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        view.backgroundColor = ThemeManager.shared.currentTheme.backgroundColor
+        view.backgroundColor = LocalThemeManager.shared.currentTheme.backgroundColor
         conversationsTable.backgroundColor = .clear
-        conversationsTable.separatorColor = ThemeManager.shared.currentTheme.tableViewSeparatorColor
+        conversationsTable.separatorColor = LocalThemeManager.shared.currentTheme.tableViewSeparatorColor
         
-        if listener == nil {
-            listener = firestoreProvider.getChannels {[weak self] channels, error in
-                guard let channels = channels, error == nil else {
-                    return
-                }
-
-                self?.channelRepository.add(channels: channels) { error in
-                    if error != nil {
-                        self?.showError(with: "Failed to update channels")
-                    }
-                }
-            }
-        }
-        
-        try? fetchedResultsController.performFetch()
-        
+        service.delegate = self
         isVisible = true
     }
     
@@ -174,9 +163,9 @@ extension ConversationsListViewController: UINavigationControllerDelegate {
         let item = UIBarButtonItem(title: " ", style: .plain, target: nil, action: nil)
         viewController.navigationItem.backBarButtonItem = item
         
-        if theme != ThemeManager.shared.currentTheme {
+        if theme != LocalThemeManager.shared.currentTheme {
             conversationsTable.reloadData()
-            theme = ThemeManager.shared.currentTheme
+            theme = LocalThemeManager.shared.currentTheme
         }
         
         profileModel.load {[weak self] profile, _ in
@@ -194,28 +183,19 @@ extension ConversationsListViewController: UINavigationControllerDelegate {
 }
 
 extension ConversationsListViewController: UITableViewDataSource {
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        guard let sections = fetchedResultsController.sections else {
-            return 0
-        }
-
-        return sections.count
-    }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let sections = fetchedResultsController.sections else {
-            return 0
-        }
-
-        return sections[section].numberOfObjects
+        return channels.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: type(of: ConversationTableViewCell.self))) as? ConversationTableViewCell
             else { return UITableViewCell(style: .default, reuseIdentifier: "default") }
 
-        configure(cell: cell, with: Channel(from: fetchedResultsController.object(at: indexPath)))
+        if let channel = channels[indexPath.row] {
+            configure(cell: cell, with: channel)
+        }
+        
         return cell
     }
 
@@ -250,54 +230,49 @@ extension ConversationsListViewController: UITableViewDelegate {
     
 }
 
-extension ConversationsListViewController: NSFetchedResultsControllerDelegate {
-    // isVisible добавлено из-за появления ошибки
-    // [TableView] Warning once only: UITableView was told to layout its visible cells and other contents without
-    // being in the view hierarchy (the table view or one of its superviews has not been added to a window).
-    // This may cause bugs by forcing views inside the table view to load and perform layout without accurate information
-    // (e.g. table view bounds, trait collection, layout margins, safe area insets, etc),
-    // and will also cause unnecessary performance overhead due to extra layout passes.
+extension ConversationsListViewController: ChannelServiceDelegate {
     
-    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        if !isVisible { return }
-        conversationsTable.beginUpdates()
-    }
-
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
-                    didChange anObject: Any,
-                    at indexPath: IndexPath?,
-                    for type: NSFetchedResultsChangeType,
-                    newIndexPath: IndexPath?) {
-        if !isVisible { return }
-        switch type {
-        case .insert:
-            if let indexPath = newIndexPath {
-                conversationsTable.insertRows(at: [indexPath], with: .automatic)
+    func data(_ result: Result<[ObjectChanges<Channel>], Error>) {
+        switch result {
+        case .success(let result):
+            conversationsTable.beginUpdates()
+            for change in result {
+                switch change.changeType {
+                case .insert:
+                    if let index = change.newIndex {
+                        channels[index] = change.object
+                        conversationsTable.insertRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+                    }
+                case .move:
+                    if let index = change.index {
+                        if channels.removeValue(forKey: index) != nil {
+                            conversationsTable.deleteRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+                        }
+                    }
+                    if let newIndex = change.newIndex {
+                        channels[newIndex] = change.object
+                        conversationsTable.insertRows(at: [IndexPath(row: newIndex, section: 0)], with: .automatic)
+                    }
+                    
+                case .update:
+                    if let index = change.index {
+                        channels[index] = change.object
+                        guard let cell = conversationsTable.cellForRow(at: IndexPath(row: index, section: 0)) as? ConversationTableViewCell else { break }
+                        configure(cell: cell, with: change.object)
+                    }
+                    
+                case .delete:
+                    if let index = change.index {
+                        if channels.removeValue(forKey: index) != nil {
+                            conversationsTable.deleteRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+                        }
+                    }
+                }
             }
-        case .delete:
-            if let indexPath = indexPath {
-                conversationsTable.deleteRows(at: [indexPath], with: .automatic)
-            }
-        case .move:
-            if let indexPath = indexPath {
-                conversationsTable.deleteRows(at: [indexPath], with: .automatic)
-            }
-
-            if let newIndexPath = newIndexPath {
-                conversationsTable.insertRows(at: [newIndexPath], with: .automatic)
-            }
-        case .update:
-            if let indexPath = indexPath {
-                guard let cell = conversationsTable.cellForRow(at: indexPath) as? ConversationTableViewCell else { break }
-                configure(cell: cell, with: Channel(from: fetchedResultsController.object(at: indexPath)))
-            }
-        @unknown default:
-            fatalError("Unknown ResultsChangeType")
+            conversationsTable.endUpdates()
+            return
+        case .failure(let error):
+            showError(with: error.localizedDescription)
         }
-    }
-
-    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        if !isVisible { return }
-        conversationsTable.endUpdates()
     }
 }

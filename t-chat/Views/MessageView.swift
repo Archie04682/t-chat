@@ -108,9 +108,9 @@ extension MessageView: ConfigurableView {
         
         let largePadding = UIScreen.main.bounds.width * 0.25
         
-        container.backgroundColor = isIncomming ? ThemeManager.shared.currentTheme.incommingMessageBackgroundColor
-            : ThemeManager.shared.currentTheme.outcommingMessageBackgroundColor
-        messageLabel.textColor = isIncomming ? ThemeManager.shared.currentTheme.incommingMessageTextColor : ThemeManager.shared.currentTheme.outcommingMessageTextColor
+        container.backgroundColor = isIncomming ? LocalThemeManager.shared.currentTheme.incommingMessageBackgroundColor
+            : LocalThemeManager.shared.currentTheme.outcommingMessageBackgroundColor
+        messageLabel.textColor = isIncomming ? LocalThemeManager.shared.currentTheme.incommingMessageTextColor : LocalThemeManager.shared.currentTheme.outcommingMessageTextColor
         
         trailingConstraint?.isActive = false
         trailingConstraint = isIncomming ? container.trailingAnchor.constraint(lessThanOrEqualTo: self.trailingAnchor, constant: -largePadding)

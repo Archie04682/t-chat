@@ -29,13 +29,13 @@ class AddNewChannelViewController: UIAlertController {
             textField.borderStyle = .roundedRect
             textField.attributedPlaceholder = NSAttributedString(string: "Channel name",
                                                                  attributes: [NSAttributedString.Key.foregroundColor:
-                                                                    ThemeManager.shared.currentTheme.textColor.withAlphaComponent(0.7)])
+                                                                    LocalThemeManager.shared.currentTheme.textColor.withAlphaComponent(0.7)])
             textField.font = UIFont.systemFont(ofSize: 16, weight: .regular)
-            textField.backgroundColor = ThemeManager.shared.currentTheme.inputFieldBackgroundColor
-            textField.layer.borderColor = ThemeManager.shared.currentTheme.inputFieldBorderBackgroundColor.cgColor
+            textField.backgroundColor = LocalThemeManager.shared.currentTheme.inputFieldBackgroundColor
+            textField.layer.borderColor = LocalThemeManager.shared.currentTheme.inputFieldBorderBackgroundColor.cgColor
             textField.layer.borderWidth = 1.5
             textField.layer.cornerRadius = 4.0
-            textField.textColor = ThemeManager.shared.currentTheme.textColor
+            textField.textColor = LocalThemeManager.shared.currentTheme.textColor
             textField.returnKeyType = .go
             textField.delegate = self
             textField.enablesReturnKeyAutomatically = true

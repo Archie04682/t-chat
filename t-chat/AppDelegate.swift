@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, StateLoggable {
         
         let window = UIWindow(frame: UIScreen.main.bounds)
         
-        ThemeManager.shared.apply(theme: ThemeManager.shared.currentTheme)
+        LocalThemeManager.shared.apply(theme: LocalThemeManager.shared.currentTheme)
         
         var coreDataStack: CoreDataStack = NewWaveStack(withModel: "Chats")
         coreDataStack.didUpdateDatabase = { stack in
@@ -31,7 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, StateLoggable {
         
         coreDataStack.enableObservers()
         
-        let channelRepository = ChannelRepository(coreDataStack: coreDataStack)
+        let channelRepository = CoreDataChannelRepository(coreDataStack: coreDataStack)
         let navigationController = UINavigationController()
         let conversationsListViewController = ConversationsListViewController(channelRepository: channelRepository)
         navigationController.viewControllers = [conversationsListViewController]

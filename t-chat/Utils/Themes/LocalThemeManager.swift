@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ThemeManager: NSObject {
+class LocalThemeManager: NSObject {
     private let dispatchQueue: DispatchQueue
     
     weak var delegate: ThemePickerDelegate?
@@ -16,8 +16,8 @@ class ThemeManager: NSObject {
     
     private let themeKey = "theme"
     
-    static var shared: ThemeManager = {
-       return ThemeManager()
+    static var shared: LocalThemeManager = {
+       return LocalThemeManager()
     }()
     
     private var theme: Theme
@@ -65,7 +65,7 @@ class ThemeManager: NSObject {
     }
 }
 
-extension ThemeManager: NSCopying {
+extension LocalThemeManager: NSCopying {
     
     func copy(with zone: NSZone? = nil) -> Any {
         return self

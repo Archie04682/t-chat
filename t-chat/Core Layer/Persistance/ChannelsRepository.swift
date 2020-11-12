@@ -9,11 +9,55 @@
 import CoreData
 import Foundation
 
-final class ChannelRepository {
+protocol ChannelRepositoryDelegate: AnyObject {
+    func channelsUpdated(_ data: Result<[ObjectChanges<Channel>], Error>)
+}
+
+protocol ChannelRepository {
+    var delegate: ChannelRepositoryDelegate? { get set }
+    
+    func add(channels: [Channel], completion: @escaping (Error?) -> Void)
+}
+
+final class CoreDataChannelRepository: NSObject, ChannelRepository {
     private let coreDataStack: CoreDataStack
+    private var updated: [ObjectChanges<Channel>] = []
+    
+    private var frc: NSFetchedResultsController<ChannelEntity>?
+    
+    weak var delegate: ChannelRepositoryDelegate? {
+        didSet {
+            frc = createChannelsFetchResultsController(sortBy: #keyPath(ChannelEntity.lastActivity), ascending: false)
+            frc?.delegate = self
+            
+            do {
+                if let frc = frc {
+                    
+                    try frc.performFetch()
+                    
+                    if let enumerated = frc.fetchedObjects?.enumerated() {
+                        for (index, ent) in enumerated {
+                            let channel = Channel(from: ent)
+                            updated.append(ObjectChanges<Channel>(index: nil, object: channel, newIndex: index, changeType: .insert))
+                        }
+                    }
+                    
+                    if !updated.isEmpty {
+                        delegate?.channelsUpdated(.success(updated))
+                    }
+                    
+                }
+            } catch {
+                delegate?.channelsUpdated(.failure(error))
+            }
+            
+        }
+    }
     
     init(coreDataStack: CoreDataStack) {
         self.coreDataStack = coreDataStack
+        
+        super.init()
     }
     
     func add(channels: [Channel], completion: @escaping (Error?) -> Void) {
@@ -111,5 +155,27 @@ final class ChannelRepository {
                                                     cacheName: withCache ? "MessagesCache" : nil)
         
         return controller
+    }
+}
+
+extension CoreDataChannelRepository: NSFetchedResultsControllerDelegate {
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        updated.removeAll()
+    }
+
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
+                    didChange anObject: Any,
+                    at indexPath: IndexPath?,
+                    for type: NSFetchedResultsChangeType,
+                    newIndexPath: IndexPath?) {
+        if let object = anObject as? ChannelEntity {
+            updated.append(ObjectChanges<Channel>(index: indexPath?.row, object: Channel(from: object), newIndex: newIndexPath?.row, changeType: ChangeType(from: type)))
+        }
+    }
+
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        if !updated.isEmpty {
+            delegate?.channelsUpdated(.success(updated))
+        }
     }
 }

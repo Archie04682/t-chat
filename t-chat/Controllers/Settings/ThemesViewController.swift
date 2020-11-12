@@ -10,7 +10,7 @@ import UIKit
 
 class ThemesViewController: UIViewController {
     
-    private var selectedTheme = ThemeManager.shared.currentTheme
+    private var selectedTheme = LocalThemeManager.shared.currentTheme
     
     private lazy var themeViews: [ThemeView] = {
         var views: [ThemeView] = []
@@ -40,7 +40,7 @@ class ThemesViewController: UIViewController {
         super.viewDidLoad()
         title = "Settings"
         
-         ThemeManager.shared.delegate = self
+         LocalThemeManager.shared.delegate = self
 //        ThemeManager.shared.didPickTheme = {[weak self] theme in
 //            self?.update(theme: theme)
 //        }
@@ -60,7 +60,7 @@ class ThemesViewController: UIViewController {
     }
     
     private func themeDidChange(theme: Theme) {
-        ThemeManager.shared.apply(theme: theme)
+        LocalThemeManager.shared.apply(theme: theme)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -88,7 +88,7 @@ class ThemesViewController: UIViewController {
 extension ThemesViewController: ThemePickerDelegate {
     
     func didSelectTheme(theme: Theme) {
-        ThemeManager.shared.save(theme: theme) {[weak self] in
+        LocalThemeManager.shared.save(theme: theme) {[weak self] in
             DispatchQueue.main.async {
                 self?.update(theme: theme)
             }

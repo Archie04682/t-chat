@@ -27,7 +27,7 @@ class ConversationTableViewCell: UITableViewCell {
     private lazy var lastActivityLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 15, weight: .regular)
-        label.textColor = ThemeManager.shared.currentTheme.subtitleColor
+        label.textColor = LocalThemeManager.shared.currentTheme.subtitleColor
         label.textAlignment = .right
         return label
     }()
@@ -82,9 +82,9 @@ extension ConversationTableViewCell: ConfigurableView {
     
     func configure(with model: Channel) {
         channelNameLabel.text = model.name
-        channelNameLabel.textColor = ThemeManager.shared.currentTheme.textColor
-        lastMessageLabel.textColor = ThemeManager.shared.currentTheme.subtitleColor
-        lastActivityLabel.textColor = ThemeManager.shared.currentTheme.subtitleColor
+        channelNameLabel.textColor = LocalThemeManager.shared.currentTheme.textColor
+        lastMessageLabel.textColor = LocalThemeManager.shared.currentTheme.subtitleColor
+        lastActivityLabel.textColor = LocalThemeManager.shared.currentTheme.subtitleColor
         
         configureMessageLabel(with: model.lastMessage)
         configureMessageDateLabel(with: model.lastActivity)

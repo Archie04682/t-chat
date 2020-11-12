@@ -47,7 +47,7 @@ class ImagePicker: NSObject {
     }
     
     private func showImagePicker(for sourceType: UIImagePickerController.SourceType) {
-        self.imagePickerController.view.subviews[0].backgroundColor = ThemeManager.shared.currentTheme.backgroundColor
+        self.imagePickerController.view.subviews[0].backgroundColor = LocalThemeManager.shared.currentTheme.backgroundColor
         self.imagePickerController.sourceType = sourceType
         self.imagePickerController.allowsEditing = false
         self.viewController?.present(self.imagePickerController, animated: true)

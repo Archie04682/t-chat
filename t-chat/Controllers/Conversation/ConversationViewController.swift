@@ -13,7 +13,7 @@ import Firebase
 class ConversationViewController: UIViewController {
     
     private let profile: ProfileModel
-    private let channelRepository: ChannelRepository
+    private let channelRepository: CoreDataChannelRepository
     private let channel: ChannelEntity
     
     private var listener: ListenerRegistration?
@@ -38,7 +38,7 @@ class ConversationViewController: UIViewController {
         label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
         label.text = "No messages yet."
         label.textAlignment = .center
-        label.textColor = ThemeManager.shared.currentTheme.textColor
+        label.textColor = LocalThemeManager.shared.currentTheme.textColor
         return label
     }()
     
@@ -62,11 +62,11 @@ class ConversationViewController: UIViewController {
         let view = UITextView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.font = UIFont.systemFont(ofSize: 16, weight: .regular)
-        view.textColor = ThemeManager.shared.currentTheme.textColor
+        view.textColor = LocalThemeManager.shared.currentTheme.textColor
         view.isScrollEnabled = false
         view.delegate = self
-        view.backgroundColor = ThemeManager.shared.currentTheme.inputFieldBackgroundColor
-        view.layer.borderColor = ThemeManager.shared.currentTheme.inputFieldBorderBackgroundColor.cgColor
+        view.backgroundColor = LocalThemeManager.shared.currentTheme.inputFieldBackgroundColor
+        view.layer.borderColor = LocalThemeManager.shared.currentTheme.inputFieldBorderBackgroundColor.cgColor
         view.layer.borderWidth = 1.5
         view.layer.cornerRadius = 16
         view.layer.masksToBounds = true
@@ -80,12 +80,12 @@ class ConversationViewController: UIViewController {
         label.text = "Message"
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.sizeToFit()
-        label.textColor = ThemeManager.shared.currentTheme.textColor.withAlphaComponent(0.6)
+        label.textColor = LocalThemeManager.shared.currentTheme.textColor.withAlphaComponent(0.6)
         
         return label
     }()
     
-    init(profile: ProfileModel, firestoreProvider: FirestoreProvider, channelRepository: ChannelRepository, channel: ChannelEntity) {
+    init(profile: ProfileModel, firestoreProvider: FirestoreProvider, channelRepository: CoreDataChannelRepository, channel: ChannelEntity) {
         self.channelRepository = channelRepository
         self.profile = profile
         self.firestoreProvider = firestoreProvider
@@ -181,8 +181,8 @@ class ConversationViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        view.backgroundColor = ThemeManager.shared.currentTheme.conversationBackgroundColor
-        conversationTable.backgroundColor = ThemeManager.shared.currentTheme.conversationBackgroundColor
+        view.backgroundColor = LocalThemeManager.shared.currentTheme.conversationBackgroundColor
+        conversationTable.backgroundColor = LocalThemeManager.shared.currentTheme.conversationBackgroundColor
         
         listener = firestoreProvider.getMessages(forChannel: channel.uid) {[weak self] messages, error in
             guard error == nil, let messages = messages, let channelId = self?.channel.objectID else {return}
