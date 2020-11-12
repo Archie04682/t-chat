@@ -13,7 +13,7 @@ protocol ProfileServiceDelegate: AnyObject {
 }
 
 protocol ProfileService {
-    var delegate: ProfileServiceDelegate? { get }
+    var delegate: ProfileServiceDelegate? { get set }
     
     func load()
     

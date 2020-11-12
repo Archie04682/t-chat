@@ -21,29 +21,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate, StateLoggable {
         FirebaseApp.configure()
         
         let window = UIWindow(frame: UIScreen.main.bounds)
+        let root = RootAssembly()
+//        LocalThemeManager.shared.apply(theme: LocalThemeManager.shared.currentTheme)
         
-        LocalThemeManager.shared.apply(theme: LocalThemeManager.shared.currentTheme)
+//        var coreDataStack: CoreDataStack = NewWaveStack(withModel: "Chats")
+//        coreDataStack.didUpdateDatabase = { stack in
+//            stack.printStatictics()
+//        }
         
-        var coreDataStack: CoreDataStack = NewWaveStack(withModel: "Chats")
-        coreDataStack.didUpdateDatabase = { stack in
-            stack.printStatictics()
-        }
+//        coreDataStack.enableObservers()
         
-        coreDataStack.enableObservers()
-        
-        let channelRepository = CoreDataChannelRepository(coreDataStack: coreDataStack)
+//        let channelRepository = CoreDataChannelRepository(coreDataStack: coreDataStack)
         let navigationController = UINavigationController()
-        let conversationsListViewController = ConversationsListViewController(channelRepository: channelRepository)
-        navigationController.viewControllers = [conversationsListViewController]
+//        let conversationsListViewController = ConversationsListViewController(channelRepository: channelRepository)
+        navigationController.viewControllers = [root.presentationAssembly.conversationsListViewController()]
         
-        if ApplicationFileProvider.isFirstLaunch() {
-            let model = ProfileModel()
-            model.changedData[.username] = "Artur Gnedoy".data(using: .utf8)
-            model.changedData[.about] = "Some description".data(using: .utf8)
-            model.save(with: .GCD)
-        }
-        
-        navigationController.viewControllers = [conversationsListViewController]
+//        if ApplicationFileProvider.isFirstLaunch() {
+//            let model = ProfileModel()
+//            model.changedData[.username] = "Artur Gnedoy".data(using: .utf8)
+//            model.changedData[.about] = "Some description".data(using: .utf8)
+//            model.save(with: .GCD)
+//        }
+//
+//        navigationController.viewControllers = [conversationsListViewController]
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
         

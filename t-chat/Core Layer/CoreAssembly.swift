@@ -20,7 +20,7 @@ protocol CoreAssembly {
     
 }
 
-final class CoreAssemblyImplementation {
+final class CoreAssemblyImplementation: CoreAssembly {
     private let firestoreProvider = FirestoreProvider()
     private lazy var coreDataStack: CoreDataStack = NewWaveStack(withModel: "Chats")
     

@@ -11,13 +11,12 @@ import UIKit
 import Firebase
 
 class ConversationsListViewController: UIViewController {
-    private var theme = LocalThemeManager.shared.currentTheme
-    private var channelRepository: CoreDataChannelRepository
-    private let profileModel = ProfileModel()
+    
+    private var themeManager: ThemeManager
+    private var channelsService: ChannelService
+    private var profileService: ProfileService
+    private var theme: Theme
     private var isVisible = true
-    private let fetchedResultsController: NSFetchedResultsController<ChannelEntity>
-    private lazy var service: ChannelService = CombinedChannelService(channelDataProvider: FirestoreChannelProvider(firestoreProvider: self.firestoreProvider),
-                                                              channelRepository: self.channelRepository)
     
     private var channels: [Int: Channel] = [:]
     
@@ -38,15 +37,11 @@ class ConversationsListViewController: UIViewController {
         return profileImageView
     }()
     
-    private let firestoreProvider = FirestoreProvider()
-    private var listener: ListenerRegistration?
-    
-    init(channelRepository: CoreDataChannelRepository) {
-        self.channelRepository = channelRepository
-        self.fetchedResultsController = channelRepository.createChannelsFetchResultsController(sortBy: #keyPath(ChannelEntity.lastActivity),
-                                                                                               ascending: false,
-                                                                                               fetchBatchSize: 20,
-                                                                                               withCache: false)
+    init(themeManager: ThemeManager, channelsService: ChannelService, profileService: ProfileService) {
+        self.themeManager = themeManager
+        self.channelsService = channelsService
+        self.theme = themeManager.currentTheme
+        self.profileService = profileService
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -91,8 +86,11 @@ class ConversationsListViewController: UIViewController {
         conversationsTable.backgroundColor = .clear
         conversationsTable.separatorColor = LocalThemeManager.shared.currentTheme.tableViewSeparatorColor
         
-        service.delegate = self
+        channelsService.delegate = self
         isVisible = true
+        
+        profileService.delegate = self
+        profileService.load()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -111,13 +109,13 @@ class ConversationsListViewController: UIViewController {
     }
     
     @objc func goToProfile() {
-        let vc = ProfileViewController(model: profileModel)
-
-        vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(closeProfilePage))
-        vc.title = "My profile"
-        let nvc = UINavigationController(rootViewController: vc)
-        
-        present(nvc, animated: true, completion: nil)
+//        let vc = ProfileViewController(model: profileModel)
+//
+//        vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(closeProfilePage))
+//        vc.title = "My profile"
+//        let nvc = UINavigationController(rootViewController: vc)
+//
+//        present(nvc, animated: true, completion: nil)
     }
     
     @objc func openSettings() {
@@ -125,27 +123,23 @@ class ConversationsListViewController: UIViewController {
     }
     
     @objc func closeProfilePage() {
-        self.dismiss(animated: true) {[weak self] in
-            DispatchQueue.main.async {
-                if let imageData = self?.profileModel.photoData {
-                    self?.profileImageView.image = UIImage(data: imageData)
-                } else if let username = self?.profileModel.username {
-                    self?.profileImageView.setInitials(username: username)
-                }
-            }
-        }
+//        self.dismiss(animated: true) {[weak self] in
+//            DispatchQueue.main.async {
+//                if let imageData = self?.profileModel.photoData {
+//                    self?.profileImageView.image = UIImage(data: imageData)
+//                } else if let username = self?.profileModel.username {
+//                    self?.profileImageView.setInitials(username: username)
+//                }
+//            }
+//        }
     }
     
     func saveNewChannel(name: String) {
-        firestoreProvider.createChannel(withName: name) {[weak self] error in
+        channelsService.add(withName: name) {[weak self] error in
             if let error = error {
                 self?.showError(with: error.localizedDescription)
             }
         }
-    }
-    
-    deinit {
-        listener?.remove()
     }
     
     func showError(with message: String) {
@@ -168,18 +162,26 @@ extension ConversationsListViewController: UINavigationControllerDelegate {
             theme = LocalThemeManager.shared.currentTheme
         }
         
-        profileModel.load {[weak self] profile, _ in
-            if let profile = profile {
-                DispatchQueue.main.async {
-                    if let imageData = profile.photoData {
-                        self?.profileImageView.image = UIImage(data: imageData)
-                    } else {
-                        self?.profileImageView.setInitials(username: profile.username)
-                    }
+        profileService.delegate = self
+    }
+}
+
+extension ConversationsListViewController: ProfileServiceDelegate {
+    func profile(updated: Result<UserProfile, Error>) {
+        switch updated {
+        case .success(let profile):
+            DispatchQueue.main.async { [weak self] in
+                if let imageData = profile.photoData {
+                    self?.profileImageView.image = UIImage(data: imageData)
+                } else {
+                    self?.profileImageView.setInitials(username: profile.username)
                 }
             }
+        case .failure(let error):
+            showError(with: error.localizedDescription)
         }
     }
+    
 }
 
 extension ConversationsListViewController: UITableViewDataSource {
@@ -200,17 +202,16 @@ extension ConversationsListViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vc = ConversationViewController(profile: profileModel,
-                                            firestoreProvider: firestoreProvider,
-                                            channelRepository: channelRepository,
-                                            channel: fetchedResultsController.object(at: indexPath))
-        navigationController?.pushViewController(vc, animated: true)
+//        let vc = ConversationViewController(profile: profileModel,
+//                                            firestoreProvider: firestoreProvider,
+//                                            channelRepository: channelRepository,
+//                                            channel: fetchedResultsController.object(at: indexPath))
+//        navigationController?.pushViewController(vc, animated: true)
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            let object = fetchedResultsController.object(at: indexPath)
-            firestoreProvider.deleteChannel(atPath: object.uid) {[weak self] error in
+        if editingStyle == .delete, let channel = channels[indexPath.row] {
+            channelsService.delete(withUID: channel.identifier) {[weak self] error in
                 if error != nil {
                     self?.showError(with: "Failed to remove channel. Try again")
                 }

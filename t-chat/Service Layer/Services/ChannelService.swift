@@ -14,6 +14,10 @@ protocol ChannelServiceDelegate: AnyObject {
 
 protocol ChannelService {
     var delegate: ChannelServiceDelegate? { get set }
+    
+    func add(withName name: String, completion: @escaping (Error?) -> Void)
+    
+    func delete(withUID uid: String, completion: @escaping (Error?) -> Void)
 }
 
 final class CombinedChannelService: ChannelService {
@@ -27,9 +31,18 @@ final class CombinedChannelService: ChannelService {
             channelDataProvider.get()
         }
     }
+    
     init(channelDataProvider: ChannelProvider, channelRepository: ChannelRepository) {
         self.channelDataProvider = channelDataProvider
         self.channelRepository = channelRepository
+    }
+    
+    func add(withName name: String, completion: @escaping (Error?) -> Void) {
+        channelDataProvider.add(withName: name, completion: completion)
+    }
+    
+    func delete(withUID uid: String, completion: @escaping (Error?) -> Void) {
+        channelDataProvider.delete(withUID: uid, completion: completion)
     }
 }
 

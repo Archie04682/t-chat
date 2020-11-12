@@ -14,6 +14,8 @@ protocol ServiceAssembly {
     var channelService: ChannelService { get }
     
     var themeManager: ThemeManager { get }
+    
+    var profileService: ProfileService { get }
 }
 
 final class ServiceAssemblyImplementation: ServiceAssembly {

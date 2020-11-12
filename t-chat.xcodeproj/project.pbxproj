@@ -32,6 +32,8 @@
 		FC466E89255DE75D00BC1204 /* CoreAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC466E88255DE75D00BC1204 /* CoreAssembly.swift */; };
 		FC466E8C255DEB1500BC1204 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC466E8B255DEB1500BC1204 /* ThemeManager.swift */; };
 		FC466E8F255DED5200BC1204 /* ProfileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC466E8E255DED5200BC1204 /* ProfileService.swift */; };
+		FC466E95255DF41500BC1204 /* PresentaionAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC466E94255DF41500BC1204 /* PresentaionAssembly.swift */; };
+		FC466E97255DF4BD00BC1204 /* RootAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC466E96255DF4BD00BC1204 /* RootAssembly.swift */; };
 		FC4C599625208654008F72C2 /* ConversationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4C599525208654008F72C2 /* ConversationViewController.swift */; };
 		FC4F8B60255022C00054F31F /* ErrorOccuredView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4F8B5F255022C00054F31F /* ErrorOccuredView.swift */; };
 		FC5370362520B58700653A19 /* ConversationMessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC5370352520B58700653A19 /* ConversationMessageTableViewCell.swift */; };
@@ -98,6 +100,8 @@
 		FC466E88255DE75D00BC1204 /* CoreAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreAssembly.swift; sourceTree = "<group>"; };
 		FC466E8B255DEB1500BC1204 /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
 		FC466E8E255DED5200BC1204 /* ProfileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileService.swift; sourceTree = "<group>"; };
+		FC466E94255DF41500BC1204 /* PresentaionAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentaionAssembly.swift; sourceTree = "<group>"; };
+		FC466E96255DF4BD00BC1204 /* RootAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootAssembly.swift; sourceTree = "<group>"; };
 		FC4C599525208654008F72C2 /* ConversationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationViewController.swift; sourceTree = "<group>"; };
 		FC4F8B5F255022C00054F31F /* ErrorOccuredView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorOccuredView.swift; sourceTree = "<group>"; };
 		FC5370352520B58700653A19 /* ConversationMessageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationMessageTableViewCell.swift; sourceTree = "<group>"; };
@@ -197,6 +201,7 @@
 		FC0BA0D7250B7A68005AE946 /* t-chat */ = {
 			isa = PBXGroup;
 			children = (
+				FC466E90255DF0E000BC1204 /* Presentarion Layer */,
 				FC466E7D255DBAA800BC1204 /* Shared */,
 				FC466E79255DB8E000BC1204 /* Service Layer */,
 				FC466E76255DB4F300BC1204 /* Core Layer */,
@@ -209,6 +214,7 @@
 				FC0BA0E3250B7A69005AE946 /* LaunchScreen.storyboard */,
 				FC0BA0E6250B7A69005AE946 /* Info.plist */,
 				FC61DC22253B6CE0009B6223 /* GoogleService-Info.plist */,
+				FC466E96255DF4BD00BC1204 /* RootAssembly.swift */,
 			);
 			path = "t-chat";
 			sourceTree = "<group>";
@@ -314,6 +320,41 @@
 			path = Profile;
 			sourceTree = "<group>";
 		};
+		FC466E90255DF0E000BC1204 /* Presentarion Layer */ = {
+			isa = PBXGroup;
+			children = (
+				FC466E91255DF0E900BC1204 /* ConversationsList */,
+				FC466E94255DF41500BC1204 /* PresentaionAssembly.swift */,
+			);
+			path = "Presentarion Layer";
+			sourceTree = "<group>";
+		};
+		FC466E91255DF0E900BC1204 /* ConversationsList */ = {
+			isa = PBXGroup;
+			children = (
+				FC466E93255DF3B700BC1204 /* Views */,
+				FC466E92255DF3A700BC1204 /* Controller */,
+			);
+			path = ConversationsList;
+			sourceTree = "<group>";
+		};
+		FC466E92255DF3A700BC1204 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				FCEE4B3C251D151A00911B5C /* ConversationsListViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		FC466E93255DF3B700BC1204 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				FC98763B253EA65A0037EBFE /* AddNewChannelViewController.swift */,
+				FCEE4B41251D267C00911B5C /* ConversationTableViewCell.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		FC4C1EB62549632000F76A6B /* ProfileManagement */ = {
 			isa = PBXGroup;
 			children = (
@@ -400,9 +441,6 @@
 		FCEE4B39251D14BC00911B5C /* ConversationsList */ = {
 			isa = PBXGroup;
 			children = (
-				FCEE4B3C251D151A00911B5C /* ConversationsListViewController.swift */,
-				FCEE4B41251D267C00911B5C /* ConversationTableViewCell.swift */,
-				FC98763B253EA65A0037EBFE /* AddNewChannelViewController.swift */,
 			);
 			path = ConversationsList;
 			sourceTree = "<group>";
@@ -576,6 +614,7 @@
 				FC466E78255DB5B500BC1204 /* FirestoreChannelProvider.swift in Sources */,
 				FC0BA0F4250B9DEA005AE946 /* StateLoggable.swift in Sources */,
 				FC3811C22530E23F00AB796C /* Backdrop.swift in Sources */,
+				FC466E95255DF41500BC1204 /* PresentaionAssembly.swift in Sources */,
 				FC6D494F2547E9DE00DA09B7 /* MessageEntity+CoreDataClass.swift in Sources */,
 				FC6D49562547F27200DA09B7 /* MessageEntityExtensions.swift in Sources */,
 				FC32038F2519E394000C2DD9 /* UserProfile.swift in Sources */,
@@ -585,6 +624,7 @@
 				FC466E81255DDD1F00BC1204 /* FirestoreMessageProvider.swift in Sources */,
 				FC77CCD62542C1D700B08061 /* OldSchoolStack.swift in Sources */,
 				FC0BA0ED250B8911005AE946 /* AppState.swift in Sources */,
+				FC466E97255DF4BD00BC1204 /* RootAssembly.swift in Sources */,
 				FC7C00D8253211A700C3DCAE /* FileOperations.swift in Sources */,
 				FC694F232531D9A100256A32 /* ApplicationFileProvider.swift in Sources */,
 				FCAC8A8C251E60960085E686 /* ConfigurableView.swift in Sources */,
