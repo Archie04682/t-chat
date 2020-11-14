@@ -18,7 +18,7 @@ class ConversationViewController: UIViewController {
     
     private var toolbarBottomConstraint: NSLayoutConstraint?
     
-    private var messages: [Int: Message] = [:]
+    private var messages: [Message] = []
     
     private lazy var conversationTable: UITableView = {
         let tableView = UITableView(frame: .zero, style: .plain)
@@ -171,26 +171,6 @@ class ConversationViewController: UIViewController {
         
         view.backgroundColor = LocalThemeManager.shared.currentTheme.conversationBackgroundColor
         conversationTable.backgroundColor = LocalThemeManager.shared.currentTheme.conversationBackgroundColor
-        
-//        listener = firestoreProvider.getMessages(forChannel: channel.uid) {[weak self] messages, error in
-//            guard error == nil, let messages = messages, let channelId = self?.channel.objectID else {return}
-//
-//            if !messages.isEmpty {
-//                self?.channelRepository.addMessages(messages: messages, toObjectWithID: channelId) { error in
-//                    if error != nil {
-//                        self?.showError(with: "Failed to save cache")
-//                    }
-//                }
-//
-//                DispatchQueue.main.async {[weak self] in
-//                    self?.conversationTable.isHidden = false
-//                    self?.noMessagesLabel.isHidden = true
-//                }
-//            } else {
-//                self?.conversationTable.isHidden = true
-//                self?.noMessagesLabel.isHidden = false
-//            }
-//        }
     }
     
     @objc func keyboardWillShow(notification: NSNotification) {
@@ -226,13 +206,12 @@ class ConversationViewController: UIViewController {
             }
         }
     }
-
 }
 
 extension ConversationViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 0
+        return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -243,10 +222,8 @@ extension ConversationViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: type(of: ConversationMessageTableViewCell.self))) as? ConversationMessageTableViewCell
             else { return UITableViewCell(style: .default, reuseIdentifier: "default") }
         
-        if let message = messages[indexPath.row] {
-            configure(cell, with: message)
-        }
-    
+        configure(cell, with: messages[indexPath.row])
+        
         return cell
     }
     
@@ -268,21 +245,29 @@ extension ConversationViewController: MessageServiceDelegate {
         switch result {
         case .success(let result):
             conversationTable.beginUpdates()
+            if messages.isEmpty {
+                messages.append(contentsOf: result.filter { $0.changeType == .insert }.sorted { $0 }.map { $0.object })
+            } else {
+                for message in result.map({ $0.object }) {
+                    messages.insert(message, at: 0)
+                }
+            }
+            
+            conversationTable.isHidden = messages.isEmpty
+            noMessagesLabel.isHidden = !messages.isEmpty
             for change in result {
                 switch change.changeType {
                 case .insert:
-                    if let index = change.newIndex {
-                        messages[index] = change.object
+                    if let index = messages.firstIndex(where: { $0.uid == change.object.uid}) {
                         conversationTable.insertRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
                     }
                 case .move:
-                    if let index = change.index {
-                        if messages.removeValue(forKey: index) != nil {
-                            conversationTable.deleteRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
-                        }
+                    if let index = messages.firstIndex(where: { $0.uid == change.object.uid}) {
+                        messages.remove(at: index)
+                        conversationTable.deleteRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
                     }
                     if let newIndex = change.newIndex {
-                        messages[newIndex] = change.object
+                        messages.insert(change.object, at: newIndex)
                         conversationTable.insertRows(at: [IndexPath(row: newIndex, section: 0)], with: .automatic)
                     }
                     
@@ -294,15 +279,13 @@ extension ConversationViewController: MessageServiceDelegate {
                     }
                     
                 case .delete:
-                    if let index = change.index {
-                        if messages.removeValue(forKey: index) != nil {
-                            conversationTable.deleteRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
-                        }
+                    if let index = messages.firstIndex(where: { $0.uid == change.object.uid}) {
+                        messages.remove(at: index)
+                        conversationTable.deleteRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
                     }
                 }
             }
             conversationTable.endUpdates()
-            return
         case .failure(let error):
             showError(with: error.localizedDescription)
         }

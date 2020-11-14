@@ -42,10 +42,8 @@ final class CoreDataChannelRepository: NSObject, ChannelRepository {
                         }
                     }
                     
-                    if !updated.isEmpty {
-                        delegate?.channelsUpdated(.success(updated))
-                    }
-                    
+                    delegate?.channelsUpdated(.success(updated))
+                    updated.removeAll()
                 }
             } catch {
                 delegate?.channelsUpdated(.failure(error))

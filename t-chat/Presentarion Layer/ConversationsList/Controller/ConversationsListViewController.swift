@@ -19,7 +19,7 @@ class ConversationsListViewController: UIViewController {
     private var theme: Theme
     private var isVisible = true
     
-    private var channels: [Int: Channel] = [:]
+    private var channels: [Channel] = []
     
     private lazy var conversationsTable: UITableView = {
         let tableView = UITableView(frame: .zero, style: .plain)
@@ -58,7 +58,7 @@ class ConversationsListViewController: UIViewController {
         setupViews()
         navigationController?.delegate = self
         conversationsTable.register(ConversationTableViewCell.self, forCellReuseIdentifier: String(describing: type(of: ConversationTableViewCell.self)))
-        
+        channelsService.delegate = self
     }
     
     private func setupViews() {
@@ -87,8 +87,7 @@ class ConversationsListViewController: UIViewController {
         view.backgroundColor = LocalThemeManager.shared.currentTheme.backgroundColor
         conversationsTable.backgroundColor = .clear
         conversationsTable.separatorColor = LocalThemeManager.shared.currentTheme.tableViewSeparatorColor
-        
-        channelsService.delegate = self
+    
         isVisible = true
         
         profileService.delegate = self
@@ -200,24 +199,20 @@ extension ConversationsListViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: type(of: ConversationTableViewCell.self))) as? ConversationTableViewCell
             else { return UITableViewCell(style: .default, reuseIdentifier: "default") }
 
-        if let channel = channels[indexPath.row] {
-            configure(cell: cell, with: channel)
-        }
+//        if let channel = channels[indexPath.row] {
+            configure(cell: cell, with: channels[indexPath.row])
+//        }
         
         return cell
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let channel = channels[indexPath.row] else {
-            return
-        }
-        
-        rootNavigator.navigate(to: .conversation(channel: channel))
+        rootNavigator.navigate(to: .conversation(channel: channels[indexPath.row]))
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete, let channel = channels[indexPath.row] {
-            channelsService.delete(withUID: channel.identifier) {[weak self] error in
+        if editingStyle == .delete {
+            channelsService.delete(withUID: channels[indexPath.row].identifier) {[weak self] error in
                 if error != nil {
                     self?.showError(with: "Failed to remove channel. Try again")
                 }
@@ -242,37 +237,27 @@ extension ConversationsListViewController: ChannelServiceDelegate {
     func data(_ result: Result<[ObjectChanges<Channel>], Error>) {
         switch result {
         case .success(let result):
-            if !isVisible {
-                return
-            }
             
             conversationsTable.beginUpdates()
-            
-            result.filter { $0.changeType == .insert }.forEach { channel in
-                if let newIndex = channel.newIndex {
-                    channels[newIndex] = channel.object
-                }
-            }
+            channels.append(contentsOf: result.filter { $0.changeType == .insert }.map { $0.object })
             for change in result {
                 switch change.changeType {
                 case .insert:
-                    if let index = change.newIndex {
+                    if let index = channels.firstIndex(where: { $0.identifier == change.object.identifier }) {
                         conversationsTable.insertRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
-
                     }
                 case .move:
-                    if let index = change.index {
-                        if channels.removeValue(forKey: index) != nil {
-                            conversationsTable.deleteRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
-                        }
+                    if let index = channels.firstIndex(where: { $0.identifier == change.object.identifier }) {
+                        channels.remove(at: index)
+                        conversationsTable.deleteRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
                     }
                     if let newIndex = change.newIndex {
-                        channels[newIndex] = change.object
+                        channels.insert(change.object, at: newIndex)
                         conversationsTable.insertRows(at: [IndexPath(row: newIndex, section: 0)], with: .automatic)
                     }
                     
                 case .update:
-                    if let index = change.index {
+                    if let index = channels.firstIndex(where: { $0.identifier == change.object.identifier }) {
                         channels[index] = change.object
                         guard let cell = conversationsTable.cellForRow(at: IndexPath(row: index, section: 0)) as? ConversationTableViewCell else { break }
                         configure(cell: cell, with: change.object)
@@ -280,9 +265,8 @@ extension ConversationsListViewController: ChannelServiceDelegate {
                     
                 case .delete:
                     if let index = change.index {
-                        if channels.removeValue(forKey: index) != nil {
-                            conversationsTable.deleteRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
-                        }
+                        channels.remove(at: index)
+                        conversationsTable.deleteRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
                     }
                 }
             }

@@ -37,6 +37,7 @@ final class CoreDataMessageRepository: NSObject, MessageRepository {
         ascending: false)
         
         do {
+            frc?.delegate = self
             try frc?.performFetch()
             
             if let enumerated = frc?.fetchedObjects?.enumerated() {
@@ -46,10 +47,8 @@ final class CoreDataMessageRepository: NSObject, MessageRepository {
                 }
             }
             
-            if !updated.isEmpty {
-                delegate?.messagesUpdated(.success(updated))
-            }
-            
+            delegate?.messagesUpdated(.success(updated))
+            updated.removeAll()
         } catch {
             delegate?.messagesUpdated(.failure(error))
         }
@@ -58,7 +57,7 @@ final class CoreDataMessageRepository: NSObject, MessageRepository {
     
     func add(_ messages: [Message], forChannelWithUID uid: String, completion: @escaping (Error?) -> Void) {
         coreDataStack.save({ context in
-            if let existingChannel = self.getChannelBy(uid: uid) {
+            if let existingChannel = self.getChannelBy(uid: uid, context) {
                 for message in messages {
                     if let uid = message.uid {
                         let fetchRequest: NSFetchRequest<MessageEntity> = MessageEntity.fetchRequest()
@@ -74,12 +73,12 @@ final class CoreDataMessageRepository: NSObject, MessageRepository {
         })
     }
     
-    private func getChannelBy(uid: String) -> ChannelEntity? {
+    private func getChannelBy(uid: String, _ context: NSManagedObjectContext) -> ChannelEntity? {
         let fetchRequest: NSFetchRequest<ChannelEntity> = ChannelEntity.fetchRequest()
         fetchRequest.fetchLimit = 1
         fetchRequest.predicate = NSPredicate(format: "uid == %@", uid)
-        
-        if let existing = try? coreDataStack.mainContext.fetch(fetchRequest).first {
+
+        if let existing = try? context.fetch(fetchRequest).first {
             return existing
         }
         
@@ -92,7 +91,7 @@ final class CoreDataMessageRepository: NSObject, MessageRepository {
                                             fetchBatchSize: Int = 20,
                                             withCache: Bool = false) {
         
-        if let existing = getChannelBy(uid: channelId) {
+        if let existing = getChannelBy(uid: channelId, coreDataStack.mainContext) {
             let request: NSFetchRequest<MessageEntity> = MessageEntity.fetchRequest()
             request.predicate = NSPredicate(format: "%K == %@", #keyPath(MessageEntity.channel), existing.objectID)
             request.sortDescriptors = [NSSortDescriptor(key: sortField, ascending: ascending)]

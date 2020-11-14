@@ -66,18 +66,16 @@ extension CombinedMessageService: MessageProviderDelegate {
 extension CombinedMessageService: MessageRepositoryDelegate {
     
     func messagesUpdated(_ data: Result<[ObjectChanges<Message>], Error>) {
-        func channelsUpdated(_ data: Result<[ObjectChanges<Message>], Error>) {
-            switch data {
-            case .success(let objects):
-                delegate?.data(.success(objects))
-                if !isLaunched {
-                    messageProvider.delegate = self
-                    
-                    isLaunched = true
-                }
-            case .failure(let error):
-                delegate?.data(.failure(error))
+        switch data {
+        case .success(let objects):
+            delegate?.data(.success(objects))
+            if !isLaunched {
+                messageProvider.delegate = self
+                messageProvider.get(forChannelWithUID: channel.identifier)
+                isLaunched = true
             }
+        case .failure(let error):
+            delegate?.data(.failure(error))
         }
     }
     
