@@ -21,28 +21,28 @@ protocol ChannelService {
 }
 
 final class CombinedChannelService: ChannelService {
-    private var channelDataProvider: ChannelProvider
+    private var channelProvider: ChannelProvider
     private var channelRepository: ChannelRepository
+    
+    private var isLaunched = false
     
     weak var delegate: ChannelServiceDelegate? {
         didSet {
             channelRepository.delegate = self
-            channelDataProvider.delegate = self
-            channelDataProvider.get()
         }
     }
     
     init(channelDataProvider: ChannelProvider, channelRepository: ChannelRepository) {
-        self.channelDataProvider = channelDataProvider
+        self.channelProvider = channelDataProvider
         self.channelRepository = channelRepository
     }
     
     func add(withName name: String, completion: @escaping (Error?) -> Void) {
-        channelDataProvider.add(withName: name, completion: completion)
+        channelProvider.add(withName: name, completion: completion)
     }
     
     func delete(withUID uid: String, completion: @escaping (Error?) -> Void) {
-        channelDataProvider.delete(withUID: uid, completion: completion)
+        channelProvider.delete(withUID: uid, completion: completion)
     }
 }
 
@@ -69,6 +69,11 @@ extension CombinedChannelService: ChannelRepositoryDelegate {
         switch data {
         case .success(let objects):
             delegate?.data(.success(objects))
+            if !isLaunched {
+                channelProvider.delegate = self
+                channelProvider.get()
+                isLaunched = true
+            }
         case .failure(let error):
             delegate?.data(.failure(error))
         }

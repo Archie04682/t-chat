@@ -24,13 +24,13 @@ final class CombinedMessageService: MessageService {
     private var messageProvider: MessageProvider
     private var messageRepository: MessageRepository
     
+    private var isLaunched = false
     let channel: Channel
     
     weak var delegate: MessageServiceDelegate? {
         didSet {
             messageRepository.delegate = self
             messageRepository.fetch(forChannelWithUID: channel.identifier)
-            messageProvider.delegate = self
         }
     }
     
@@ -70,6 +70,11 @@ extension CombinedMessageService: MessageRepositoryDelegate {
             switch data {
             case .success(let objects):
                 delegate?.data(.success(objects))
+                if !isLaunched {
+                    messageProvider.delegate = self
+                    
+                    isLaunched = true
+                }
             case .failure(let error):
                 delegate?.data(.failure(error))
             }
