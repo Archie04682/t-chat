@@ -66,7 +66,6 @@
 		FC98763C253EA65A0037EBFE /* AddNewChannelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC98763B253EA65A0037EBFE /* AddNewChannelViewController.swift */; };
 		FCAC8A8C251E60960085E686 /* ConfigurableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCAC8A8B251E60960085E686 /* ConfigurableView.swift */; };
 		FCC7DA312529AE0D006B5A71 /* ThemeSelectionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC7DA302529AE0D006B5A71 /* ThemeSelectionButton.swift */; };
-		FCC7DA332529B45F006B5A71 /* LocalThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC7DA322529B45F006B5A71 /* LocalThemeManager.swift */; };
 		FCEE4B3D251D151A00911B5C /* ConversationsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCEE4B3C251D151A00911B5C /* ConversationsListViewController.swift */; };
 		FCEE4B42251D267C00911B5C /* ConversationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCEE4B41251D267C00911B5C /* ConversationTableViewCell.swift */; };
 /* End PBXBuildFile section */
@@ -135,7 +134,6 @@
 		FC98763B253EA65A0037EBFE /* AddNewChannelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewChannelViewController.swift; sourceTree = "<group>"; };
 		FCAC8A8B251E60960085E686 /* ConfigurableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurableView.swift; sourceTree = "<group>"; };
 		FCC7DA302529AE0D006B5A71 /* ThemeSelectionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSelectionButton.swift; sourceTree = "<group>"; };
-		FCC7DA322529B45F006B5A71 /* LocalThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalThemeManager.swift; sourceTree = "<group>"; };
 		FCEE4B3C251D151A00911B5C /* ConversationsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsListViewController.swift; sourceTree = "<group>"; };
 		FCEE4B41251D267C00911B5C /* ConversationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -172,6 +170,7 @@
 		FC09BBD02542B4B9005564D3 /* Persistance */ = {
 			isa = PBXGroup;
 			children = (
+				FC3859C22560040100B771D5 /* Models */,
 				FC466E84255DE15400BC1204 /* MessageRepository.swift */,
 				FC77CCD12542BC3A00B08061 /* CoreDataStack.swift */,
 				FC77CCD52542C1D700B08061 /* OldSchoolStack.swift */,
@@ -204,10 +203,8 @@
 			isa = PBXGroup;
 			children = (
 				FC466E90255DF0E000BC1204 /* Presentarion Layer */,
-				FC466E7D255DBAA800BC1204 /* Shared */,
 				FC466E79255DB8E000BC1204 /* Service Layer */,
 				FC466E76255DB4F300BC1204 /* Core Layer */,
-				FC94E5EA25286937000F09BE /* Views */,
 				FC4F20BF251FB6FC00F0A8AB /* Utils */,
 				FC32038D2519E37E000C2DD9 /* Models */,
 				FC82CC6F2519D5ED0041DFAE /* Controllers */,
@@ -221,15 +218,6 @@
 			path = "t-chat";
 			sourceTree = "<group>";
 		};
-		FC249E2C2535E3FB00DE093E /* Logging */ = {
-			isa = PBXGroup;
-			children = (
-				FC0BA0F3250B9DEA005AE946 /* StateLoggable.swift */,
-				FC3203902519ED26000C2DD9 /* StateLoggingViewController.swift */,
-			);
-			path = Logging;
-			sourceTree = "<group>";
-		};
 		FC249E2D2535E40800DE093E /* Images */ = {
 			isa = PBXGroup;
 			children = (
@@ -239,19 +227,9 @@
 			path = Images;
 			sourceTree = "<group>";
 		};
-		FC249E2E2535E41D00DE093E /* Themes */ = {
-			isa = PBXGroup;
-			children = (
-				FC94E5FA2528B8B9000F09BE /* ThemePickerDelegate.swift */,
-				FCC7DA322529B45F006B5A71 /* LocalThemeManager.swift */,
-			);
-			path = Themes;
-			sourceTree = "<group>";
-		};
 		FC32038D2519E37E000C2DD9 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				FC77CCCC2542BA2400B08061 /* CoreData */,
 				FC0BA0EC250B8911005AE946 /* AppState.swift */,
 				FC0BA0EE250B9675005AE946 /* ViewControllerState.swift */,
 				FC32038E2519E394000C2DD9 /* UserProfile.swift */,
@@ -296,6 +274,37 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		FC3859C1256003CE00B771D5 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				FC0BA0F3250B9DEA005AE946 /* StateLoggable.swift */,
+				FC3203902519ED26000C2DD9 /* StateLoggingViewController.swift */,
+				FC4F8B5F255022C00054F31F /* ErrorOccuredView.swift */,
+				FC3811C12530E23F00AB796C /* Backdrop.swift */,
+				FC94E5F62528808D000F09BE /* MessageView.swift */,
+				FCAC8A8B251E60960085E686 /* ConfigurableView.swift */,
+				FC82CC732519D9DE0041DFAE /* ProfileImageView.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		FC3859C22560040100B771D5 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				FC77CCCC2542BA2400B08061 /* CoreData */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		FC3859C32560042A00B771D5 /* Themes */ = {
+			isa = PBXGroup;
+			children = (
+				FC466E8B255DEB1500BC1204 /* ThemeManager.swift */,
+				FC94E5FA2528B8B9000F09BE /* ThemePickerDelegate.swift */,
+			);
+			path = Themes;
+			sourceTree = "<group>";
+		};
 		FC3CA9082514B0C400C7980E /* Profile */ = {
 			isa = PBXGroup;
 			children = (
@@ -319,9 +328,10 @@
 		FC466E79255DB8E000BC1204 /* Service Layer */ = {
 			isa = PBXGroup;
 			children = (
+				FC3859C32560042A00B771D5 /* Themes */,
+				FC466E7D255DBAA800BC1204 /* Shared */,
 				FC466E8A255DEAE800BC1204 /* Services */,
 				FC466E86255DE74E00BC1204 /* ServiceAssembly.swift */,
-				FC466E8B255DEB1500BC1204 /* ThemeManager.swift */,
 			);
 			path = "Service Layer";
 			sourceTree = "<group>";
@@ -359,6 +369,7 @@
 		FC466E90255DF0E000BC1204 /* Presentarion Layer */ = {
 			isa = PBXGroup;
 			children = (
+				FC3859C1256003CE00B771D5 /* Shared */,
 				FC3859BE255FF93200B771D5 /* Themes */,
 				FC3859BB255FCFAA00B771D5 /* Navigation */,
 				FC466E98255DF64600BC1204 /* Conversation */,
@@ -419,13 +430,6 @@
 			path = Controller;
 			sourceTree = "<group>";
 		};
-		FC4C1EB62549632000F76A6B /* ProfileManagement */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = ProfileManagement;
-			sourceTree = "<group>";
-		};
 		FC4C1EB72549637800F76A6B /* Firebase */ = {
 			isa = PBXGroup;
 			children = (
@@ -439,10 +443,7 @@
 		FC4F20BF251FB6FC00F0A8AB /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				FC4C1EB62549632000F76A6B /* ProfileManagement */,
-				FC249E2E2535E41D00DE093E /* Themes */,
 				FC249E2D2535E40800DE093E /* Images */,
-				FC249E2C2535E3FB00DE093E /* Logging */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -466,18 +467,6 @@
 				FC3CA9082514B0C400C7980E /* Profile */,
 			);
 			path = Controllers;
-			sourceTree = "<group>";
-		};
-		FC94E5EA25286937000F09BE /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				FC82CC732519D9DE0041DFAE /* ProfileImageView.swift */,
-				FCAC8A8B251E60960085E686 /* ConfigurableView.swift */,
-				FC94E5F62528808D000F09BE /* MessageView.swift */,
-				FC3811C12530E23F00AB796C /* Backdrop.swift */,
-				FC4F8B5F255022C00054F31F /* ErrorOccuredView.swift */,
-			);
-			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -625,7 +614,6 @@
 				FC6D49542547F16A00DA09B7 /* ChannelEntityExtensions.swift in Sources */,
 				FC82CC742519D9DE0041DFAE /* ProfileImageView.swift in Sources */,
 				FC6D49582548281700DA09B7 /* ChannelsRepository.swift in Sources */,
-				FCC7DA332529B45F006B5A71 /* LocalThemeManager.swift in Sources */,
 				FC6D494A2547E7DA00DA09B7 /* Chats.xcdatamodeld in Sources */,
 				FC94E5FB2528B8B9000F09BE /* ThemePickerDelegate.swift in Sources */,
 				FC94E5F72528808D000F09BE /* MessageView.swift in Sources */,

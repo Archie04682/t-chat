@@ -2,31 +2,39 @@
 //  ThemeManager.swift
 //  t-chat
 //
-//  Created by Артур Гнедой on 04.10.2020.
+//  Created by Артур Гнедой on 13.11.2020.
 //  Copyright © 2020 Артур Гнедой. All rights reserved.
 //
 
+import Foundation
 import UIKit
 
-class LocalThemeManager: NSObject {
+protocol ThemeManager {
+    var currentTheme: Theme { get }
+    
+    var delegate: ThemeManagerDelegate? { get set }
+    
+    var didPickTheme: ((Theme) -> Void)? { get set }
+    
+    func apply(theme: Theme)
+    
+    func save(theme: Theme, completion: @escaping () -> Void)
+}
+
+final class UserDafaultsThemeManager: ThemeManager {
     private let dispatchQueue: DispatchQueue
     
-    weak var delegate: ThemePickerDelegate?
+    weak var delegate: ThemeManagerDelegate?
     var didPickTheme: ((Theme) -> Void)?
     
     private let themeKey = "theme"
-    
-    static var shared: LocalThemeManager = {
-       return LocalThemeManager()
-    }()
-    
     private var theme: Theme
     
     var currentTheme: Theme {
         return theme
     }
     
-    private override init() {
+    init() {
         if let storedTheme = (UserDefaults.standard.value(forKey: themeKey) as AnyObject).integerValue {
             theme = Theme(rawValue: storedTheme) ?? .classic
         } else {
@@ -34,6 +42,8 @@ class LocalThemeManager: NSObject {
         }
         
         dispatchQueue = DispatchQueue(label: "ThemeManager", qos: .userInitiated, attributes: [], autoreleaseFrequency: .inherit, target: nil)
+        
+        apply(theme: theme)
     }
     
     func apply(theme: Theme) {
@@ -63,12 +73,4 @@ class LocalThemeManager: NSObject {
             }
         }
     }
-}
-
-extension LocalThemeManager: NSCopying {
-    
-    func copy(with zone: NSZone? = nil) -> Any {
-        return self
-    }
-    
 }

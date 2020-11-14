@@ -65,7 +65,7 @@ class ProfileViewController: UIViewController {
         label.textAlignment = .center
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = LocalThemeManager.shared.currentTheme.textColor
+//        label.textColor = LocalThemeManager.shared.currentTheme.textColor
         return label
     }()
     
@@ -73,12 +73,12 @@ class ProfileViewController: UIViewController {
         let view = UITextField()
         view.borderStyle = .roundedRect
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.attributedPlaceholder = NSAttributedString(string: "Username",
-                                                        attributes: [NSAttributedString.Key.foregroundColor:
-                                                            LocalThemeManager.shared.currentTheme.textColor.withAlphaComponent(0.7)])
-        view.textColor = LocalThemeManager.shared.currentTheme.textColor
-        view.backgroundColor = LocalThemeManager.shared.currentTheme.inputFieldBackgroundColor
-        view.layer.borderColor = LocalThemeManager.shared.currentTheme.inputFieldBorderBackgroundColor.cgColor
+//        view.attributedPlaceholder = NSAttributedString(string: "Username",
+//                                                        attributes: [NSAttributedString.Key.foregroundColor:
+//                                                            LocalThemeManager.shared.currentTheme.textColor.withAlphaComponent(0.7)])
+//        view.textColor = LocalThemeManager.shared.currentTheme.textColor
+//        view.backgroundColor = LocalThemeManager.shared.currentTheme.inputFieldBackgroundColor
+//        view.layer.borderColor = LocalThemeManager.shared.currentTheme.inputFieldBorderBackgroundColor.cgColor
         view.layer.borderWidth = 1.5
         view.layer.cornerRadius = 4.0
         view.isHidden = true
@@ -90,7 +90,7 @@ class ProfileViewController: UIViewController {
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = LocalThemeManager.shared.currentTheme.textColor
+//        label.textColor = LocalThemeManager.shared.currentTheme.textColor
         return label
     }()
     
@@ -98,12 +98,12 @@ class ProfileViewController: UIViewController {
         let view = UITextView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.font = UIFont.systemFont(ofSize: 16, weight: .regular)
-        view.textColor = LocalThemeManager.shared.currentTheme.textColor
+//        view.textColor = LocalThemeManager.shared.currentTheme.textColor
         view.isScrollEnabled = false
         view.isHidden = true
         view.delegate = self
-        view.backgroundColor = LocalThemeManager.shared.currentTheme.inputFieldBackgroundColor
-        view.layer.borderColor = LocalThemeManager.shared.currentTheme.inputFieldBorderBackgroundColor.cgColor
+//        view.backgroundColor = LocalThemeManager.shared.currentTheme.inputFieldBackgroundColor
+//        view.layer.borderColor = LocalThemeManager.shared.currentTheme.inputFieldBorderBackgroundColor.cgColor
         view.layer.borderWidth = 1.5
         view.layer.cornerRadius = 4.0
         view.layer.masksToBounds = true
@@ -116,7 +116,7 @@ class ProfileViewController: UIViewController {
         view.titleLabel?.font = UIFont.systemFont(ofSize: 19, weight: .semibold)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 14
-        view.backgroundColor = LocalThemeManager.shared.currentTheme.filledButtonColor
+//        view.backgroundColor = LocalThemeManager.shared.currentTheme.filledButtonColor
         return view
     }()
     
@@ -136,7 +136,7 @@ class ProfileViewController: UIViewController {
         button.titleLabel?.font = UIFont.systemFont(ofSize: 19, weight: .semibold)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.isEnabled = false
-        button.backgroundColor = LocalThemeManager.shared.currentTheme.filledButtonColor
+//        button.backgroundColor = LocalThemeManager.shared.currentTheme.filledButtonColor
         return button
     }()
     
@@ -146,7 +146,7 @@ class ProfileViewController: UIViewController {
         button.titleLabel?.font = UIFont.systemFont(ofSize: 19, weight: .semibold)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.isEnabled = false
-        button.backgroundColor = LocalThemeManager.shared.currentTheme.filledButtonColor
+//        button.backgroundColor = LocalThemeManager.shared.currentTheme.filledButtonColor
         return button
     }()
     
@@ -185,7 +185,7 @@ class ProfileViewController: UIViewController {
         profileModel?.delegate = self
         usernameTextField.delegate = self
         
-        view.backgroundColor = LocalThemeManager.shared.currentTheme.backgroundColor
+//        view.backgroundColor = LocalThemeManager.shared.currentTheme.backgroundColor
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
@@ -264,7 +264,7 @@ class ProfileViewController: UIViewController {
         }
 
         if let text = textField.text, text.count > 0 {
-            textField.layer.borderColor = LocalThemeManager.shared.currentTheme.inputFieldBorderBackgroundColor.cgColor
+//            textField.layer.borderColor = LocalThemeManager.shared.currentTheme.inputFieldBorderBackgroundColor.cgColor
         } else {
             textField.layer.borderColor = UIColor.red.cgColor
         }

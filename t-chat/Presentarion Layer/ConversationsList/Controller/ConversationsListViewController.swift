@@ -101,7 +101,8 @@ class ConversationsListViewController: UIViewController {
     }
     
     @objc func showAddNewChannelPopup() {
-        let ac = AddNewChannelViewController(title: "Start new channel", message: nil, preferredStyle: UIAlertController.Style.alert)
+        let ac = AddNewChannelViewController(title: "New Channel", message: nil, preferredStyle: .alert)
+        ac.configure(with: "", theme: themeManager.currentTheme)
         ac.nameEntered = {[weak self] name in
             self?.saveNewChannel(name: name)
         }
@@ -199,9 +200,7 @@ extension ConversationsListViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: type(of: ConversationTableViewCell.self))) as? ConversationTableViewCell
             else { return UITableViewCell(style: .default, reuseIdentifier: "default") }
 
-//        if let channel = channels[indexPath.row] {
-            configure(cell: cell, with: channels[indexPath.row])
-//        }
+        configure(cell: cell, with: channels[indexPath.row])
         
         return cell
     }

@@ -91,7 +91,7 @@ class ThemesViewController: UIViewController {
 
 }
 
-extension ThemesViewController: ThemePickerDelegate {
+extension ThemesViewController: ThemeManagerDelegate {
     
     func didSelectTheme(theme: Theme) {
         themeManager.save(theme: theme) {[weak self] in
