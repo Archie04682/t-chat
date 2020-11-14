@@ -246,7 +246,7 @@ extension ConversationViewController: MessageServiceDelegate {
         case .success(let result):
             conversationTable.beginUpdates()
             if messages.isEmpty {
-                messages.append(contentsOf: result.filter { $0.changeType == .insert }.sorted { $0 }.map { $0.object })
+                messages.append(contentsOf: result.filter { $0.changeType == .insert }.map { $0.object })
             } else {
                 for message in result.map({ $0.object }) {
                     messages.insert(message, at: 0)
