@@ -12,10 +12,10 @@ import UIKit
 class ProfileModel {
     
     weak var delegate: ProfileModelDelegate?
+    private var profileService: ProfileService
     
-    private let factory: UserProfileDataManagerFactory
     private var userProfile: UserProfile = UserProfile(username: "", about: "", photoURL: nil, photoData: nil)
-    private(set) var identifier: String
+    private(set) var identifier = UIDevice.current.identifierForVendor!.uuidString
     
     var photoData: Data? {
         return userProfile.photoData
@@ -37,29 +37,21 @@ class ProfileModel {
                 changed = changed && data.count > 0
             }
             
-            self.delegate?.isDirty(changed)
+            delegate?.isDirty(changed)
         }
     }
     
-    init() {
-        identifier = UIDevice.current.identifierForVendor!.uuidString
-        factory = UserProfileDataManagerFactory()
-    }
-    
-    func load(with type: ManagerType = .GCD, completion: @escaping (UserProfile?, Error?) -> Void) {
-        factory.create(ofType: type).read {[weak self] profile, error in
-            if let error = error {
-                completion(nil, error)
-            } else if let profile = profile {
-                self?.userProfile = profile
-                
-                completion(profile, nil)
-            }
+    init(profileService: ProfileService) {
+        self.profileService = profileService
+        
+        self.profileService.delegate = self
+        if let p = self.profileService.profile {
+            self.userProfile = p
         }
     }
     
     func save(with type: ManagerType) {
-        factory.create(ofType: type).write(changedData) {[weak self] failedProperties, error in
+        profileService.save(with: type, data: changedData) { [weak self] failedProperties, error in
             if let self = self {
                 if let error = error {
                     self.delegate?.didFailUpdate(error)
@@ -78,6 +70,19 @@ class ProfileModel {
     func photoIsSame(with data: Data?) -> Bool {
         return userProfile.photoData == data
     }
+}
+
+extension ProfileModel: ProfileServiceDelegate {
+    
+    func profile(updated: Result<UserProfile, Error>) {
+        switch updated {
+        case .success(let profile):
+            self.userProfile = profile
+        case .failure(let error):
+            delegate?.didFailUpdate(error)
+        }
+    }
+    
 }
 
 protocol ProfileModelDelegate: class {

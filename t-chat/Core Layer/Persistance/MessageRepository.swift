@@ -90,7 +90,7 @@ final class CoreDataMessageRepository: NSObject, MessageRepository {
                                             ascending: Bool,
                                             fetchBatchSize: Int = 20,
                                             withCache: Bool = false) {
-        
+        frc = nil
         if let existing = getChannelBy(uid: channelId, coreDataStack.mainContext) {
             let request: NSFetchRequest<MessageEntity> = MessageEntity.fetchRequest()
             request.predicate = NSPredicate(format: "%K == %@", #keyPath(MessageEntity.channel), existing.objectID)

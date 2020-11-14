@@ -16,6 +16,8 @@ protocol ServiceAssembly {
     var themeManager: ThemeManager { get }
     
     var profileService: ProfileService { get }
+    
+    var imagePicker: ImagePicker { get }
 }
 
 final class ServiceAssemblyImplementation: ServiceAssembly {
@@ -34,4 +36,6 @@ final class ServiceAssemblyImplementation: ServiceAssembly {
     lazy var themeManager: ThemeManager = UserDafaultsThemeManager()
     
     lazy var profileService: ProfileService = UserProfileService(profileManagerFactory: self.coreAssembly.profileManagerFactory)
+    
+    lazy var imagePicker: ImagePicker = LocalImagePicker(imageManager: self.coreAssembly.imageManager)
 }

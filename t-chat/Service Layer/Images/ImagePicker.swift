@@ -13,19 +13,31 @@ protocol ImagePickerDelegate: class {
     func didSelectImage(url: URL?)
 }
 
-class ImagePicker: NSObject {
+protocol ImagePicker {
+    var delegate: ImagePickerDelegate? { get set }
+    var rootViewController: UIViewController? { get set }
+    
+    func pickImage(with sourceType: UIImagePickerController.SourceType)
+}
+
+class LocalImagePicker: NSObject, ImagePicker {
     
     private let imagePickerController: UIImagePickerController
-    weak var viewController: UIViewController?
+    weak var rootViewController: UIViewController?
     weak var delegate: ImagePickerDelegate?
+    private let imageManager: ImageManager
     
-    override init() {
+    init(imageManager: ImageManager) {
         self.imagePickerController = UIImagePickerController()
+        self.imageManager = imageManager
         super.init()
         self.imagePickerController.delegate = self
     }
     
     func pickImage(with sourceType: UIImagePickerController.SourceType) {
+        guard rootViewController != nil else {
+            fatalError()
+        }
         let status = PHPhotoLibrary.authorizationStatus()
         switch status {
         case .authorized:
@@ -47,10 +59,9 @@ class ImagePicker: NSObject {
     }
     
     private func showImagePicker(for sourceType: UIImagePickerController.SourceType) {
-//        self.imagePickerController.view.subviews[0].backgroundColor = LocalThemeManager.shared.currentTheme.backgroundColor
         self.imagePickerController.sourceType = sourceType
         self.imagePickerController.allowsEditing = false
-        self.viewController?.present(self.imagePickerController, animated: true)
+        self.rootViewController?.present(self.imagePickerController, animated: true)
     }
     
     private func showGoToSettingsAlert() {
@@ -73,7 +84,7 @@ class ImagePicker: NSObject {
         let cancelAction = UIAlertAction(title: "Отмена", style: .default, handler: nil)
         alertController.addAction(cancelAction)
 
-        self.viewController?.present(alertController, animated: true, completion: nil)
+        self.rootViewController?.present(alertController, animated: true, completion: nil)
     }
     
     private func didSelectImage(_ imagePickerController: UIImagePickerController, url: URL?) {
@@ -84,12 +95,12 @@ class ImagePicker: NSObject {
 
 }
 
-extension ImagePicker: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+extension LocalImagePicker: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     @objc func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         if let url = info[.imageURL] as? URL {
             self.didSelectImage(picker, url: url)
         } else if let image = info[.originalImage] as? UIImage {
-            ImageManager.shared.saveToCameraRoll(image) { [weak self] url in
+            imageManager.save(image) { [weak self] url in
                 guard let self = self, let url = url else { return }
                 self.didSelectImage(picker, url: url)
             }

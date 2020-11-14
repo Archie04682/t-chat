@@ -9,8 +9,6 @@
 import UIKit
 
 protocol PresentationAssembly: AnyObject {
-//    func conversationsListViewController() -> ConversationsListViewController
-//    func conversationViewController(for channel: Channel) -> ConversationViewController
     var rootNavigator: RootNavigator { get }
 }
 
@@ -26,6 +24,7 @@ final class PresentationAssemblyImplementation: PresentationAssembly {
         rootNavigator.navigationController.viewControllers = [conversationsListViewController()]
         rootNavigator.createConversationView = conversationViewController(for:)
         rootNavigator.createSettingsView = themesViewController
+        rootNavigator.createProfileView = profileViewController
     }
     
     private func conversationsListViewController() -> ConversationsListViewController {
@@ -43,5 +42,11 @@ final class PresentationAssemblyImplementation: PresentationAssembly {
     
     private func themesViewController() -> ThemesViewController {
         return ThemesViewController(themeManager: self.serviceAssembly.themeManager)
+    }
+    
+    private func profileViewController() -> ProfileViewController {
+        return ProfileViewController(model: ProfileModel(profileService: self.serviceAssembly.profileService),
+                                     imagePicker: self.serviceAssembly.imagePicker,
+                                     themeManager: self.serviceAssembly.themeManager)
     }
 }

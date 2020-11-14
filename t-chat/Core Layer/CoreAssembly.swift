@@ -17,7 +17,7 @@ protocol CoreAssembly {
     var messageProvider: MessageProvider { get }
     
     var profileManagerFactory: ProfileManagerFactory { get }
-    
+    var imageManager: ImageManager { get }
 }
 
 final class CoreAssemblyImplementation: CoreAssembly {
@@ -31,4 +31,5 @@ final class CoreAssemblyImplementation: CoreAssembly {
     lazy var messageProvider: MessageProvider = FirestoreMessageProvider(firestoreProvider: self.firestoreProvider)
     
     lazy var profileManagerFactory: ProfileManagerFactory = UserProfileDataManagerFactory()
+    lazy var imageManager: ImageManager = LocalImageManager()
 }

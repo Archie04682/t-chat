@@ -9,18 +9,22 @@
 import UIKit
 import Photos
 
-class ImageManager {
+protocol ImageManager {
     
-    static var shared: ImageManager = {
-       return ImageManager()
-    }()
+    func getImageFrom(url: URL) throws -> UIImage?
+
+    func save(_ image: UIImage, completion: @escaping (URL?) -> Void)
+    
+}
+
+class LocalImageManager: ImageManager {
     
     func getImageFrom(url: URL) throws -> UIImage? {
         let data = try Data(contentsOf: url)
         return UIImage(data: data)
     }
     
-    func saveToCameraRoll(_ image: UIImage, completion: @escaping (URL?) -> Void) {
+    func save(_ image: UIImage, completion: @escaping (URL?) -> Void) {
         var placeHolder: PHObjectPlaceholder?
         PHPhotoLibrary.shared().performChanges({
             let creationRequest = PHAssetChangeRequest.creationRequestForAsset(from: image)
@@ -39,14 +43,6 @@ class ImageManager {
                 completion(editingInput?.fullSizeImageURL)
             })
         })
-    }
-    
-}
-
-extension ImageManager: NSCopying {
-    
-    func copy(with zone: NSZone? = nil) -> Any {
-        return self
     }
     
 }

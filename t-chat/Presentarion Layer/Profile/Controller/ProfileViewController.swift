@@ -59,13 +59,9 @@ class ProfileViewController: UIViewController {
         return button
     }()
     
-    private lazy var usernameLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.translatesAutoresizingMaskIntoConstraints = false
-//        label.textColor = LocalThemeManager.shared.currentTheme.textColor
+    private lazy var usernameLabel: StyledLabel = {
+        let label = StyledLabel()
+        label.configure(font: UIFont.systemFont(ofSize: 24, weight: .bold), theme: themeManager.currentTheme)
         return label
     }()
     
@@ -73,40 +69,31 @@ class ProfileViewController: UIViewController {
         let view = UITextField()
         view.borderStyle = .roundedRect
         view.translatesAutoresizingMaskIntoConstraints = false
-//        view.attributedPlaceholder = NSAttributedString(string: "Username",
-//                                                        attributes: [NSAttributedString.Key.foregroundColor:
-//                                                            LocalThemeManager.shared.currentTheme.textColor.withAlphaComponent(0.7)])
-//        view.textColor = LocalThemeManager.shared.currentTheme.textColor
-//        view.backgroundColor = LocalThemeManager.shared.currentTheme.inputFieldBackgroundColor
-//        view.layer.borderColor = LocalThemeManager.shared.currentTheme.inputFieldBorderBackgroundColor.cgColor
+        view.attributedPlaceholder = NSAttributedString(string: "Username",
+                                                        attributes: [NSAttributedString.Key.foregroundColor:
+                                                            themeManager.currentTheme.textColor.withAlphaComponent(0.7)])
+        view.textColor = themeManager.currentTheme.textColor
+        view.backgroundColor = themeManager.currentTheme.inputFieldBackgroundColor
+        view.layer.borderColor = themeManager.currentTheme.inputFieldBorderBackgroundColor.cgColor
         view.layer.borderWidth = 1.5
         view.layer.cornerRadius = 4.0
         view.isHidden = true
         return view
     }()
     
-    private lazy var aboutUserLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
-        label.numberOfLines = 0
-        label.translatesAutoresizingMaskIntoConstraints = false
-//        label.textColor = LocalThemeManager.shared.currentTheme.textColor
+    private lazy var aboutUserLabel: StyledLabel = {
+        let label = StyledLabel()
+        label.configure(font: UIFont.systemFont(ofSize: 16, weight: .regular), theme: themeManager.currentTheme)
+        label.isHidden = false
         return label
     }()
     
-    private lazy var aboutUserTextView: UITextView = {
-        let view = UITextView()
+    private lazy var aboutUserTextView: TextViewWithPlaceholder = {
+        let view = TextViewWithPlaceholder()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.font = UIFont.systemFont(ofSize: 16, weight: .regular)
-//        view.textColor = LocalThemeManager.shared.currentTheme.textColor
-        view.isScrollEnabled = false
+        view.configure(placeholder: "About user", theme: themeManager.currentTheme)
+        view.textDelegate = self
         view.isHidden = true
-        view.delegate = self
-//        view.backgroundColor = LocalThemeManager.shared.currentTheme.inputFieldBackgroundColor
-//        view.layer.borderColor = LocalThemeManager.shared.currentTheme.inputFieldBorderBackgroundColor.cgColor
-        view.layer.borderWidth = 1.5
-        view.layer.cornerRadius = 4.0
-        view.layer.masksToBounds = true
         return view
     }()
     
@@ -116,7 +103,7 @@ class ProfileViewController: UIViewController {
         view.titleLabel?.font = UIFont.systemFont(ofSize: 19, weight: .semibold)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 14
-//        view.backgroundColor = LocalThemeManager.shared.currentTheme.filledButtonColor
+        view.backgroundColor = themeManager.currentTheme.filledButtonColor
         return view
     }()
     
@@ -136,7 +123,7 @@ class ProfileViewController: UIViewController {
         button.titleLabel?.font = UIFont.systemFont(ofSize: 19, weight: .semibold)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.isEnabled = false
-//        button.backgroundColor = LocalThemeManager.shared.currentTheme.filledButtonColor
+        button.backgroundColor = themeManager.currentTheme.filledButtonColor
         return button
     }()
     
@@ -146,31 +133,26 @@ class ProfileViewController: UIViewController {
         button.titleLabel?.font = UIFont.systemFont(ofSize: 19, weight: .semibold)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.isEnabled = false
-//        button.backgroundColor = LocalThemeManager.shared.currentTheme.filledButtonColor
+        button.backgroundColor = themeManager.currentTheme.filledButtonColor
         return button
-    }()
-    
-    private lazy var aboutTextViewPlaceholder: UILabel = {
-        let label = UILabel()
-        label.text = "About user info"
-        label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
-        label.sizeToFit()
-        label.textColor = .gray
-        label.frame.origin = CGPoint(x: 5, y: (self.aboutUserTextView.font?.pointSize)! / 2)
-        label.isHidden = true
-        return label
     }()
     
     private lazy var cancelButton: UIBarButtonItem = {
         return UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.cancel))
     }()
     
-    private let imagePicker = ImagePicker()
+    private var imagePicker: ImagePicker
+    private let themeManager: ThemeManager
     private var profileModel: ProfileModel?
     
-    init(model: ProfileModel) {
+    init(model: ProfileModel, imagePicker: ImagePicker, themeManager: ThemeManager) {
         self.profileModel = model
+        self.imagePicker = imagePicker
+        self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
+        
+        self.imagePicker.delegate = self
+        self.imagePicker.rootViewController = self
     }
     
     required init?(coder: NSCoder) {
@@ -181,11 +163,11 @@ class ProfileViewController: UIViewController {
         super.viewDidLoad()
         
         imagePicker.delegate = self
-        imagePicker.viewController = self
+        imagePicker.rootViewController = self
         profileModel?.delegate = self
         usernameTextField.delegate = self
         
-//        view.backgroundColor = LocalThemeManager.shared.currentTheme.backgroundColor
+        view.backgroundColor = themeManager.currentTheme.backgroundColor
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
@@ -264,7 +246,7 @@ class ProfileViewController: UIViewController {
         }
 
         if let text = textField.text, text.count > 0 {
-//            textField.layer.borderColor = LocalThemeManager.shared.currentTheme.inputFieldBorderBackgroundColor.cgColor
+            textField.layer.borderColor = themeManager.currentTheme.inputFieldBorderBackgroundColor.cgColor
         } else {
             textField.layer.borderColor = UIColor.red.cgColor
         }
@@ -319,7 +301,6 @@ class ProfileViewController: UIViewController {
             $0.widthAnchor.constraint(equalTo: profileImageContainer.widthAnchor).isActive = true
         }
         
-        aboutUserTextView.addSubview(aboutTextViewPlaceholder)
         [aboutUserLabel, aboutUserTextView].forEach {
             $0.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
             $0.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 32).isActive = true
@@ -425,7 +406,6 @@ extension ProfileViewController {
 
 extension ProfileViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
-        aboutTextViewPlaceholder.isHidden = !textView.text.isEmpty
         if textView.text != aboutUserLabel.text {
             profileModel?.changedData[.about] = textView.text?.data(using: .utf8)
         } else {
@@ -454,17 +434,15 @@ extension ProfileViewController: ProfileModelDelegate {
             if let props = failToUpdateProperties, !props.isEmpty {
                 var message = "Cannot update some properties:\n"
                 props.forEach { message = message + "\($0.key)" }
-                let ac = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
-                ac.addAction(UIAlertAction(title: "Ok", style: .default) { _ in
-                    ac.dismiss(animated: true, completion: nil)
+                let repeatAC = RepeatableAlert(title: "Error", message: message, preferredStyle: .alert)
+                repeatAC.okHandler = {
                     self?.backdrop.isHidden = true
-                })
-                ac.addAction(UIAlertAction(title: "Repeat", style: .default) { _ in
+                }
+                repeatAC.repeatHandler = {
                     self?.profileModel?.save(with: provider)
-                    ac.dismiss(animated: true, completion: nil)
-                })
+                }
                     
-                self?.present(ac, animated: true, completion: nil)
+                self?.present(repeatAC, animated: true, completion: nil)
             } else {
                 let ac = UIAlertController(title: "Saved with \(provider)", message: "Profile data updated successfully", preferredStyle: .alert)
                 ac.addAction(UIAlertAction(title: "Ok", style: .default) { _ in
@@ -482,12 +460,8 @@ extension ProfileViewController: ProfileModelDelegate {
         DispatchQueue.main.async { [weak self] in
             self?.view.endEditing(true)
             self?.backdrop.isHidden = true
-            let ac = UIAlertController(title: "Error happend", message: "Failed to save your data", preferredStyle: .alert)
-            ac.addAction(UIAlertAction(title: "Ok", style: .default) { _ in
-                ac.dismiss(animated: true, completion: nil)
-            })
-            
-            self?.present(ac, animated: true, completion: nil)
+            let errorAC = ErrorOccuredView(message: "Failed to save your data")
+            self?.present(errorAC, animated: true, completion: nil)
         }
     }
     

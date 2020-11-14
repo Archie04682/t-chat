@@ -49,7 +49,7 @@ final class UserProfileService: ProfileService {
     }
     
     func save(with type: ManagerType, data: [UserProfile.Keys: Data?], completion: @escaping ([UserProfile.Keys: Error]?, Error?) -> Void) {
-        self.profileManagerFactory.create(ofType: type).write(data) { failed, error in
+        self.profileManagerFactory.create(ofType: type).write(data) {[weak self] failed, error in
             
             if let failed = failed {
                 completion(failed, error)
@@ -58,6 +58,8 @@ final class UserProfileService: ProfileService {
             if let error = error {
                 completion(nil, error)
             }
+            
+            self?.load()
         }
     }
 }

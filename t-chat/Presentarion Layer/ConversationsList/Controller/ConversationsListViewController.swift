@@ -87,11 +87,16 @@ class ConversationsListViewController: UIViewController {
         view.backgroundColor = themeManager.currentTheme.backgroundColor
         conversationsTable.backgroundColor = .clear
         conversationsTable.separatorColor = themeManager.currentTheme.tableViewSeparatorColor
-    
+        
         isVisible = true
         
-        profileService.delegate = self
-        profileService.load()
+        if let imageData = profileService.profile?.photoData {
+            self.profileImageView.image = UIImage(data: imageData)
+        } else {
+            if let username = profileService.profile?.username {
+                self.profileImageView.setInitials(username: username)
+            }
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -111,29 +116,11 @@ class ConversationsListViewController: UIViewController {
     }
     
     @objc func goToProfile() {
-//        let vc = ProfileViewController(model: profileModel)
-//
-//        vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(closeProfilePage))
-//        vc.title = "My profile"
-//        let nvc = UINavigationController(rootViewController: vc)
-//
-//        present(nvc, animated: true, completion: nil)
+        rootNavigator.navigate(to: .profile)
     }
     
     @objc func openSettings() {
         rootNavigator.navigate(to: .settings)
-    }
-    
-    @objc func closeProfilePage() {
-//        self.dismiss(animated: true) {[weak self] in
-//            DispatchQueue.main.async {
-//                if let imageData = self?.profileModel.photoData {
-//                    self?.profileImageView.image = UIImage(data: imageData)
-//                } else if let username = self?.profileModel.username {
-//                    self?.profileImageView.setInitials(username: username)
-//                }
-//            }
-//        }
     }
     
     func saveNewChannel(name: String) {
@@ -163,27 +150,7 @@ extension ConversationsListViewController: UINavigationControllerDelegate {
             conversationsTable.reloadData()
             theme = themeManager.currentTheme
         }
-        
-        profileService.delegate = self
     }
-}
-
-extension ConversationsListViewController: ProfileServiceDelegate {
-    func profile(updated: Result<UserProfile, Error>) {
-        switch updated {
-        case .success(let profile):
-            DispatchQueue.main.async { [weak self] in
-                if let imageData = profile.photoData {
-                    self?.profileImageView.image = UIImage(data: imageData)
-                } else {
-                    self?.profileImageView.setInitials(username: profile.username)
-                }
-            }
-        case .failure(let error):
-            showError(with: error.localizedDescription)
-        }
-    }
-    
 }
 
 extension ConversationsListViewController: UITableViewDataSource {
