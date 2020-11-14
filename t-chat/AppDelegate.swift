@@ -22,9 +22,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, StateLoggable {
         
         let window = UIWindow(frame: UIScreen.main.bounds)
         let root = RootAssembly()
-        let navigationController = UINavigationController()
-        navigationController.viewControllers = [root.presentationAssembly.initial]
-        window.rootViewController = navigationController
+        
+        window.rootViewController = root.presentationAssembly.rootNavigator.navigationController
+        
         window.makeKeyAndVisible()
         
         self.window = window

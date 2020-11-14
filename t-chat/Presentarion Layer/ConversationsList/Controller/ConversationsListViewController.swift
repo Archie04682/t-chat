@@ -15,6 +15,7 @@ class ConversationsListViewController: UIViewController {
     private var themeManager: ThemeManager
     private var channelsService: ChannelService
     private var profileService: ProfileService
+    private var rootNavigator: RootNavigator
     private var theme: Theme
     private var isVisible = true
     
@@ -37,11 +38,12 @@ class ConversationsListViewController: UIViewController {
         return profileImageView
     }()
     
-    init(themeManager: ThemeManager, channelsService: ChannelService, profileService: ProfileService) {
+    init(themeManager: ThemeManager, channelsService: ChannelService, profileService: ProfileService, navigator: RootNavigator) {
         self.themeManager = themeManager
         self.channelsService = channelsService
         self.theme = themeManager.currentTheme
         self.profileService = profileService
+        self.rootNavigator = navigator
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -185,6 +187,10 @@ extension ConversationsListViewController: ProfileServiceDelegate {
 }
 
 extension ConversationsListViewController: UITableViewDataSource {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return channels.count
@@ -202,11 +208,11 @@ extension ConversationsListViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        let vc = ConversationViewController(profile: profileModel,
-//                                            firestoreProvider: firestoreProvider,
-//                                            channelRepository: channelRepository,
-//                                            channel: fetchedResultsController.object(at: indexPath))
-//        navigationController?.pushViewController(vc, animated: true)
+        guard let channel = channels[indexPath.row] else {
+            return
+        }
+        
+        rootNavigator.navigate(to: .conversation(channel: channel))
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -236,13 +242,23 @@ extension ConversationsListViewController: ChannelServiceDelegate {
     func data(_ result: Result<[ObjectChanges<Channel>], Error>) {
         switch result {
         case .success(let result):
+            if !isVisible {
+                return
+            }
+            
             conversationsTable.beginUpdates()
+            
+            result.filter { $0.changeType == .insert }.forEach { channel in
+                if let newIndex = channel.newIndex {
+                    channels[newIndex] = channel.object
+                }
+            }
             for change in result {
                 switch change.changeType {
                 case .insert:
                     if let index = change.newIndex {
-                        channels[index] = change.object
                         conversationsTable.insertRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+
                     }
                 case .move:
                     if let index = change.index {

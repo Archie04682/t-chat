@@ -8,31 +8,32 @@
 
 import UIKit
 
-protocol PresentationAssembly {
-    func conversationsListViewController() -> ConversationsListViewController
-    func conversationViewController(for channel: Channel) -> ConversationViewController
-    var initial: UIViewController { get }
+protocol PresentationAssembly: AnyObject {
+//    func conversationsListViewController() -> ConversationsListViewController
+//    func conversationViewController(for channel: Channel) -> ConversationViewController
+    var rootNavigator: RootNavigator { get }
 }
 
 final class PresentationAssemblyImplementation: PresentationAssembly {
+    var rootNavigator: RootNavigator
     
     private let serviceAssembly: ServiceAssembly
     
-    var initial: UIViewController {
-        return conversationsListViewController()
-    }
-    
     init(serviceAssembly: ServiceAssembly) {
         self.serviceAssembly = serviceAssembly
+        self.rootNavigator = RootNavigator(navigationController: UINavigationController())
+        rootNavigator.navigationController.viewControllers = [conversationsListViewController()]
+        rootNavigator.createConversationView = conversationViewController(for:)
     }
     
-    func conversationsListViewController() -> ConversationsListViewController {
+    private func conversationsListViewController() -> ConversationsListViewController {
         return ConversationsListViewController(themeManager: self.serviceAssembly.themeManager,
                                                channelsService: self.serviceAssembly.channelService,
-                                               profileService: self.serviceAssembly.profileService)
+                                               profileService: self.serviceAssembly.profileService,
+                                               navigator: self.rootNavigator)
     }
     
-    func conversationViewController(for channel: Channel) -> ConversationViewController {
+    private func conversationViewController(for channel: Channel) -> ConversationViewController {
         return ConversationViewController(profileService: self.serviceAssembly.profileService,
                                           messageService: self.serviceAssembly.messageService(for: channel),
                                           themeManager: self.serviceAssembly.themeManager)

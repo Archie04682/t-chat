@@ -22,6 +22,7 @@
 		FC3203912519ED26000C2DD9 /* StateLoggingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3203902519ED26000C2DD9 /* StateLoggingViewController.swift */; };
 		FC3811C22530E23F00AB796C /* Backdrop.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3811C12530E23F00AB796C /* Backdrop.swift */; };
 		FC3811C82530F3DF00AB796C /* GCDUserProfileDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3811C72530F3DF00AB796C /* GCDUserProfileDataManager.swift */; };
+		FC3859BD255FCFB800B771D5 /* Navigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3859BC255FCFB800B771D5 /* Navigator.swift */; };
 		FC466E78255DB5B500BC1204 /* FirestoreChannelProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC466E77255DB5B500BC1204 /* FirestoreChannelProvider.swift */; };
 		FC466E7B255DB8EE00BC1204 /* ChannelService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC466E7A255DB8EE00BC1204 /* ChannelService.swift */; };
 		FC466E7F255DBAB300BC1204 /* ObjectChanges.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC466E7E255DBAB300BC1204 /* ObjectChanges.swift */; };
@@ -90,6 +91,7 @@
 		FC3203902519ED26000C2DD9 /* StateLoggingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateLoggingViewController.swift; sourceTree = "<group>"; };
 		FC3811C12530E23F00AB796C /* Backdrop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Backdrop.swift; sourceTree = "<group>"; };
 		FC3811C72530F3DF00AB796C /* GCDUserProfileDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GCDUserProfileDataManager.swift; sourceTree = "<group>"; };
+		FC3859BC255FCFB800B771D5 /* Navigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Navigator.swift; sourceTree = "<group>"; };
 		FC466E77255DB5B500BC1204 /* FirestoreChannelProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreChannelProvider.swift; sourceTree = "<group>"; };
 		FC466E7A255DB8EE00BC1204 /* ChannelService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelService.swift; sourceTree = "<group>"; };
 		FC466E7E255DBAB300BC1204 /* ObjectChanges.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectChanges.swift; sourceTree = "<group>"; };
@@ -260,6 +262,14 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		FC3859BB255FCFAA00B771D5 /* Navigation */ = {
+			isa = PBXGroup;
+			children = (
+				FC3859BC255FCFB800B771D5 /* Navigator.swift */,
+			);
+			path = Navigation;
+			sourceTree = "<group>";
+		};
 		FC3CA9082514B0C400C7980E /* Profile */ = {
 			isa = PBXGroup;
 			children = (
@@ -323,6 +333,7 @@
 		FC466E90255DF0E000BC1204 /* Presentarion Layer */ = {
 			isa = PBXGroup;
 			children = (
+				FC3859BB255FCFAA00B771D5 /* Navigation */,
 				FC466E98255DF64600BC1204 /* Conversation */,
 				FC466E91255DF0E900BC1204 /* ConversationsList */,
 				FC466E94255DF41500BC1204 /* PresentaionAssembly.swift */,
@@ -639,6 +650,7 @@
 				FC7C00DA2532144700C3DCAE /* OperationsUserProfileManager.swift in Sources */,
 				FC466E83255DE02400BC1204 /* MessageService.swift in Sources */,
 				FC7C00DC253236D000C3DCAE /* UserProfileDataManager.swift in Sources */,
+				FC3859BD255FCFB800B771D5 /* Navigator.swift in Sources */,
 				FC6D49522547E9DE00DA09B7 /* ChannelEntity+CoreDataProperties.swift in Sources */,
 				FC94E5EF25286B1C000F09BE /* Theme.swift in Sources */,
 				FC0BA0D9250B7A68005AE946 /* AppDelegate.swift in Sources */,
