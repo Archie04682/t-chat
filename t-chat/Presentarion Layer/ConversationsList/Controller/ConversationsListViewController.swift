@@ -84,9 +84,9 @@ class ConversationsListViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        view.backgroundColor = LocalThemeManager.shared.currentTheme.backgroundColor
+        view.backgroundColor = themeManager.currentTheme.backgroundColor
         conversationsTable.backgroundColor = .clear
-        conversationsTable.separatorColor = LocalThemeManager.shared.currentTheme.tableViewSeparatorColor
+        conversationsTable.separatorColor = themeManager.currentTheme.tableViewSeparatorColor
     
         isVisible = true
         
@@ -120,7 +120,7 @@ class ConversationsListViewController: UIViewController {
     }
     
     @objc func openSettings() {
-        navigationController?.pushViewController(ThemesViewController(), animated: true)
+        rootNavigator.navigate(to: .settings)
     }
     
     @objc func closeProfilePage() {
@@ -158,9 +158,9 @@ extension ConversationsListViewController: UINavigationControllerDelegate {
         let item = UIBarButtonItem(title: " ", style: .plain, target: nil, action: nil)
         viewController.navigationItem.backBarButtonItem = item
         
-        if theme != LocalThemeManager.shared.currentTheme {
+        if theme != themeManager.currentTheme {
             conversationsTable.reloadData()
-            theme = LocalThemeManager.shared.currentTheme
+            theme = themeManager.currentTheme
         }
         
         profileService.delegate = self
@@ -221,7 +221,7 @@ extension ConversationsListViewController: UITableViewDataSource {
     }
 
     private func configure(cell: ConversationTableViewCell, with channel: Channel) {
-        cell.configure(with: channel)
+        cell.configure(with: channel, theme: themeManager.currentTheme)
         cell.accessoryType = .disclosureIndicator
         cell.tintColor = .white
     }

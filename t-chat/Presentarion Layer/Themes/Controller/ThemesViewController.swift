@@ -9,13 +9,13 @@
 import UIKit
 
 class ThemesViewController: UIViewController {
-    
-    private var selectedTheme = LocalThemeManager.shared.currentTheme
+    private var themeManager: ThemeManager
+    private lazy var selectedTheme = themeManager.currentTheme
     
     private lazy var themeViews: [ThemeView] = {
         var views: [ThemeView] = []
         for theme in Theme.allCases {
-            let view = ThemeView()
+            let view = ThemeView(theme: theme)
 
             view.selected = {[weak self] theme in
                 self?.themeDidChange(theme: theme)
@@ -35,15 +35,21 @@ class ThemesViewController: UIViewController {
         view.axis = .vertical
         return view
     }()
-
+    
+    init(themeManager: ThemeManager) {
+        self.themeManager = themeManager
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Settings"
         
-         LocalThemeManager.shared.delegate = self
-//        ThemeManager.shared.didPickTheme = {[weak self] theme in
-//            self?.update(theme: theme)
-//        }
+        themeManager.delegate = self
         
         view.backgroundColor = selectedTheme.conversationBackgroundColor
         themeViews.forEach {
@@ -60,7 +66,7 @@ class ThemesViewController: UIViewController {
     }
     
     private func themeDidChange(theme: Theme) {
-        LocalThemeManager.shared.apply(theme: theme)
+        themeManager.apply(theme: theme)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -88,7 +94,7 @@ class ThemesViewController: UIViewController {
 extension ThemesViewController: ThemePickerDelegate {
     
     func didSelectTheme(theme: Theme) {
-        LocalThemeManager.shared.save(theme: theme) {[weak self] in
+        themeManager.save(theme: theme) {[weak self] in
             DispatchQueue.main.async {
                 self?.update(theme: theme)
             }

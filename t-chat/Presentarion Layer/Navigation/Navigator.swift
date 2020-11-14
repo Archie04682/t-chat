@@ -15,10 +15,13 @@ protocol Navigator {
     func navigate(to destination: Dest)
     
     var navigationController: UINavigationController { get }
+    
+    var createSettingsView: (() -> ThemesViewController)? { get }
 }
 
 enum RootDestination {
     case conversation(channel: Channel)
+    case settings
 }
 
 final class RootNavigator: Navigator {
@@ -26,6 +29,7 @@ final class RootNavigator: Navigator {
     var navigationController: UINavigationController
     
     var createConversationView: ((Channel) -> ConversationViewController)?
+    var createSettingsView: (() -> ThemesViewController)?
     
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
@@ -35,6 +39,10 @@ final class RootNavigator: Navigator {
         switch destination {
         case .conversation(let channel):
             if let controller = createConversationView?(channel) {
+                navigationController.pushViewController(controller, animated: true)
+            }
+        case .settings:
+            if let controller = createSettingsView?() {
                 navigationController.pushViewController(controller, animated: true)
             }
         }

@@ -39,8 +39,12 @@ extension ConversationMessageTableViewCell: ConfigurableView {
     
     typealias ConfigurationModel = Message
     
-    func configure(with model: Message) {
-        messageView.configure(with: model)
+    func configure(with model: Message, theme: Theme?) {
+        guard let theme = theme else {
+            return
+        }
+        
+        messageView.configure(with: model, theme: theme)
     }
     
 }

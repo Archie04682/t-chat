@@ -22,8 +22,10 @@ final class PresentationAssemblyImplementation: PresentationAssembly {
     init(serviceAssembly: ServiceAssembly) {
         self.serviceAssembly = serviceAssembly
         self.rootNavigator = RootNavigator(navigationController: UINavigationController())
+        
         rootNavigator.navigationController.viewControllers = [conversationsListViewController()]
         rootNavigator.createConversationView = conversationViewController(for:)
+        rootNavigator.createSettingsView = themesViewController
     }
     
     private func conversationsListViewController() -> ConversationsListViewController {
@@ -37,5 +39,9 @@ final class PresentationAssemblyImplementation: PresentationAssembly {
         return ConversationViewController(profileService: self.serviceAssembly.profileService,
                                           messageService: self.serviceAssembly.messageService(for: channel),
                                           themeManager: self.serviceAssembly.themeManager)
+    }
+    
+    private func themesViewController() -> ThemesViewController {
+        return ThemesViewController(themeManager: self.serviceAssembly.themeManager)
     }
 }

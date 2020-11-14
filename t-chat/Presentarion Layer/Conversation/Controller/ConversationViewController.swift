@@ -169,8 +169,8 @@ class ConversationViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        view.backgroundColor = LocalThemeManager.shared.currentTheme.conversationBackgroundColor
-        conversationTable.backgroundColor = LocalThemeManager.shared.currentTheme.conversationBackgroundColor
+        view.backgroundColor = themeManager.currentTheme.conversationBackgroundColor
+        conversationTable.backgroundColor = themeManager.currentTheme.conversationBackgroundColor
     }
     
     @objc func keyboardWillShow(notification: NSNotification) {
@@ -228,7 +228,7 @@ extension ConversationViewController: UITableViewDataSource {
     }
     
     private func configure(_ cell: ConversationMessageTableViewCell, with message: Message) {
-        cell.configure(with: message)
+        cell.configure(with: message, theme: themeManager.currentTheme)
         cell.backgroundColor = .clear
         cell.contentView.transform = CGAffineTransform(scaleX: 1, y: -1)
     }

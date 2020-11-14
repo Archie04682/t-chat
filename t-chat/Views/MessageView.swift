@@ -102,15 +102,19 @@ extension MessageView: ConfigurableView {
     
     typealias ConfigurationModel = Message
     
-    func configure(with model: Message) {
+    func configure(with model: Message, theme: Theme?) {
+        guard let theme = theme else {
+            return
+        }
+        
         let deviceId = UIDevice.current.identifierForVendor!.uuidString
         let isIncomming = deviceId != model.senderId
         
         let largePadding = UIScreen.main.bounds.width * 0.25
         
-        container.backgroundColor = isIncomming ? LocalThemeManager.shared.currentTheme.incommingMessageBackgroundColor
-            : LocalThemeManager.shared.currentTheme.outcommingMessageBackgroundColor
-        messageLabel.textColor = isIncomming ? LocalThemeManager.shared.currentTheme.incommingMessageTextColor : LocalThemeManager.shared.currentTheme.outcommingMessageTextColor
+        container.backgroundColor = isIncomming ? theme.incommingMessageBackgroundColor
+            : theme.outcommingMessageBackgroundColor
+        messageLabel.textColor = isIncomming ? theme.incommingMessageTextColor : theme.outcommingMessageTextColor
         
         trailingConstraint?.isActive = false
         trailingConstraint = isIncomming ? container.trailingAnchor.constraint(lessThanOrEqualTo: self.trailingAnchor, constant: -largePadding)

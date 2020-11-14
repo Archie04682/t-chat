@@ -12,7 +12,7 @@ class ThemeView: UIView {
     
     var selected: ((Theme) -> Void)?
     
-    private var theme: Theme?
+    private let theme: Theme
     
     private lazy var selectionButton: ThemeSelectionButton = {
         let button = ThemeSelectionButton(type: .custom)
@@ -59,27 +59,18 @@ class ThemeView: UIView {
         
         return view
     }()
-
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
+    
+    init(theme: Theme) {
+        self.theme = theme
+        super.init(frame: CGRect())
         setupView()
     }
-    
-    override init (frame: CGRect) {
-        super.init(frame: frame)
-        setupView()
+
+    required init?(coder: NSCoder) {
+        fatalError()
     }
     
     private func setupView() {
-        incommingMessageView.configure(with: Message(content: "Hello! How r u?",
-                                                     created: Date(),
-                                                     senderId: "sender",
-                                                     senderName: ""))
-        outcommingMessageView.configure(with: Message(content: "Hi! Fine!",
-                                                      created: Date(),
-                                                      senderId: UIDevice.current.identifierForVendor!.uuidString,
-                                                      senderName: ""))
-        
         dialogSampleView.addArrangedSubview(incommingMessageView)
         dialogSampleView.addArrangedSubview(outcommingMessageView)
         
@@ -104,11 +95,9 @@ class ThemeView: UIView {
     }
     
     @objc func tap(_ sender: UIView) {
-        if let theme = theme {
-            if let closure = selected {
-                closure(theme)
-                return
-            }
+        if let closure = selected {
+            closure(theme)
+            return
         }
     }
 
@@ -119,9 +108,18 @@ class ThemeView: UIView {
 }
 
 extension ThemeView: ConfigurableView {
-    func configure(with model: Theme) {
-        theme = model
+    func configure(with model: Theme, theme: Theme? = nil) {
         themeNameLabel.text = model.themeName
+        
+        incommingMessageView.configure(with: Message(content: "Hello! How r u?",
+                                                     created: Date(),
+                                                     senderId: "sender",
+                                                     senderName: ""), theme: model)
+        outcommingMessageView.configure(with: Message(content: "Hi! Fine!",
+                                                      created: Date(),
+                                                      senderId: UIDevice.current.identifierForVendor!.uuidString,
+                                                      senderName: ""), theme: model)
+        
         incommingMessageView.setBackgroundColor(model.incommingMessageBackgroundColor)
         incommingMessageView.setTextColor(model.incommingMessageTextColor)
         selectionButton.backgroundColor = model.conversationBackgroundColor

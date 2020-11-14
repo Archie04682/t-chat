@@ -270,6 +270,32 @@
 			path = Navigation;
 			sourceTree = "<group>";
 		};
+		FC3859BE255FF93200B771D5 /* Themes */ = {
+			isa = PBXGroup;
+			children = (
+				FC3859C0255FFA9800B771D5 /* Views */,
+				FC3859BF255FFA8F00B771D5 /* Controller */,
+			);
+			path = Themes;
+			sourceTree = "<group>";
+		};
+		FC3859BF255FFA8F00B771D5 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				FC94E5EB25286999000F09BE /* ThemesViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		FC3859C0255FFA9800B771D5 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				FC94E5F425287DB0000F09BE /* ThemeView.swift */,
+				FCC7DA302529AE0D006B5A71 /* ThemeSelectionButton.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		FC3CA9082514B0C400C7980E /* Profile */ = {
 			isa = PBXGroup;
 			children = (
@@ -333,6 +359,7 @@
 		FC466E90255DF0E000BC1204 /* Presentarion Layer */ = {
 			isa = PBXGroup;
 			children = (
+				FC3859BE255FF93200B771D5 /* Themes */,
 				FC3859BB255FCFAA00B771D5 /* Navigation */,
 				FC466E98255DF64600BC1204 /* Conversation */,
 				FC466E91255DF0E900BC1204 /* ConversationsList */,
@@ -436,7 +463,6 @@
 		FC82CC6F2519D5ED0041DFAE /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				FC94E5ED252869A0000F09BE /* Settings */,
 				FC3CA9082514B0C400C7980E /* Profile */,
 			);
 			path = Controllers;
@@ -448,20 +474,10 @@
 				FC82CC732519D9DE0041DFAE /* ProfileImageView.swift */,
 				FCAC8A8B251E60960085E686 /* ConfigurableView.swift */,
 				FC94E5F62528808D000F09BE /* MessageView.swift */,
-				FCC7DA302529AE0D006B5A71 /* ThemeSelectionButton.swift */,
 				FC3811C12530E23F00AB796C /* Backdrop.swift */,
 				FC4F8B5F255022C00054F31F /* ErrorOccuredView.swift */,
 			);
 			path = Views;
-			sourceTree = "<group>";
-		};
-		FC94E5ED252869A0000F09BE /* Settings */ = {
-			isa = PBXGroup;
-			children = (
-				FC94E5EB25286999000F09BE /* ThemesViewController.swift */,
-				FC94E5F425287DB0000F09BE /* ThemeView.swift */,
-			);
-			path = Settings;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
