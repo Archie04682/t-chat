@@ -72,6 +72,9 @@
 		FCD18ABB25652B8F00B92F3A /* NetworkImagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD18ABA25652B8F00B92F3A /* NetworkImagesViewController.swift */; };
 		FCD18ABD2565311800B92F3A /* NetworkPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD18ABC2565311800B92F3A /* NetworkPhoto.swift */; };
 		FCD18AC025653FBA00B92F3A /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD18ABF25653FBA00B92F3A /* PhotoCell.swift */; };
+		FCD18AC3256551C100B92F3A /* NetworkProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD18AC2256551C100B92F3A /* NetworkProvider.swift */; };
+		FCD18AC52565535E00B92F3A /* NetworkImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD18AC42565535E00B92F3A /* NetworkImageService.swift */; };
+		FCD18AC825655CCD00B92F3A /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD18AC725655CCD00B92F3A /* Parser.swift */; };
 		FCEE4B3D251D151A00911B5C /* ConversationsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCEE4B3C251D151A00911B5C /* ConversationsListViewController.swift */; };
 		FCEE4B42251D267C00911B5C /* ConversationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCEE4B41251D267C00911B5C /* ConversationTableViewCell.swift */; };
 /* End PBXBuildFile section */
@@ -146,6 +149,9 @@
 		FCD18ABA25652B8F00B92F3A /* NetworkImagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkImagesViewController.swift; sourceTree = "<group>"; };
 		FCD18ABC2565311800B92F3A /* NetworkPhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkPhoto.swift; sourceTree = "<group>"; };
 		FCD18ABF25653FBA00B92F3A /* PhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
+		FCD18AC2256551C100B92F3A /* NetworkProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkProvider.swift; sourceTree = "<group>"; };
+		FCD18AC42565535E00B92F3A /* NetworkImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkImageService.swift; sourceTree = "<group>"; };
+		FCD18AC725655CCD00B92F3A /* Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
 		FCEE4B3C251D151A00911B5C /* ConversationsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsListViewController.swift; sourceTree = "<group>"; };
 		FCEE4B41251D267C00911B5C /* ConversationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -312,6 +318,7 @@
 		FC466E76255DB4F300BC1204 /* Core Layer */ = {
 			isa = PBXGroup;
 			children = (
+				FCD18AC12565519A00B92F3A /* Networking */,
 				FC47AEA92560396100EF69A4 /* Images */,
 				FC466E8D255DEC9900BC1204 /* Profile */,
 				FC4C1EB72549637800F76A6B /* Firebase */,
@@ -324,6 +331,7 @@
 		FC466E79255DB8E000BC1204 /* Service Layer */ = {
 			isa = PBXGroup;
 			children = (
+				FCD18AC625655ABD00B92F3A /* JsonUtilities */,
 				FC47AEAA2560397600EF69A4 /* Images */,
 				FC3859C32560042A00B771D5 /* Themes */,
 				FC466E7D255DBAA800BC1204 /* Shared */,
@@ -441,6 +449,7 @@
 			isa = PBXGroup;
 			children = (
 				FC82CC6D2519C9190041DFAE /* ImagePicker.swift */,
+				FCD18AC42565535E00B92F3A /* NetworkImageService.swift */,
 			);
 			path = Images;
 			sourceTree = "<group>";
@@ -517,6 +526,22 @@
 				FCD18ABF25653FBA00B92F3A /* PhotoCell.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		FCD18AC12565519A00B92F3A /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				FCD18AC2256551C100B92F3A /* NetworkProvider.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		FCD18AC625655ABD00B92F3A /* JsonUtilities */ = {
+			isa = PBXGroup;
+			children = (
+				FCD18AC725655CCD00B92F3A /* Parser.swift */,
+			);
+			path = JsonUtilities;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -685,10 +710,12 @@
 				FC82CC6E2519C9190041DFAE /* ImagePicker.swift in Sources */,
 				FC96CBF02518AC910036E085 /* ImageManager.swift in Sources */,
 				FCEE4B42251D267C00911B5C /* ConversationTableViewCell.swift in Sources */,
+				FCD18AC52565535E00B92F3A /* NetworkImageService.swift in Sources */,
 				FC466E7F255DBAB300BC1204 /* ObjectChanges.swift in Sources */,
 				FC249E2B253572AB00DE093E /* ProfileModel.swift in Sources */,
 				FC466E78255DB5B500BC1204 /* FirestoreChannelProvider.swift in Sources */,
 				FC0BA0F4250B9DEA005AE946 /* StateLoggable.swift in Sources */,
+				FCD18AC3256551C100B92F3A /* NetworkProvider.swift in Sources */,
 				FC3811C22530E23F00AB796C /* Backdrop.swift in Sources */,
 				FC466E95255DF41500BC1204 /* PresentaionAssembly.swift in Sources */,
 				FC6D494F2547E9DE00DA09B7 /* MessageEntity+CoreDataClass.swift in Sources */,
@@ -706,6 +733,7 @@
 				FC7C00D8253211A700C3DCAE /* FileOperations.swift in Sources */,
 				FC694F232531D9A100256A32 /* ApplicationFileProvider.swift in Sources */,
 				FCAC8A8C251E60960085E686 /* ConfigurableView.swift in Sources */,
+				FCD18AC825655CCD00B92F3A /* Parser.swift in Sources */,
 				FC7C00DA2532144700C3DCAE /* OperationsUserProfileManager.swift in Sources */,
 				FC47AEB025603D9000EF69A4 /* TextViewWithPlaceholder.swift in Sources */,
 				FC466E83255DE02400BC1204 /* MessageService.swift in Sources */,

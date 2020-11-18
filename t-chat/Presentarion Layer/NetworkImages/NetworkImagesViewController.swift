@@ -12,6 +12,7 @@ import Network
 class NetworkImagesViewController: UIViewController {
     private let apiKey = "19163487-f1fd170fca1ad072fa2f4a91c"
     private let themeManager: ThemeManager
+    private let networkImageService: NetworkImageService
     
     private var photos: [NetworkPhoto] = []
     
@@ -35,8 +36,9 @@ class NetworkImagesViewController: UIViewController {
         return indicator
     }()
     
-    init(themeManager: ThemeManager) {
+    init(networkImageService: NetworkImageService, themeManager: ThemeManager) {
         self.themeManager = themeManager
+        self.networkImageService = networkImageService
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -61,33 +63,21 @@ class NetworkImagesViewController: UIViewController {
         loadingIndicator.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
         loadingIndicator.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor).isActive = true
         
-        let queryParams = [URLQueryItem(name: "key", value: apiKey),
-                           URLQueryItem(name: "q", value: "pug"),
-                           URLQueryItem(name: "image_type", value: "photo"),
-                           URLQueryItem(name: "per_page", value: "24")]
-        
-        var components = URLComponents(string: "https://pixabay.com/api/")
-        components?.queryItems = queryParams
-        let session = URLSession.shared
-        if let url = components?.url {
-            print(url.absoluteString)
-            let task = session.dataTask(with: url) {[weak self] data, _, error in
-                let parser = PixabayResponseParser()
-                if let data = data {
-                    let items = parser.parse(data: data)
-                    if items.count > 0 {
-                        self?.photos = items
-                        DispatchQueue.main.async {
-                            self?.collectionView.isHidden = false
-                            self?.collectionView.reloadData()
-                            self?.loadingIndicator.isHidden = true
-                        }
-                    }
+        networkImageService.get(limit: 34, withTags: ["pug"]) {[weak self] result in
+            switch result {
+            case .success(let photos):
+                self?.photos = photos
+                DispatchQueue.main.async {
+                    self?.collectionView.isHidden = false
+                    self?.collectionView.reloadData()
+                    self?.loadingIndicator.isHidden = true
                 }
-                
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    let errorVC = ErrorOccuredView(message: error.localizedDescription)
+                    self?.present(errorVC, animated: true, completion: nil)
+                }
             }
-            
-            task.resume()
         }
     }
     
@@ -109,17 +99,18 @@ extension NetworkImagesViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         
-        URLSession.shared.dataTask(with: photos[indexPath.row].previewURL) { data, _, error in
-            guard let data = data, let image = UIImage(data: data) else {
+        cell.showActivityIndicator()
+        
+        networkImageService.downloadImage(fromURL: photos[indexPath.row].previewURL) { result in
+            switch result {
+            case .success(let image):
+                DispatchQueue.main.async {
+                    cell.image = image
+                }
+            case .failure(let error):
                 return
             }
-            
-            DispatchQueue.main.async {
-                cell.image = image
-            }
-        }.resume()
-        
-        cell.showActivityIndicator()
+        }
         
         return cell
     }
@@ -150,36 +141,5 @@ extension NetworkImagesViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return contentInsets.left
-    }
-}
-
-class PixabayResponseParser {
-    func parse(data: Data) -> [NetworkPhoto] {
-        do {
-            guard let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
-                fatalError("Bad json for Pixabay API")
-            }
-            
-            guard let images = json["hits"] as? [[String: Any]] else {
-                fatalError("No images")
-            }
-            
-            var photos: [NetworkPhoto] = []
-            
-            for image in images {
-                if let preview = image["previewURL"] as? String, let photo = image["largeImageURL"] as? String {
-                    guard let previewURL = URL(string: preview), let imageURL = URL(string: photo) else {
-                        fatalError("No valid urls in response")
-                    }
-                    
-                    photos.append(NetworkPhoto(previewURL: previewURL, imageURL: imageURL))
-                }
-            }
-            
-            return photos
-            
-        } catch {
-            return []
-        }
     }
 }

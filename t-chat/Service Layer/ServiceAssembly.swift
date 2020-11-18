@@ -18,6 +18,8 @@ protocol ServiceAssembly {
     var profileService: ProfileService { get }
     
     var imagePicker: ImagePicker { get }
+    
+    var networkImageService: NetworkImageService { get }
 }
 
 final class ServiceAssemblyImplementation: ServiceAssembly {
@@ -38,4 +40,6 @@ final class ServiceAssemblyImplementation: ServiceAssembly {
     lazy var profileService: ProfileService = UserProfileService(profileManagerFactory: self.coreAssembly.profileManagerFactory)
     
     lazy var imagePicker: ImagePicker = LocalImagePicker(imageManager: self.coreAssembly.imageManager)
+    
+    lazy var networkImageService: NetworkImageService = PixabayImageService(networkProvider: self.coreAssembly.networkProvider, parser: PixabayParser())
 }

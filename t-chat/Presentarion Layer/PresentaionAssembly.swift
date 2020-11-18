@@ -51,6 +51,6 @@ final class PresentationAssemblyImplementation: PresentationAssembly {
     }
     
     private func networkImagesViewController() -> NetworkImagesViewController {
-        return NetworkImagesViewController(themeManager: self.serviceAssembly.themeManager)
+        return NetworkImagesViewController(networkImageService: self.serviceAssembly.networkImageService, themeManager: self.serviceAssembly.themeManager)
     }
 }
