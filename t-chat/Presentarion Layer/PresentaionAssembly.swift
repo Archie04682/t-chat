@@ -21,7 +21,7 @@ final class PresentationAssemblyImplementation: PresentationAssembly {
         self.serviceAssembly = serviceAssembly
         self.rootNavigator = RootNavigator(navigationController: UINavigationController())
         
-        rootNavigator.navigationController.viewControllers = [conversationsListViewController()]
+        rootNavigator.navigationController.viewControllers = [networkImagesViewController()]
         rootNavigator.createConversationView = conversationViewController(for:)
         rootNavigator.createSettingsView = themesViewController
         rootNavigator.createProfileView = profileViewController
@@ -48,5 +48,9 @@ final class PresentationAssemblyImplementation: PresentationAssembly {
         return ProfileViewController(model: ProfileModel(profileService: self.serviceAssembly.profileService),
                                      imagePicker: self.serviceAssembly.imagePicker,
                                      themeManager: self.serviceAssembly.themeManager)
+    }
+    
+    private func networkImagesViewController() -> NetworkImagesViewController {
+        return NetworkImagesViewController(themeManager: self.serviceAssembly.themeManager)
     }
 }

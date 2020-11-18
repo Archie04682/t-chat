@@ -69,6 +69,9 @@
 		FC98763C253EA65A0037EBFE /* AddNewChannelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC98763B253EA65A0037EBFE /* AddNewChannelViewController.swift */; };
 		FCAC8A8C251E60960085E686 /* ConfigurableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCAC8A8B251E60960085E686 /* ConfigurableView.swift */; };
 		FCC7DA312529AE0D006B5A71 /* ThemeSelectionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC7DA302529AE0D006B5A71 /* ThemeSelectionButton.swift */; };
+		FCD18ABB25652B8F00B92F3A /* NetworkImagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD18ABA25652B8F00B92F3A /* NetworkImagesViewController.swift */; };
+		FCD18ABD2565311800B92F3A /* NetworkPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD18ABC2565311800B92F3A /* NetworkPhoto.swift */; };
+		FCD18AC025653FBA00B92F3A /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD18ABF25653FBA00B92F3A /* PhotoCell.swift */; };
 		FCEE4B3D251D151A00911B5C /* ConversationsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCEE4B3C251D151A00911B5C /* ConversationsListViewController.swift */; };
 		FCEE4B42251D267C00911B5C /* ConversationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCEE4B41251D267C00911B5C /* ConversationTableViewCell.swift */; };
 /* End PBXBuildFile section */
@@ -140,6 +143,9 @@
 		FC98763B253EA65A0037EBFE /* AddNewChannelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewChannelViewController.swift; sourceTree = "<group>"; };
 		FCAC8A8B251E60960085E686 /* ConfigurableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurableView.swift; sourceTree = "<group>"; };
 		FCC7DA302529AE0D006B5A71 /* ThemeSelectionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSelectionButton.swift; sourceTree = "<group>"; };
+		FCD18ABA25652B8F00B92F3A /* NetworkImagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkImagesViewController.swift; sourceTree = "<group>"; };
+		FCD18ABC2565311800B92F3A /* NetworkPhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkPhoto.swift; sourceTree = "<group>"; };
+		FCD18ABF25653FBA00B92F3A /* PhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
 		FCEE4B3C251D151A00911B5C /* ConversationsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsListViewController.swift; sourceTree = "<group>"; };
 		FCEE4B41251D267C00911B5C /* ConversationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -231,6 +237,7 @@
 				FC94E5EE25286B1C000F09BE /* Theme.swift */,
 				FC1C9A28253B694C00CC9A42 /* Channel.swift */,
 				FC1C9A2C253B6A0100CC9A42 /* Message.swift */,
+				FCD18ABC2565311800B92F3A /* NetworkPhoto.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -359,6 +366,7 @@
 		FC466E90255DF0E000BC1204 /* Presentarion Layer */ = {
 			isa = PBXGroup;
 			children = (
+				FCD18AB925652B5900B92F3A /* NetworkImages */,
 				FC47AEAB25603C0700EF69A4 /* Profile */,
 				FC3859C1256003CE00B771D5 /* Shared */,
 				FC3859BE255FF93200B771D5 /* Themes */,
@@ -492,6 +500,23 @@
 				FC6D49552547F27200DA09B7 /* MessageEntityExtensions.swift */,
 			);
 			path = CoreData;
+			sourceTree = "<group>";
+		};
+		FCD18AB925652B5900B92F3A /* NetworkImages */ = {
+			isa = PBXGroup;
+			children = (
+				FCD18ABE25653F9A00B92F3A /* Views */,
+				FCD18ABA25652B8F00B92F3A /* NetworkImagesViewController.swift */,
+			);
+			path = NetworkImages;
+			sourceTree = "<group>";
+		};
+		FCD18ABE25653F9A00B92F3A /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				FCD18ABF25653FBA00B92F3A /* PhotoCell.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -640,6 +665,7 @@
 				FC6D49542547F16A00DA09B7 /* ChannelEntityExtensions.swift in Sources */,
 				FC82CC742519D9DE0041DFAE /* ProfileImageView.swift in Sources */,
 				FC6D49582548281700DA09B7 /* ChannelsRepository.swift in Sources */,
+				FCD18AC025653FBA00B92F3A /* PhotoCell.swift in Sources */,
 				FC47AEB22560416400EF69A4 /* RepeatableAlert.swift in Sources */,
 				FC6D494A2547E7DA00DA09B7 /* Chats.xcdatamodeld in Sources */,
 				FC94E5FB2528B8B9000F09BE /* ThemePickerDelegate.swift in Sources */,
@@ -671,9 +697,11 @@
 				FC94E5EC25286999000F09BE /* ThemesViewController.swift in Sources */,
 				FC61DC25253B7342009B6223 /* FirestoreProvider.swift in Sources */,
 				FC466E8C255DEB1500BC1204 /* ThemeManager.swift in Sources */,
+				FCD18ABB25652B8F00B92F3A /* NetworkImagesViewController.swift in Sources */,
 				FC466E81255DDD1F00BC1204 /* FirestoreMessageProvider.swift in Sources */,
 				FC77CCD62542C1D700B08061 /* OldSchoolStack.swift in Sources */,
 				FC0BA0ED250B8911005AE946 /* AppState.swift in Sources */,
+				FCD18ABD2565311800B92F3A /* NetworkPhoto.swift in Sources */,
 				FC466E97255DF4BD00BC1204 /* RootAssembly.swift in Sources */,
 				FC7C00D8253211A700C3DCAE /* FileOperations.swift in Sources */,
 				FC694F232531D9A100256A32 /* ApplicationFileProvider.swift in Sources */,
