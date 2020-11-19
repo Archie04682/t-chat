@@ -18,6 +18,7 @@
 		FC1C9A29253B694C00CC9A42 /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC1C9A28253B694C00CC9A42 /* Channel.swift */; };
 		FC1C9A2D253B6A0100CC9A42 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC1C9A2C253B6A0100CC9A42 /* Message.swift */; };
 		FC249E2B253572AB00DE093E /* ProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC249E2A253572AB00DE093E /* ProfileModel.swift */; };
+		FC2F41F3256637BF000C6416 /* NavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2F41F2256637BF000C6416 /* NavigationViewController.swift */; };
 		FC32038F2519E394000C2DD9 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC32038E2519E394000C2DD9 /* UserProfile.swift */; };
 		FC3203912519ED26000C2DD9 /* StateLoggingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3203902519ED26000C2DD9 /* StateLoggingViewController.swift */; };
 		FC3811C22530E23F00AB796C /* Backdrop.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3811C12530E23F00AB796C /* Backdrop.swift */; };
@@ -75,6 +76,7 @@
 		FCD18AC3256551C100B92F3A /* NetworkProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD18AC2256551C100B92F3A /* NetworkProvider.swift */; };
 		FCD18AC52565535E00B92F3A /* NetworkImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD18AC42565535E00B92F3A /* NetworkImageService.swift */; };
 		FCD18AC825655CCD00B92F3A /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD18AC725655CCD00B92F3A /* Parser.swift */; };
+		FCD18ACA2565654000B92F3A /* NetworkImagesViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD18AC92565654000B92F3A /* NetworkImagesViewDelegate.swift */; };
 		FCEE4B3D251D151A00911B5C /* ConversationsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCEE4B3C251D151A00911B5C /* ConversationsListViewController.swift */; };
 		FCEE4B42251D267C00911B5C /* ConversationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCEE4B41251D267C00911B5C /* ConversationTableViewCell.swift */; };
 /* End PBXBuildFile section */
@@ -95,6 +97,7 @@
 		FC1C9A28253B694C00CC9A42 /* Channel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Channel.swift; sourceTree = "<group>"; };
 		FC1C9A2C253B6A0100CC9A42 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		FC249E2A253572AB00DE093E /* ProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileModel.swift; sourceTree = "<group>"; };
+		FC2F41F2256637BF000C6416 /* NavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationViewController.swift; sourceTree = "<group>"; };
 		FC32038E2519E394000C2DD9 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		FC3203902519ED26000C2DD9 /* StateLoggingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateLoggingViewController.swift; sourceTree = "<group>"; };
 		FC3811C12530E23F00AB796C /* Backdrop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Backdrop.swift; sourceTree = "<group>"; };
@@ -152,6 +155,7 @@
 		FCD18AC2256551C100B92F3A /* NetworkProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkProvider.swift; sourceTree = "<group>"; };
 		FCD18AC42565535E00B92F3A /* NetworkImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkImageService.swift; sourceTree = "<group>"; };
 		FCD18AC725655CCD00B92F3A /* Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
+		FCD18AC92565654000B92F3A /* NetworkImagesViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkImagesViewDelegate.swift; sourceTree = "<group>"; };
 		FCEE4B3C251D151A00911B5C /* ConversationsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsListViewController.swift; sourceTree = "<group>"; };
 		FCEE4B41251D267C00911B5C /* ConversationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -252,6 +256,7 @@
 			isa = PBXGroup;
 			children = (
 				FC3859BC255FCFB800B771D5 /* Navigator.swift */,
+				FC2F41F2256637BF000C6416 /* NavigationViewController.swift */,
 			);
 			path = Navigation;
 			sourceTree = "<group>";
@@ -516,6 +521,7 @@
 			children = (
 				FCD18ABE25653F9A00B92F3A /* Views */,
 				FCD18ABA25652B8F00B92F3A /* NetworkImagesViewController.swift */,
+				FCD18AC92565654000B92F3A /* NetworkImagesViewDelegate.swift */,
 			);
 			path = NetworkImages;
 			sourceTree = "<group>";
@@ -697,6 +703,7 @@
 				FC94E5F72528808D000F09BE /* MessageView.swift in Sources */,
 				FC5370362520B58700653A19 /* ConversationMessageTableViewCell.swift in Sources */,
 				FC4F8B60255022C00054F31F /* ErrorOccuredView.swift in Sources */,
+				FC2F41F3256637BF000C6416 /* NavigationViewController.swift in Sources */,
 				FC3811C82530F3DF00AB796C /* GCDUserProfileDataManager.swift in Sources */,
 				FC466E85255DE15400BC1204 /* MessageRepository.swift in Sources */,
 				FC1C9A29253B694C00CC9A42 /* Channel.swift in Sources */,
@@ -711,6 +718,7 @@
 				FC96CBF02518AC910036E085 /* ImageManager.swift in Sources */,
 				FCEE4B42251D267C00911B5C /* ConversationTableViewCell.swift in Sources */,
 				FCD18AC52565535E00B92F3A /* NetworkImageService.swift in Sources */,
+				FCD18ACA2565654000B92F3A /* NetworkImagesViewDelegate.swift in Sources */,
 				FC466E7F255DBAB300BC1204 /* ObjectChanges.swift in Sources */,
 				FC249E2B253572AB00DE093E /* ProfileModel.swift in Sources */,
 				FC466E78255DB5B500BC1204 /* FirestoreChannelProvider.swift in Sources */,

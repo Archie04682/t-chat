@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ProfileViewController: UIViewController {
+class ProfileViewController: NavigationViewController {
     private lazy var backdrop: Backdrop = {
         let view = Backdrop()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -144,11 +144,12 @@ class ProfileViewController: UIViewController {
     private var imagePicker: ImagePicker
     private let themeManager: ThemeManager
     private var profileModel: ProfileModel?
-    
-    init(model: ProfileModel, imagePicker: ImagePicker, themeManager: ThemeManager) {
+    private let rootNavigator: RootNavigator
+    init(model: ProfileModel, imagePicker: ImagePicker, themeManager: ThemeManager, rootNavigator: RootNavigator) {
         self.profileModel = model
         self.imagePicker = imagePicker
         self.themeManager = themeManager
+        self.rootNavigator = rootNavigator
         super.init(nibName: nil, bundle: nil)
         
         self.imagePicker.delegate = self
@@ -161,7 +162,7 @@ class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        title = "My Profile"
         imagePicker.delegate = self
         imagePicker.rootViewController = self
         profileModel?.delegate = self
@@ -387,6 +388,10 @@ extension ProfileViewController {
                 self.imagePicker.pickImage(with: .camera)
             })
         }
+        
+        ac.addAction(UIAlertAction(title: "Загрузить из сети", style: .default) { _ in
+            self.navigate?(self, .networkImages, true)
+        })
 
         if profileImageView.image != nil {
             ac.addAction(UIAlertAction(title: "Удалить изображение", style: .destructive) { _ in
@@ -402,6 +407,15 @@ extension ProfileViewController {
     @objc func dismissAlertController() {
         self.dismiss(animated: true, completion: nil)
     }
+}
+
+extension ProfileViewController: NetworkImagesViewDelegate {
+    
+    func didSelect(image: UIImage) {
+        profileImageView.image = image
+        profileModel?.changedData[.photoData] = image.pngData()
+    }
+    
 }
 
 extension ProfileViewController: UITextViewDelegate {

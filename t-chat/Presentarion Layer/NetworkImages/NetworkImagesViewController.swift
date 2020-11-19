@@ -14,6 +14,8 @@ class NetworkImagesViewController: UIViewController {
     private let themeManager: ThemeManager
     private let networkImageService: NetworkImageService
     
+    weak var delegate: NetworkImagesViewDelegate?
+    
     private var photos: [NetworkPhoto] = []
     
     private let contentInsets = UIEdgeInsets(top: 8.0,
@@ -42,8 +44,16 @@ class NetworkImagesViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
     }
     
+    private lazy var cancelButton: UIBarButtonItem = {
+        return UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.cancel))
+    }()
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    @objc func cancel() {
+        dismiss(animated: true, completion: nil)
     }
 
     override func viewDidLoad() {
@@ -62,7 +72,7 @@ class NetworkImagesViewController: UIViewController {
         view.addSubview(loadingIndicator)
         loadingIndicator.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
         loadingIndicator.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor).isActive = true
-        
+        navigationItem.leftBarButtonItem = cancelButton
         networkImageService.get(limit: 34, withTags: ["pug"]) {[weak self] result in
             switch result {
             case .success(let photos):
@@ -113,6 +123,27 @@ extension NetworkImagesViewController: UICollectionViewDataSource {
         }
         
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? PhotoCell, let image = cell.image else {
+            return
+        }
+        
+        networkImageService.downloadImage(fromURL: photos[indexPath.row].imageURL) { result in
+            switch result {
+            case .success(let image):
+                DispatchQueue.main.async { [weak self] in
+                    self?.delegate?.didSelect(image: image)
+                    self?.dismiss(animated: true, completion: nil)
+                }
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    let ac = ErrorOccuredView(message: error.localizedDescription)
+                    self.present(ac, animated: true, completion: nil)
+                }
+            }
+        }
     }
 }
 

@@ -25,6 +25,7 @@ enum RootDestination {
     case conversation(channel: Channel)
     case settings
     case profile
+    case networkImages
 }
 
 final class RootNavigator: Navigator {
@@ -34,9 +35,21 @@ final class RootNavigator: Navigator {
     var createConversationView: ((Channel) -> ConversationViewController)?
     var createSettingsView: (() -> ThemesViewController)?
     var createProfileView: (() -> ProfileViewController)?
+    var createNetworkImagesView: (() -> NetworkImagesViewController)?
     
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
+    }
+    
+    func nav(_ rootVC: UIViewController?, destination: RootDestination, modal: Bool = false) {
+        if let root = rootVC {
+            if let vc = createNetworkImagesView?() {
+                vc.delegate = root as? NetworkImagesViewDelegate
+                let nvc = UINavigationController(rootViewController: vc)
+                
+                root.present(nvc, animated: true, completion: nil)
+            }
+        }
     }
     
     func navigate(to destination: RootDestination) {
@@ -51,19 +64,31 @@ final class RootNavigator: Navigator {
             }
         case .profile:
             if let vc = createProfileView?() {
-                vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(closeProfilePage))
-                vc.title = "My profile"
-                let nvc = UINavigationController(rootViewController: vc)
-        
-                if let top = navigationController.topViewController {
-                    top.present(nvc, animated: true, completion: nil)
-                }
+                vc.navigate = nav
+                vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(close))
+                presentModal(vc)
             }
+        case .networkImages:
+            if let vc = createNetworkImagesView?() {
+                vc.delegate = navigationController.topViewController as? NetworkImagesViewDelegate
+                presentModal(vc)
+            }
+        }
+        
+    }
+    
+    private func presentModal(_ vc: UIViewController) {
+        vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(close))
+        let nvc = UINavigationController(rootViewController: vc)
+        
+        if let top = navigationController.topViewController {
+            top.present(nvc, animated: true, completion: nil)
         }
     }
     
-    @objc func closeProfilePage() {
-        navigationController.dismiss(animated: true)
-        navigationController.topViewController?.viewWillAppear(true)
+    @objc func close(_ button: UIBarButtonItem) {
+//        viewController.navigationController?.dismiss(animated: true, completion: nil)
+//        navigationController.dismiss(animated: true)
+//        navigationController.topViewController?.viewWillAppear(true)
     }
 }
