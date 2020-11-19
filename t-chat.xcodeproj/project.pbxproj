@@ -19,6 +19,7 @@
 		FC1C9A2D253B6A0100CC9A42 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC1C9A2C253B6A0100CC9A42 /* Message.swift */; };
 		FC249E2B253572AB00DE093E /* ProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC249E2A253572AB00DE093E /* ProfileModel.swift */; };
 		FC2F41F3256637BF000C6416 /* NavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2F41F2256637BF000C6416 /* NavigationViewController.swift */; };
+		FC2F41F525663FCA000C6416 /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2F41F425663FCA000C6416 /* ActionButton.swift */; };
 		FC32038F2519E394000C2DD9 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC32038E2519E394000C2DD9 /* UserProfile.swift */; };
 		FC3203912519ED26000C2DD9 /* StateLoggingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3203902519ED26000C2DD9 /* StateLoggingViewController.swift */; };
 		FC3811C22530E23F00AB796C /* Backdrop.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3811C12530E23F00AB796C /* Backdrop.swift */; };
@@ -98,6 +99,7 @@
 		FC1C9A2C253B6A0100CC9A42 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		FC249E2A253572AB00DE093E /* ProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileModel.swift; sourceTree = "<group>"; };
 		FC2F41F2256637BF000C6416 /* NavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationViewController.swift; sourceTree = "<group>"; };
+		FC2F41F425663FCA000C6416 /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
 		FC32038E2519E394000C2DD9 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		FC3203902519ED26000C2DD9 /* StateLoggingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateLoggingViewController.swift; sourceTree = "<group>"; };
 		FC3811C12530E23F00AB796C /* Backdrop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Backdrop.swift; sourceTree = "<group>"; };
@@ -473,6 +475,7 @@
 			isa = PBXGroup;
 			children = (
 				FC47AEAD25603C3500EF69A4 /* StyledLabel.swift */,
+				FC2F41F425663FCA000C6416 /* ActionButton.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -733,6 +736,7 @@
 				FC61DC25253B7342009B6223 /* FirestoreProvider.swift in Sources */,
 				FC466E8C255DEB1500BC1204 /* ThemeManager.swift in Sources */,
 				FCD18ABB25652B8F00B92F3A /* NetworkImagesViewController.swift in Sources */,
+				FC2F41F525663FCA000C6416 /* ActionButton.swift in Sources */,
 				FC466E81255DDD1F00BC1204 /* FirestoreMessageProvider.swift in Sources */,
 				FC77CCD62542C1D700B08061 /* OldSchoolStack.swift in Sources */,
 				FC0BA0ED250B8911005AE946 /* AppState.swift in Sources */,

@@ -97,14 +97,11 @@ class ProfileViewController: NavigationViewController {
         return view
     }()
     
-    private lazy var editButton: UIButton = {
-        let view = UIButton(type: .system)
-        view.setTitle("Edit", for: .normal)
-        view.titleLabel?.font = UIFont.systemFont(ofSize: 19, weight: .semibold)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.cornerRadius = 14
-        view.backgroundColor = themeManager.currentTheme.filledButtonColor
-        return view
+    private lazy var editButton: ActionButton = {
+        let button = ActionButton(type: .system)
+        button.configure(with: "Edit", theme: themeManager.currentTheme)
+        
+        return button
     }()
     
     private lazy var saveButtonsContainer: UIStackView = {
@@ -117,23 +114,19 @@ class ProfileViewController: NavigationViewController {
         return button
     }()
     
-    private lazy var saveWithGCDButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("GCD", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 19, weight: .semibold)
-        button.translatesAutoresizingMaskIntoConstraints = false
+    private lazy var saveWithGCDButton: ActionButton = {
+        let button = ActionButton(type: .system)
+        button.configure(with: "GCD", theme: themeManager.currentTheme)
         button.isEnabled = false
-        button.backgroundColor = themeManager.currentTheme.filledButtonColor
+        
         return button
     }()
     
-    private lazy var saveWithOperationButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Operation", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 19, weight: .semibold)
-        button.translatesAutoresizingMaskIntoConstraints = false
+    private lazy var saveWithOperationButton: ActionButton = {
+        let button = ActionButton(type: .system)
+        button.configure(with: "Operation", theme: themeManager.currentTheme)
         button.isEnabled = false
-        button.backgroundColor = themeManager.currentTheme.filledButtonColor
+        
         return button
     }()
     

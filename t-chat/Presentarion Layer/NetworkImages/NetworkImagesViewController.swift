@@ -126,10 +126,6 @@ extension NetworkImagesViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let cell = collectionView.cellForItem(at: indexPath) as? PhotoCell, let image = cell.image else {
-            return
-        }
-        
         networkImageService.downloadImage(fromURL: photos[indexPath.row].imageURL) { result in
             switch result {
             case .success(let image):
