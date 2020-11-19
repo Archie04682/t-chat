@@ -13,10 +13,10 @@ class PhotoCell: UICollectionViewCell, ConfigurableView {
     var image: UIImage? {
         didSet {
             if let image = image {
-                activityIndicator.isHidden = true
-                
                 imageView.image = image
                 imageView.isHidden = false
+                
+                activityIndicator.isHidden = true
             }
         }
     }

@@ -9,18 +9,10 @@
 import UIKit
 
 class ProfileViewController: NavigationViewController {
-    private lazy var backdrop: Backdrop = {
-        let view = Backdrop()
+    private lazy var backdrop: BackdropWithLoading = {
+        let view = BackdropWithLoading()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.isHidden = true
-        return view
-    }()
-    
-    private lazy var activityIndicator: UIActivityIndicatorView = {
-        let view = UIActivityIndicatorView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.color = .red
-        view.startAnimating()
         return view
     }()
     
@@ -137,12 +129,12 @@ class ProfileViewController: NavigationViewController {
     private var imagePicker: ImagePicker
     private let themeManager: ThemeManager
     private var profileModel: ProfileModel?
-    private let rootNavigator: RootNavigator
-    init(model: ProfileModel, imagePicker: ImagePicker, themeManager: ThemeManager, rootNavigator: RootNavigator) {
+
+    init(model: ProfileModel, imagePicker: ImagePicker, themeManager: ThemeManager) {
         self.profileModel = model
         self.imagePicker = imagePicker
         self.themeManager = themeManager
-        self.rootNavigator = rootNavigator
+        
         super.init(nibName: nil, bundle: nil)
         
         self.imagePicker.delegate = self
@@ -209,19 +201,19 @@ class ProfileViewController: NavigationViewController {
     }
     
     @objc func cancel() {
-        DispatchQueue.main.async {[weak self] in
-            if self?.profileModel?.changedData[.photoData] != nil {
-                if let data = self?.profileModel?.photoData {
-                    self?.profileImageView.image = UIImage(data: data)
-                } else if let text = self?.usernameLabel.text {
-                    self?.profileImageView.setInitials(username: text)
+        DispatchQueue.main.async {
+            if self.profileModel?.changedData[.photoData] != nil {
+                if let data = self.profileModel?.photoData {
+                    self.profileImageView.image = UIImage(data: data)
+                } else if let text = self.usernameLabel.text {
+                    self.profileImageView.setInitials(username: text)
                 }
             }
+            
+            self.profileModel?.changedData = [:]
+            self.toggleMode()
+            self.view.endEditing(true)
         }
-        
-        profileModel?.changedData = [:]
-        toggleMode()
-        view.endEditing(true)
     }
 
     @objc func saveChanges(_ button: UIButton) {
@@ -271,7 +263,6 @@ class ProfileViewController: NavigationViewController {
         containerView.addSubview(editButton)
         containerView.addSubview(saveButtonsContainer)
         scrollView.addSubview(containerView)
-        backdrop.addSubview(activityIndicator)
         
         view.addSubview(scrollView)
         view.addSubview(backdrop)
@@ -328,9 +319,6 @@ class ProfileViewController: NavigationViewController {
         let width = containerView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
         width.priority = UILayoutPriority(1000)
         width.isActive = true
-        
-        activityIndicator.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
-        activityIndicator.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor).isActive = true
         
         backdrop.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         backdrop.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true

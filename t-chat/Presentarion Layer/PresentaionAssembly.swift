@@ -29,10 +29,11 @@ final class PresentationAssemblyImplementation: PresentationAssembly {
     }
     
     private func conversationsListViewController() -> ConversationsListViewController {
-        return ConversationsListViewController(themeManager: self.serviceAssembly.themeManager,
+        let vc = ConversationsListViewController(themeManager: self.serviceAssembly.themeManager,
                                                channelsService: self.serviceAssembly.channelService,
-                                               profileService: self.serviceAssembly.profileService,
-                                               navigator: self.rootNavigator)
+                                               profileService: self.serviceAssembly.profileService)
+        vc.navigate = rootNavigator.navigate
+        return vc
     }
     
     private func conversationViewController(for channel: Channel) -> ConversationViewController {
@@ -46,10 +47,12 @@ final class PresentationAssemblyImplementation: PresentationAssembly {
     }
     
     private func profileViewController() -> ProfileViewController {
-        return ProfileViewController(model: ProfileModel(profileService: self.serviceAssembly.profileService),
+        let vc = ProfileViewController(model: ProfileModel(profileService: self.serviceAssembly.profileService),
                                      imagePicker: self.serviceAssembly.imagePicker,
-                                     themeManager: self.serviceAssembly.themeManager,
-                                     rootNavigator: self.rootNavigator)
+                                     themeManager: self.serviceAssembly.themeManager)
+        vc.navigate = rootNavigator.navigate
+        
+        return vc
     }
     
     private func networkImagesViewController() -> NetworkImagesViewController {

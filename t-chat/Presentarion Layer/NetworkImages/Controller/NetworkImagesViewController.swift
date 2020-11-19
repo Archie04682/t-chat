@@ -31,11 +31,11 @@ class NetworkImagesViewController: UIViewController {
         return view
     }()
     
-    private lazy var loadingIndicator: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView(style: .gray)
-        indicator.translatesAutoresizingMaskIntoConstraints = false
-        indicator.startAnimating()
-        return indicator
+    private lazy var backdropWithLoading: BackdropWithLoading = {
+        let backdrop = BackdropWithLoading()
+        backdrop.translatesAutoresizingMaskIntoConstraints = false
+        
+        return backdrop
     }()
     
     init(networkImageService: NetworkImageService, themeManager: ThemeManager) {
@@ -44,16 +44,8 @@ class NetworkImagesViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
     }
     
-    private lazy var cancelButton: UIBarButtonItem = {
-        return UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.cancel))
-    }()
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    @objc func cancel() {
-        dismiss(animated: true, completion: nil)
     }
 
     override func viewDidLoad() {
@@ -69,18 +61,19 @@ class NetworkImagesViewController: UIViewController {
         collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
         collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
         
-        view.addSubview(loadingIndicator)
-        loadingIndicator.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
-        loadingIndicator.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor).isActive = true
-        navigationItem.leftBarButtonItem = cancelButton
-        networkImageService.get(limit: 34, withTags: ["pug"]) {[weak self] result in
+        view.addSubview(backdropWithLoading)
+        backdropWithLoading.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        backdropWithLoading.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        backdropWithLoading.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
+        backdropWithLoading.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
+        networkImageService.get(limit: 200, withTags: ["pug"]) {[weak self] result in
             switch result {
             case .success(let photos):
                 self?.photos = photos
                 DispatchQueue.main.async {
                     self?.collectionView.isHidden = false
                     self?.collectionView.reloadData()
-                    self?.loadingIndicator.isHidden = true
+                    self?.backdropWithLoading.isHidden = true
                 }
             case .failure(let error):
                 DispatchQueue.main.async {
@@ -118,7 +111,10 @@ extension NetworkImagesViewController: UICollectionViewDataSource {
                     cell.image = image
                 }
             case .failure(let error):
-                return
+                print(error.localizedDescription)
+                DispatchQueue.main.async {
+                    cell.image = UIImage(named: "image-placeholder")
+                }
             }
         }
         
@@ -126,11 +122,13 @@ extension NetworkImagesViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        backdropWithLoading.isHidden = false
         networkImageService.downloadImage(fromURL: photos[indexPath.row].imageURL) { result in
             switch result {
             case .success(let image):
                 DispatchQueue.main.async { [weak self] in
                     self?.delegate?.didSelect(image: image)
+                    self?.backdropWithLoading.isHidden = true
                     self?.dismiss(animated: true, completion: nil)
                 }
             case .failure(let error):

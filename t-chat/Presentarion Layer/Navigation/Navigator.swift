@@ -12,7 +12,7 @@ import UIKit
 protocol Navigator {
     associatedtype Dest
     
-    func navigate(to destination: Dest)
+    func navigate(_ rootVC: UIViewController?, destination: Dest, modal: Bool)
     
     var navigationController: UINavigationController { get }
     
@@ -41,54 +41,47 @@ final class RootNavigator: Navigator {
         self.navigationController = navigationController
     }
     
-    func nav(_ rootVC: UIViewController?, destination: RootDestination, modal: Bool = false) {
+    func navigate(_ rootVC: UIViewController?, destination: RootDestination, modal: Bool = false) {
         if let root = rootVC {
-            if let vc = createNetworkImagesView?() {
-                vc.delegate = root as? NetworkImagesViewDelegate
-                let nvc = UINavigationController(rootViewController: vc)
-                
-                root.present(nvc, animated: true, completion: nil)
+            var vc: UIViewController?
+            
+            switch destination {
+            case .conversation(let channel):
+                vc = createConversationView?(channel)
+            case .settings:
+                vc = createSettingsView?()
+            case .profile:
+                vc = createProfileView?()
+            case .networkImages:
+                let networkImages = createNetworkImagesView?()
+                networkImages?.delegate = rootVC as? NetworkImagesViewDelegate
+                vc = networkImages
             }
-        }
-    }
-    
-    func navigate(to destination: RootDestination) {
-        switch destination {
-        case .conversation(let channel):
-            if let controller = createConversationView?(channel) {
-                navigationController.pushViewController(controller, animated: true)
+            
+            if let vc = vc {
+                if modal {
+                    let nvc = UINavigationController(rootViewController: vc)
+                    
+                    let closeButton = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(close(_:)))
+                    vc.navigationItem.leftBarButtonItem = closeButton
+                    
+                    root.present(nvc, animated: true, completion: nil)
+                } else {
+                    navigationController.pushViewController(vc, animated: true)
+                }
             }
-        case .settings:
-            if let controller = createSettingsView?() {
-                navigationController.pushViewController(controller, animated: true)
-            }
-        case .profile:
-            if let vc = createProfileView?() {
-                vc.navigate = nav
-                vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(close))
-                presentModal(vc)
-            }
-        case .networkImages:
-            if let vc = createNetworkImagesView?() {
-                vc.delegate = navigationController.topViewController as? NetworkImagesViewDelegate
-                presentModal(vc)
-            }
-        }
-        
-    }
-    
-    private func presentModal(_ vc: UIViewController) {
-        vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(close))
-        let nvc = UINavigationController(rootViewController: vc)
-        
-        if let top = navigationController.topViewController {
-            top.present(nvc, animated: true, completion: nil)
         }
     }
     
     @objc func close(_ button: UIBarButtonItem) {
-//        viewController.navigationController?.dismiss(animated: true, completion: nil)
-//        navigationController.dismiss(animated: true)
-//        navigationController.topViewController?.viewWillAppear(true)
+        if var topController = UIApplication.shared.keyWindow?.rootViewController {
+            while let presentedViewController = topController.presentedViewController {
+                topController = presentedViewController
+            }
+            
+            topController.dismiss(animated: true, completion: nil)
+        }
+        
+        navigationController.topViewController?.viewWillAppear(true)
     }
 }
