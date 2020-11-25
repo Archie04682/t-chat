@@ -80,6 +80,7 @@
 		FCD18AC52565535E00B92F3A /* NetworkImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD18AC42565535E00B92F3A /* NetworkImageService.swift */; };
 		FCD18AC825655CCD00B92F3A /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD18AC725655CCD00B92F3A /* Parser.swift */; };
 		FCD18ACA2565654000B92F3A /* NetworkImagesViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD18AC92565654000B92F3A /* NetworkImagesViewDelegate.swift */; };
+		FCE12749256EEABE00ED203B /* TinkoffFlakesEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCE12748256EEABE00ED203B /* TinkoffFlakesEmitter.swift */; };
 		FCEE4B3D251D151A00911B5C /* ConversationsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCEE4B3C251D151A00911B5C /* ConversationsListViewController.swift */; };
 		FCEE4B42251D267C00911B5C /* ConversationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCEE4B41251D267C00911B5C /* ConversationTableViewCell.swift */; };
 /* End PBXBuildFile section */
@@ -162,6 +163,7 @@
 		FCD18AC42565535E00B92F3A /* NetworkImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkImageService.swift; sourceTree = "<group>"; };
 		FCD18AC725655CCD00B92F3A /* Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
 		FCD18AC92565654000B92F3A /* NetworkImagesViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkImagesViewDelegate.swift; sourceTree = "<group>"; };
+		FCE12748256EEABE00ED203B /* TinkoffFlakesEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TinkoffFlakesEmitter.swift; sourceTree = "<group>"; };
 		FCEE4B3C251D151A00911B5C /* ConversationsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsListViewController.swift; sourceTree = "<group>"; };
 		FCEE4B41251D267C00911B5C /* ConversationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -538,6 +540,7 @@
 			isa = PBXGroup;
 			children = (
 				FCA9EA1B256ECBDF00BEECE1 /* TransitionAnimationBuilder.swift */,
+				FCE12748256EEABE00ED203B /* TinkoffFlakesEmitter.swift */,
 			);
 			path = Animations;
 			sourceTree = "<group>";
@@ -737,6 +740,7 @@
 				FC6D49502547E9DE00DA09B7 /* MessageEntity+CoreDataProperties.swift in Sources */,
 				FC466E7B255DB8EE00BC1204 /* ChannelService.swift in Sources */,
 				FC77CCD22542BC3A00B08061 /* CoreDataStack.swift in Sources */,
+				FCE12749256EEABE00ED203B /* TinkoffFlakesEmitter.swift in Sources */,
 				FC080064254B04C900A23FF4 /* NewWaveStack.swift in Sources */,
 				FC6D49512547E9DE00DA09B7 /* ChannelEntity+CoreDataClass.swift in Sources */,
 				FC5370382520D42300653A19 /* ProfileViewController.swift in Sources */,

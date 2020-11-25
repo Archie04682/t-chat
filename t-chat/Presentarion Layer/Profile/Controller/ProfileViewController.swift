@@ -184,8 +184,7 @@ class ProfileViewController: NavigationViewController {
         transitionBuilder.addRotation(withAngle: 18.0, reverseRotation: true)
         transitionBuilder.addPositionTransition(withIntent: 5, direction: .horizontal)
         transitionBuilder.addPositionTransition(withIntent: 5, direction: .vertical)
-        
-        self.profileImageEditButton.layer.add(transitionBuilder.build(), forKey: #keyPath(CALayer.transform))
+        profileImageEditButton.layer.add(transitionBuilder.build(), forKey: #keyPath(CALayer.transform))
     }
     
     @objc func toggleMode() {
