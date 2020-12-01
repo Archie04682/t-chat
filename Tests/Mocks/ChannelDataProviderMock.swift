@@ -13,8 +13,10 @@ class ChannelDataProviderMock: ChannelProvider {
     var delegate: ChannelProviderDelegate?
     
     var addCallsCount: Int = 0
+    var addLastCallParameter: String = ""
     var getCallsCount: Int = 0
     var deleteCallsCount: Int = 0
+    var lastDeleteCallParameter: String = ""
     
     func get() {
         delegate?.fetched(.success([Channel(identifier: "id", name: "testName", lastMessage: "", lastActivity: Date())]))
@@ -23,6 +25,8 @@ class ChannelDataProviderMock: ChannelProvider {
     
     func add(withName name: String, completion: @escaping (Error?) -> Void) {
         addCallsCount += 1
+        addLastCallParameter = name
+        
         if name == "failedName" {
             completion(NetworkError.wrongData)
         } else {
@@ -33,6 +37,7 @@ class ChannelDataProviderMock: ChannelProvider {
     
     func delete(withUID uid: String, completion: @escaping (Error?) -> Void) {
         deleteCallsCount += 1
+        lastDeleteCallParameter = uid
     }
     
 }

@@ -23,18 +23,22 @@ class ChannelServiceTests: XCTestCase {
     }
     
     func testShouldAddNewChannel() {
+        let rightParameter = "Test Name"
         sut.add(withName: "Test Name") { error in
             if let error = error {
                 XCTFail(error.localizedDescription)
             }
             
+            XCTAssertEqual(rightParameter, self.dataProvider.addLastCallParameter)
             XCTAssertEqual(self.dataProvider.addCallsCount, 1)
         }
     }
     
     func testShouldReturnError_On_FailSaving() {
-        sut.add(withName: "failedName") { error in
-            XCTAssertEqual(self.dataProvider.addCallsCount, 1)
+        let wrongParameter = "failedName"
+        sut.add(withName: wrongParameter) { error in
+            XCTAssertEqual(wrongParameter, self.dataProvider.addLastCallParameter)
+            XCTAssertEqual(1, self.dataProvider.addCallsCount)
             XCTAssertNotNil(error)
         }
     }
@@ -44,13 +48,16 @@ class ChannelServiceTests: XCTestCase {
         
         sut.delegate = delegate
         
-        sut.delete(withUID: "testUID") { error in
+        let uid = "testUID"
+        
+        sut.delete(withUID: uid) { error in
             if let error = error {
                 XCTFail(error.localizedDescription)
             }
             
-            XCTAssertEqual(self.dataProvider.deleteCallsCount, 1)
-            XCTAssertEqual(delegate.delegateCallsCount, 1)
+            XCTAssertEqual(uid, self.dataProvider.lastDeleteCallParameter)
+            XCTAssertEqual(1, self.dataProvider.deleteCallsCount)
+            XCTAssertEqual(1, delegate.delegateCallsCount)
         }
     }
 }

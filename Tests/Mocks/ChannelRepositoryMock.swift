@@ -11,9 +11,11 @@
 class ChannelRepositoryMock: ChannelRepository {
     var delegate: ChannelRepositoryDelegate?
     var addCallsCount: Int = 0
+    var addLastCallParameter: [Channel] = []
     
     func add(channels: [Channel], completion: @escaping (Error?) -> Void) {
         addCallsCount += 1
+        addLastCallParameter = channels
         completion(nil)
     }
 
