@@ -13,4 +13,9 @@ target 't-chat' do
       inherit! :search_paths
       pod 'Firebase/Firestore'
   end
+  
+  target 'UITests' do
+      inherit! :search_paths
+      pod 'Firebase/Firestore'
+  end
 end

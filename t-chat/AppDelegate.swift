@@ -25,7 +25,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, StateLoggable {
         let window = UIWindow(frame: UIScreen.main.bounds)
         let root = RootAssembly()
         
-        window.rootViewController = root.presentationAssembly.rootNavigator.navigationController
+        #if DEBUG
+        if let startScreen = ProcessInfo.processInfo.environment["screenToLaunch"] {
+            window.rootViewController = root.presentationAssembly.createRootViewController(
+                withStartScreen: AvailableScreen(rawValue: startScreen) ?? AvailableScreen.conversationsList)
+        } else {
+            window.rootViewController = root.presentationAssembly.createRootViewController(withStartScreen: .conversationsList)
+        }
+        #endif
         
         window.makeKeyAndVisible()
         

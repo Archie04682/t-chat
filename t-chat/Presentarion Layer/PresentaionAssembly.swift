@@ -9,7 +9,9 @@
 import UIKit
 
 protocol PresentationAssembly: AnyObject {
-    var rootNavigator: RootNavigator { get }
+    
+    func createRootViewController(withStartScreen screen: AvailableScreen) -> UINavigationController
+    
 }
 
 final class PresentationAssemblyImplementation: PresentationAssembly {
@@ -21,11 +23,23 @@ final class PresentationAssemblyImplementation: PresentationAssembly {
         self.serviceAssembly = serviceAssembly
         self.rootNavigator = RootNavigator(navigationController: UINavigationController())
         
-        rootNavigator.navigationController.viewControllers = [conversationsListViewController()]
         rootNavigator.createConversationView = conversationViewController(for:)
         rootNavigator.createSettingsView = themesViewController
         rootNavigator.createProfileView = profileViewController
         rootNavigator.createNetworkImagesView = networkImagesViewController
+    }
+    
+    func createRootViewController(withStartScreen screen: AvailableScreen = .conversationsList) -> UINavigationController {
+        switch screen {
+        case .themes:
+            rootNavigator.navigationController.viewControllers = [themesViewController()]
+        case .profile:
+            rootNavigator.navigationController.viewControllers = [profileViewController()]
+        default:
+            rootNavigator.navigationController.viewControllers = [conversationsListViewController()]
+        }
+        
+        return rootNavigator.navigationController
     }
     
     private func conversationsListViewController() -> ConversationsListViewController {
@@ -58,4 +72,10 @@ final class PresentationAssemblyImplementation: PresentationAssembly {
     private func networkImagesViewController() -> NetworkImagesViewController {
         return NetworkImagesViewController(networkImageService: self.serviceAssembly.networkImageService, themeManager: self.serviceAssembly.themeManager)
     }
+}
+
+enum AvailableScreen: String {
+    case conversationsList = "conversations"
+    case profile = "profile"
+    case themes = "themes"
 }
