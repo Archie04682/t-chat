@@ -30,7 +30,7 @@ class ChannelServiceTests: XCTestCase {
             }
             
             XCTAssertEqual(rightParameter, self.dataProvider.addLastCallParameter)
-            XCTAssertEqual(self.dataProvider.addCallsCount, 1)
+            XCTAssertEqual(1, self.dataProvider.addCallsCount)
         }
     }
     

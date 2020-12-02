@@ -44,6 +44,9 @@
 		FC47AEB025603D9000EF69A4 /* TextViewWithPlaceholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC47AEAF25603D9000EF69A4 /* TextViewWithPlaceholder.swift */; };
 		FC47AEB22560416400EF69A4 /* RepeatableAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC47AEB12560416400EF69A4 /* RepeatableAlert.swift */; };
 		FC4C599625208654008F72C2 /* ConversationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4C599525208654008F72C2 /* ConversationViewController.swift */; };
+		FC4F7546257811C5001FE089 /* ProfileServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4F7545257811C5001FE089 /* ProfileServiceTests.swift */; };
+		FC4F754825781237001FE089 /* ProfileManagerFactoryMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4F754725781237001FE089 /* ProfileManagerFactoryMock.swift */; };
+		FC4F754A257813D7001FE089 /* ProfileServiceDelegateMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4F7549257813D7001FE089 /* ProfileServiceDelegateMock.swift */; };
 		FC4F8B60255022C00054F31F /* ErrorOccuredView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4F8B5F255022C00054F31F /* ErrorOccuredView.swift */; };
 		FC5370362520B58700653A19 /* ConversationMessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC5370352520B58700653A19 /* ConversationMessageTableViewCell.swift */; };
 		FC5370382520D42300653A19 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC5370372520D42300653A19 /* ProfileViewController.swift */; };
@@ -157,6 +160,9 @@
 		FC47AEAF25603D9000EF69A4 /* TextViewWithPlaceholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextViewWithPlaceholder.swift; sourceTree = "<group>"; };
 		FC47AEB12560416400EF69A4 /* RepeatableAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepeatableAlert.swift; sourceTree = "<group>"; };
 		FC4C599525208654008F72C2 /* ConversationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationViewController.swift; sourceTree = "<group>"; };
+		FC4F7545257811C5001FE089 /* ProfileServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileServiceTests.swift; sourceTree = "<group>"; };
+		FC4F754725781237001FE089 /* ProfileManagerFactoryMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileManagerFactoryMock.swift; sourceTree = "<group>"; };
+		FC4F7549257813D7001FE089 /* ProfileServiceDelegateMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileServiceDelegateMock.swift; sourceTree = "<group>"; };
 		FC4F8B5F255022C00054F31F /* ErrorOccuredView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorOccuredView.swift; sourceTree = "<group>"; };
 		FC5370352520B58700653A19 /* ConversationMessageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationMessageTableViewCell.swift; sourceTree = "<group>"; };
 		FC5370372520D42300653A19 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
@@ -620,6 +626,7 @@
 			children = (
 				FCA038652575500A0099080A /* PixabayJsonParserTests.swift */,
 				FCA0386725755BEA0099080A /* ChannelServiceTests.swift */,
+				FC4F7545257811C5001FE089 /* ProfileServiceTests.swift */,
 			);
 			path = "Service Layer";
 			sourceTree = "<group>";
@@ -630,6 +637,8 @@
 				FCA0386A25755D410099080A /* ChannelRepositoryMock.swift */,
 				FCA0386C2575602B0099080A /* ChannelDataProviderMock.swift */,
 				FCA0386E25756D820099080A /* ChannelServiceDelegateMock.swift */,
+				FC4F754725781237001FE089 /* ProfileManagerFactoryMock.swift */,
+				FC4F7549257813D7001FE089 /* ProfileServiceDelegateMock.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -1042,7 +1051,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				FCA0386D2575602B0099080A /* ChannelDataProviderMock.swift in Sources */,
+				FC4F7546257811C5001FE089 /* ProfileServiceTests.swift in Sources */,
 				FCA038662575500A0099080A /* PixabayJsonParserTests.swift in Sources */,
+				FC4F754825781237001FE089 /* ProfileManagerFactoryMock.swift in Sources */,
+				FC4F754A257813D7001FE089 /* ProfileServiceDelegateMock.swift in Sources */,
 				FCA0386B25755D410099080A /* ChannelRepositoryMock.swift in Sources */,
 				FCA0386F25756D820099080A /* ChannelServiceDelegateMock.swift in Sources */,
 				FCA0386825755BEA0099080A /* ChannelServiceTests.swift in Sources */,
