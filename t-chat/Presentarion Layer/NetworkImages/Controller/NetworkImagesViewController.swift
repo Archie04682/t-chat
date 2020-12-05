@@ -10,7 +10,6 @@ import UIKit
 import Network
 
 class NetworkImagesViewController: UIViewController {
-    private let apiKey = "19163487-f1fd170fca1ad072fa2f4a91c"
     private let themeManager: ThemeManager
     private let networkImageService: NetworkImageService
     
