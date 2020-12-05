@@ -2,6 +2,20 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>DATABASE_URL</key>
+	<string>https://$(FIREBASE_DATABASE_URL)</string>
+	<key>GCM_SENDER_ID</key>
+	<string>$(FIREBASE_GCM_SENDER_ID)</string>
+	<key>API_KEY</key>
+	<string>$(FIREBASE_API_KEY)</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>$(FIREBASE_REVERSED_CLIENT_ID)</string>
+	<key>CLIENT_ID</key>
+	<string>$(FIREBASE_CLIENT_ID)</string>
+	<key>Pixabay Api Key</key>
+	<string>$(PIXABAY_API_KEY)</string>
+	<key>Pixabay Api</key>
+	<string>https://$(PIXABAY_API)</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>

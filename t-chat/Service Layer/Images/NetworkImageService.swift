@@ -20,17 +20,24 @@ protocol NetworkImageService {
 final class PixabayImageService: NetworkImageService {
     private let networkProvider: NetworkProvider
     private let parser: Parser
+    private let configurationService: ConfigurationService
     
-    private let apiKey = "19163487-f1fd170fca1ad072fa2f4a91c"
-    
-    init(networkProvider: NetworkProvider, parser: Parser) {
+    init(networkProvider: NetworkProvider, parser: Parser, configurationService: ConfigurationService) {
         self.networkProvider = networkProvider
         self.parser = parser
+        self.configurationService = configurationService
     }
     
     func get(limit: Int,
              withTags tags: [String]? = [],
              completion: @escaping (Result<[NetworkPhoto], Error>) -> Void) {
+        
+        guard let apiURL = configurationService.get(forKey: PixabayConfigurationSettings.api.rawValue) as? String,
+            let apiKey = configurationService.get(forKey: PixabayConfigurationSettings.apiKey.rawValue) as? String else {
+                completion(.failure(ConfigurationServiceError.missingKey))
+                return
+        }
+        
         var queryParams = [URLQueryItem(name: "key", value: apiKey),
                            URLQueryItem(name: "image_type", value: "photo"),
                            URLQueryItem(name: "per_page", value: "\(limit)")]
@@ -39,7 +46,7 @@ final class PixabayImageService: NetworkImageService {
             queryParams.append(URLQueryItem(name: "q", value: tags.joined(separator: "+")))
         }
         
-        var components = URLComponents(string: "https://pixabay.com/api/")
+        var components = URLComponents(string: apiURL)
         
         components?.queryItems = queryParams
         
