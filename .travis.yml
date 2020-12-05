@@ -2,5 +2,6 @@ language: swift
 osx_image: xcode11.6
 install: 
   - bundle install
+  - brew install libsodium
 script:
   - bundle exec fastlane build_and_test
