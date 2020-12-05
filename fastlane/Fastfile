@@ -1,0 +1,54 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+platform :ios do
+  desc "Install dependencies and build application for testing. Do not run tests."
+  lane :build_for_testing do
+
+    cocoapods(
+      clean_install: true
+    )
+
+    scan(
+      clean: true, 
+      build_for_testing: true,
+      scheme: 't-chat'
+    )
+
+  end
+
+  desc "Perform unit and UI testing"
+  lane :run_application_tests do
+
+    scan(
+      test_without_building: true,
+      device: 'iPhone 11 Pro',
+      scheme: 't-chat',
+    )
+
+  end
+
+  desc "Restores Pods, build project and run tests"
+  lane :build_and_test do
+
+    build_for_testing
+
+    run_application_tests
+    
+  end
+
+end
