@@ -58,22 +58,23 @@ platform :ios do
       UI.error(ex)
     end
 
-    discord_notifier(
-      webhook_url: ENV["DISCORD_URL"],
-      title: "t-chat CI Success",
-      description: "Build and tests passes",
-      success: true
-    )
+    puts ENV["MSG"]
+    # discord_notifier(
+    #   webhook_url: ENV["DISCORD_URL"],
+    #   title: "t-chat CI Success",
+    #   description: "Build and tests passes",
+    #   success: true
+    # )
 
   end
 
   error do |lane, exception|
-    discord_notifier(
-      webhook_url: ENV["DISCORD_URL"],
-      title: "t-chat CI Failed",
-      description: "Lane: #{lane} - Exception: #{exception}",
-      success: false
-    )
+    # discord_notifier(
+    #   webhook_url: ENV["DISCORD_URL"],
+    #   title: "t-chat CI Failed",
+    #   description: "Lane: #{lane} - Exception: #{exception}",
+    #   success: false
+    # )
   end
 
 end
