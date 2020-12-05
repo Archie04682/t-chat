@@ -16,16 +16,6 @@ or alternatively using `brew install fastlane`
 
 # Available Actions
 ## iOS
-### ios build_for_testing
-```
-fastlane ios build_for_testing
-```
-Install dependencies and build application for testing. Do not run tests.
-### ios run_application_tests
-```
-fastlane ios run_application_tests
-```
-Perform unit and UI testing
 ### ios build_and_test
 ```
 fastlane ios build_and_test

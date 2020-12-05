@@ -17,7 +17,7 @@ default_platform(:ios)
 
 platform :ios do
   desc "Install dependencies and build application for testing. Do not run tests."
-  lane :build_for_testing do
+  private_lane :build_for_testing do
 
     cocoapods(
       clean_install: true
@@ -32,7 +32,7 @@ platform :ios do
   end
 
   desc "Perform unit and UI testing"
-  lane :run_application_tests do
+  private_lane :run_application_tests do
 
     scan(
       test_without_building: true,
@@ -45,10 +45,34 @@ platform :ios do
   desc "Restores Pods, build project and run tests"
   lane :build_and_test do
 
-    build_for_testing
+    begin
+      build_for_testing
+    rescue => ex
+      UI.error(ex)
+    end
 
-    run_application_tests
+    begin
+      run_application_tests
+    rescue => ex
+      UI.error(ex)
+    end
+
+    discord_notifier(
+      webhook_url: ENV["DISCORD_URL"],
+      title: "t-chat CI Success",
+      description: "Build and tests passes",
+      success: true
+    )
     
+  end
+
+  error do |lane, exception|
+    discord_notifier(
+      webhook_url: ENV["DISCORD_URL"],
+      title: "t-chat CI Failed",
+      description: "Lane: #{lane} - Exception: #{exception}",
+      success: false
+    )
   end
 
 end
