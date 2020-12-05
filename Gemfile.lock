@@ -230,6 +230,8 @@ GEM
       CFPropertyList
       naturally
     slack-notifier (2.3.2)
+    sodium (0.7.1)
+      ffi (~> 1)
     terminal-notifier (2.0.0)
     terminal-table (1.8.0)
       unicode-display_width (~> 1.1, >= 1.1.1)
@@ -270,6 +272,7 @@ DEPENDENCIES
   cocoapods
   fastlane
   fastlane-plugin-discord_notifier
+  sodium
 
 BUNDLED WITH
    2.1.4
