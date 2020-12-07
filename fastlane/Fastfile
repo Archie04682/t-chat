@@ -50,15 +50,18 @@ platform :ios do
       build_for_testing
     rescue => ex
       UI.error(ex)
+      next
     end
 
     begin
       run_application_tests
     rescue => ex
       UI.error(ex)
+      next
     end
 
     puts ENV["MSG"]
+    puts "Success"
     # discord_notifier(
     #   webhook_url: ENV["DISCORD_URL"],
     #   title: "t-chat CI Success",
