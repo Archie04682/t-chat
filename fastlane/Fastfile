@@ -18,7 +18,7 @@ default_platform(:ios)
 
 platform :ios do
   desc "Install dependencies and build application for testing. Do not run tests."
-  private_lane :build_for_testing do
+  lane :build_for_testing do
 
     cocoapods(
       clean_install: true
@@ -33,7 +33,7 @@ platform :ios do
   end
 
   desc "Perform unit and UI testing"
-  private_lane :run_application_tests do
+  lane :run_application_tests do
 
     scan(
       test_without_building: true,
@@ -45,6 +45,8 @@ platform :ios do
 
   desc "Restores Pods, build project and run tests. Sends notification to Discord on success. On error includes lane and error text"
   lane :build_and_test do
+
+    message = last_git_commit[:message]
 
     begin
       build_for_testing
@@ -60,24 +62,26 @@ platform :ios do
       next
     end
 
-    puts ENV["MSG"]
-    puts "Success"
-    # discord_notifier(
-    #   webhook_url: ENV["DISCORD_URL"],
-    #   title: "t-chat CI Success",
-    #   description: "Build and tests passes",
-    #   success: true
-    # )
+    if ENV["DISCORD_URL"] 
+      discord_notifier(
+        webhook_url: ENV["DISCORD_URL"],
+        title: "t-chat CI",
+        description: "Commit: #{message}. Status: SUCCESS.",
+        success: true
+      )
+    end
 
   end
 
   error do |lane, exception|
-    # discord_notifier(
-    #   webhook_url: ENV["DISCORD_URL"],
-    #   title: "t-chat CI Failed",
-    #   description: "Lane: #{lane} - Exception: #{exception}",
-    #   success: false
-    # )
+    if ENV["DISCORD_URL"]
+      discord_notifier(
+        webhook_url: ENV["DISCORD_URL"],
+        title: "t-chat CI",
+        description: "Lane: #{lane}. Commit: #{message}. Exception: #{exception}. Status: FAILED.",
+        success: false
+      )
+    end
   end
 
 end
