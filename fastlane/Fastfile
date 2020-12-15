@@ -1,0 +1,87 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+setup_travis
+default_platform(:ios)
+
+platform :ios do
+  desc "Install dependencies and build application for testing. Do not run tests."
+  lane :build_for_testing do
+
+    cocoapods(
+      clean_install: true
+    )
+
+    scan(
+      clean: true, 
+      build_for_testing: true,
+      scheme: 't-chat'
+    )
+
+  end
+
+  desc "Perform unit and UI testing"
+  lane :run_application_tests do
+
+    scan(
+      test_without_building: true,
+      device: 'iPhone 11 Pro',
+      scheme: 't-chat',
+    )
+
+  end
+
+  desc "Restores Pods, build project and run tests. Sends notification to Discord on success. On error includes lane and error text"
+  lane :build_and_test do
+
+    message = last_git_commit[:message]
+
+    begin
+      build_for_testing
+    rescue => ex
+      UI.error(ex)
+      next
+    end
+
+    begin
+      run_application_tests
+    rescue => ex
+      UI.error(ex)
+      next
+    end
+
+    if ENV["DISCORD_URL"] 
+      discord_notifier(
+        webhook_url: ENV["DISCORD_URL"],
+        title: "t-chat CI",
+        description: "Commit: #{message}. Status: SUCCESS.",
+        success: true
+      )
+    end
+
+  end
+
+  error do |lane, exception|
+    if ENV["DISCORD_URL"]
+      discord_notifier(
+        webhook_url: ENV["DISCORD_URL"],
+        title: "t-chat CI",
+        description: "Lane: #{lane}. Commit: #{message}. Exception: #{exception}. Status: FAILED.",
+        success: false
+      )
+    end
+  end
+
+end

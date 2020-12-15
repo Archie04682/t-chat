@@ -134,4 +134,10 @@ iOSInjectionProject/
 !*.xcworkspace/contents.xcworkspacedata
 **/xcshareddata/WorkspaceSettings.xcsettings
 
+### Configuration ###
+# ignore Private.debug/release xcconfig files
+**/Private.*
+
 # End of https://www.toptal.com/developers/gitignore/api/xcode,swift,macos
+
+secrets

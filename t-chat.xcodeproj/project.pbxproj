@@ -68,6 +68,7 @@
 		FC7C00DC253236D000C3DCAE /* UserProfileDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7C00DB253236D000C3DCAE /* UserProfileDataManager.swift */; };
 		FC82CC6E2519C9190041DFAE /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC82CC6D2519C9190041DFAE /* ImagePicker.swift */; };
 		FC82CC742519D9DE0041DFAE /* ProfileImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC82CC732519D9DE0041DFAE /* ProfileImageView.swift */; };
+		FC93C540257BF2D100CEDA7C /* ConfigurationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC93C53F257BF2D100CEDA7C /* ConfigurationService.swift */; };
 		FC94E5EC25286999000F09BE /* ThemesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC94E5EB25286999000F09BE /* ThemesViewController.swift */; };
 		FC94E5EF25286B1C000F09BE /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC94E5EE25286B1C000F09BE /* Theme.swift */; };
 		FC94E5F525287DB0000F09BE /* ThemeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC94E5F425287DB0000F09BE /* ThemeView.swift */; };
@@ -184,6 +185,11 @@
 		FC7C00DB253236D000C3DCAE /* UserProfileDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileDataManager.swift; sourceTree = "<group>"; };
 		FC82CC6D2519C9190041DFAE /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		FC82CC732519D9DE0041DFAE /* ProfileImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageView.swift; sourceTree = "<group>"; };
+		FC93C533257BE45F00CEDA7C /* Complete.debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Complete.debug.xcconfig; sourceTree = "<group>"; };
+		FC93C53B257BEACA00CEDA7C /* Complete.release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Complete.release.xcconfig; sourceTree = "<group>"; };
+		FC93C53D257BEE8300CEDA7C /* Private.release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Private.release.xcconfig; sourceTree = "<group>"; };
+		FC93C53E257BEF2100CEDA7C /* Private.debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Private.debug.xcconfig; sourceTree = "<group>"; };
+		FC93C53F257BF2D100CEDA7C /* ConfigurationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationService.swift; sourceTree = "<group>"; };
 		FC94E5EB25286999000F09BE /* ThemesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemesViewController.swift; sourceTree = "<group>"; };
 		FC94E5EE25286B1C000F09BE /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		FC94E5F425287DB0000F09BE /* ThemeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeView.swift; sourceTree = "<group>"; };
@@ -307,6 +313,7 @@
 		FC0BA0D7250B7A68005AE946 /* t-chat */ = {
 			isa = PBXGroup;
 			children = (
+				FC93C538257BEA4D00CEDA7C /* Configuration */,
 				FC466E90255DF0E000BC1204 /* Presentarion Layer */,
 				FC466E79255DB8E000BC1204 /* Service Layer */,
 				FC466E76255DB4F300BC1204 /* Core Layer */,
@@ -453,6 +460,7 @@
 				FC466E7A255DB8EE00BC1204 /* ChannelService.swift */,
 				FC466E82255DE02400BC1204 /* MessageService.swift */,
 				FC466E8E255DED5200BC1204 /* ProfileService.swift */,
+				FC93C53F257BF2D100CEDA7C /* ConfigurationService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -609,6 +617,33 @@
 				FC6D49552547F27200DA09B7 /* MessageEntityExtensions.swift */,
 			);
 			path = CoreData;
+			sourceTree = "<group>";
+		};
+		FC93C538257BEA4D00CEDA7C /* Configuration */ = {
+			isa = PBXGroup;
+			children = (
+				FC93C539257BEA5E00CEDA7C /* Debug */,
+				FC93C53A257BEA6300CEDA7C /* Release */,
+			);
+			path = Configuration;
+			sourceTree = "<group>";
+		};
+		FC93C539257BEA5E00CEDA7C /* Debug */ = {
+			isa = PBXGroup;
+			children = (
+				FC93C533257BE45F00CEDA7C /* Complete.debug.xcconfig */,
+				FC93C53E257BEF2100CEDA7C /* Private.debug.xcconfig */,
+			);
+			path = Debug;
+			sourceTree = "<group>";
+		};
+		FC93C53A257BEA6300CEDA7C /* Release */ = {
+			isa = PBXGroup;
+			children = (
+				FC93C53B257BEACA00CEDA7C /* Complete.release.xcconfig */,
+				FC93C53D257BEE8300CEDA7C /* Private.release.xcconfig */,
+			);
+			path = Release;
 			sourceTree = "<group>";
 		};
 		FCA0385B25754ECE0099080A /* Tests */ = {
@@ -1016,6 +1051,7 @@
 				FC0BA0F4250B9DEA005AE946 /* StateLoggable.swift in Sources */,
 				FCD18AC3256551C100B92F3A /* NetworkProvider.swift in Sources */,
 				FC3811C22530E23F00AB796C /* BackdropWithLoading.swift in Sources */,
+				FC93C540257BF2D100CEDA7C /* ConfigurationService.swift in Sources */,
 				FC466E95255DF41500BC1204 /* PresentaionAssembly.swift in Sources */,
 				FC6D494F2547E9DE00DA09B7 /* MessageEntity+CoreDataClass.swift in Sources */,
 				FC6D49562547F27200DA09B7 /* MessageEntityExtensions.swift in Sources */,
@@ -1212,7 +1248,7 @@
 		};
 		FC0BA0EA250B7A69005AE946 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4F025F7F1F448820860C5050 /* Pods-t-chat.debug.xcconfig */;
+			baseConfigurationReference = FC93C533257BE45F00CEDA7C /* Complete.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -1232,7 +1268,7 @@
 		};
 		FC0BA0EB250B7A69005AE946 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = ED375F2916F152718D98BD78 /* Pods-t-chat.release.xcconfig */;
+			baseConfigurationReference = FC93C53B257BEACA00CEDA7C /* Complete.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;

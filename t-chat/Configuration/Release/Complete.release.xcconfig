@@ -1,0 +1,15 @@
+//
+//  Complete.release.xcconfig
+//  t-chat
+//
+//  Created by Артур Гнедой on 05.12.2020.
+//  Copyright © 2020 Артур Гнедой. All rights reserved.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+#include "../../../Pods/Target Support Files/Pods-t-chat/Pods-t-chat.release.xcconfig"
+#include "Private.release.xcconfig"
+
+PIXABAY_API = pixabay.com/api

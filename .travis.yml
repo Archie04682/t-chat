@@ -1,0 +1,13 @@
+language: swift
+osx_image: xcode11.6
+before_install:
+  - openssl aes-256-cbc -K $encrypted_fe86558143c0_key -iv $encrypted_fe86558143c0_iv -in secrets.enc -out t-chat/Configuration/Debug/Private.debug.xcconfig -d
+  - openssl aes-256-cbc -K $encrypted_fe86558143c0_key -iv $encrypted_fe86558143c0_iv -in secrets.enc -out t-chat/Configuration/Release/Private.release.xcconfig -d
+install: 
+  - bundle install
+  - brew install libsodium
+script:
+  - bundle exec fastlane build_and_test
+after_script:
+  - rm -f t-chat/Configuration/Debug/Private.debug.xcconfig
+  - rm -f t-chat/Configuration/Release/Private.release.xcconfig

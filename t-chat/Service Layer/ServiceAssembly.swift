@@ -41,5 +41,7 @@ final class ServiceAssemblyImplementation: ServiceAssembly {
     
     lazy var imagePicker: ImagePicker = LocalImagePicker(imageManager: self.coreAssembly.imageManager)
     
-    lazy var networkImageService: NetworkImageService = PixabayImageService(networkProvider: self.coreAssembly.networkProvider, parser: PixabayParser())
+    lazy var networkImageService: NetworkImageService = PixabayImageService(networkProvider: self.coreAssembly.networkProvider,
+                                                                            parser: PixabayParser(),
+                                                                            configurationService: DefaultConfigurationService())
 }
