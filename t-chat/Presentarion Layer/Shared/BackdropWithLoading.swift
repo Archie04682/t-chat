@@ -8,7 +8,7 @@
 
 import UIKit
 
-class Backdrop: UIView {
+class BackdropWithLoading: UIView {
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -22,6 +22,14 @@ class Backdrop: UIView {
     
     private func setupView() {
         backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.15)
+        let activityIndicator = UIActivityIndicatorView(style: .gray)
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.color = .red
+        activityIndicator.startAnimating()
+        
+        addSubview(activityIndicator)
+        activityIndicator.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        activityIndicator.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
     }
 
 }

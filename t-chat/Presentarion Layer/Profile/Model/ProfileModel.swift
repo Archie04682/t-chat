@@ -60,7 +60,7 @@ class ProfileModel {
                         self.userProfile.setValue(forKey: item.key, value: item.value)
                         self.changedData.removeValue(forKey: item.key)
                     }
-                    print(self.userProfile)
+                    
                     self.delegate?.didUpdate(provider: type, userProfile: self.userProfile, failToUpdateProperties: failedProperties)
                 }
             }

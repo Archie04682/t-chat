@@ -18,11 +18,14 @@
 		FC1C9A29253B694C00CC9A42 /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC1C9A28253B694C00CC9A42 /* Channel.swift */; };
 		FC1C9A2D253B6A0100CC9A42 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC1C9A2C253B6A0100CC9A42 /* Message.swift */; };
 		FC249E2B253572AB00DE093E /* ProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC249E2A253572AB00DE093E /* ProfileModel.swift */; };
+		FC2F41F3256637BF000C6416 /* NavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2F41F2256637BF000C6416 /* NavigationViewController.swift */; };
+		FC2F41F525663FCA000C6416 /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2F41F425663FCA000C6416 /* ActionButton.swift */; };
 		FC32038F2519E394000C2DD9 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC32038E2519E394000C2DD9 /* UserProfile.swift */; };
 		FC3203912519ED26000C2DD9 /* StateLoggingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3203902519ED26000C2DD9 /* StateLoggingViewController.swift */; };
-		FC3811C22530E23F00AB796C /* Backdrop.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3811C12530E23F00AB796C /* Backdrop.swift */; };
+		FC3811C22530E23F00AB796C /* BackdropWithLoading.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3811C12530E23F00AB796C /* BackdropWithLoading.swift */; };
 		FC3811C82530F3DF00AB796C /* GCDUserProfileDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3811C72530F3DF00AB796C /* GCDUserProfileDataManager.swift */; };
 		FC3859BD255FCFB800B771D5 /* Navigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3859BC255FCFB800B771D5 /* Navigator.swift */; };
+		FC3A5DCC256687D6000DD9E4 /* CloseModalButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3A5DCB256687D6000DD9E4 /* CloseModalButton.swift */; };
 		FC466E78255DB5B500BC1204 /* FirestoreChannelProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC466E77255DB5B500BC1204 /* FirestoreChannelProvider.swift */; };
 		FC466E7B255DB8EE00BC1204 /* ChannelService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC466E7A255DB8EE00BC1204 /* ChannelService.swift */; };
 		FC466E7F255DBAB300BC1204 /* ObjectChanges.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC466E7E255DBAB300BC1204 /* ObjectChanges.swift */; };
@@ -69,6 +72,13 @@
 		FC98763C253EA65A0037EBFE /* AddNewChannelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC98763B253EA65A0037EBFE /* AddNewChannelViewController.swift */; };
 		FCAC8A8C251E60960085E686 /* ConfigurableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCAC8A8B251E60960085E686 /* ConfigurableView.swift */; };
 		FCC7DA312529AE0D006B5A71 /* ThemeSelectionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC7DA302529AE0D006B5A71 /* ThemeSelectionButton.swift */; };
+		FCD18ABB25652B8F00B92F3A /* NetworkImagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD18ABA25652B8F00B92F3A /* NetworkImagesViewController.swift */; };
+		FCD18ABD2565311800B92F3A /* NetworkPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD18ABC2565311800B92F3A /* NetworkPhoto.swift */; };
+		FCD18AC025653FBA00B92F3A /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD18ABF25653FBA00B92F3A /* PhotoCell.swift */; };
+		FCD18AC3256551C100B92F3A /* NetworkProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD18AC2256551C100B92F3A /* NetworkProvider.swift */; };
+		FCD18AC52565535E00B92F3A /* NetworkImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD18AC42565535E00B92F3A /* NetworkImageService.swift */; };
+		FCD18AC825655CCD00B92F3A /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD18AC725655CCD00B92F3A /* Parser.swift */; };
+		FCD18ACA2565654000B92F3A /* NetworkImagesViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD18AC92565654000B92F3A /* NetworkImagesViewDelegate.swift */; };
 		FCEE4B3D251D151A00911B5C /* ConversationsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCEE4B3C251D151A00911B5C /* ConversationsListViewController.swift */; };
 		FCEE4B42251D267C00911B5C /* ConversationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCEE4B41251D267C00911B5C /* ConversationTableViewCell.swift */; };
 /* End PBXBuildFile section */
@@ -89,11 +99,14 @@
 		FC1C9A28253B694C00CC9A42 /* Channel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Channel.swift; sourceTree = "<group>"; };
 		FC1C9A2C253B6A0100CC9A42 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		FC249E2A253572AB00DE093E /* ProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileModel.swift; sourceTree = "<group>"; };
+		FC2F41F2256637BF000C6416 /* NavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationViewController.swift; sourceTree = "<group>"; };
+		FC2F41F425663FCA000C6416 /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
 		FC32038E2519E394000C2DD9 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		FC3203902519ED26000C2DD9 /* StateLoggingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateLoggingViewController.swift; sourceTree = "<group>"; };
-		FC3811C12530E23F00AB796C /* Backdrop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Backdrop.swift; sourceTree = "<group>"; };
+		FC3811C12530E23F00AB796C /* BackdropWithLoading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackdropWithLoading.swift; sourceTree = "<group>"; };
 		FC3811C72530F3DF00AB796C /* GCDUserProfileDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GCDUserProfileDataManager.swift; sourceTree = "<group>"; };
 		FC3859BC255FCFB800B771D5 /* Navigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Navigator.swift; sourceTree = "<group>"; };
+		FC3A5DCB256687D6000DD9E4 /* CloseModalButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloseModalButton.swift; sourceTree = "<group>"; };
 		FC466E77255DB5B500BC1204 /* FirestoreChannelProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreChannelProvider.swift; sourceTree = "<group>"; };
 		FC466E7A255DB8EE00BC1204 /* ChannelService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelService.swift; sourceTree = "<group>"; };
 		FC466E7E255DBAB300BC1204 /* ObjectChanges.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectChanges.swift; sourceTree = "<group>"; };
@@ -140,6 +153,13 @@
 		FC98763B253EA65A0037EBFE /* AddNewChannelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewChannelViewController.swift; sourceTree = "<group>"; };
 		FCAC8A8B251E60960085E686 /* ConfigurableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurableView.swift; sourceTree = "<group>"; };
 		FCC7DA302529AE0D006B5A71 /* ThemeSelectionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSelectionButton.swift; sourceTree = "<group>"; };
+		FCD18ABA25652B8F00B92F3A /* NetworkImagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkImagesViewController.swift; sourceTree = "<group>"; };
+		FCD18ABC2565311800B92F3A /* NetworkPhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkPhoto.swift; sourceTree = "<group>"; };
+		FCD18ABF25653FBA00B92F3A /* PhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
+		FCD18AC2256551C100B92F3A /* NetworkProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkProvider.swift; sourceTree = "<group>"; };
+		FCD18AC42565535E00B92F3A /* NetworkImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkImageService.swift; sourceTree = "<group>"; };
+		FCD18AC725655CCD00B92F3A /* Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
+		FCD18AC92565654000B92F3A /* NetworkImagesViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkImagesViewDelegate.swift; sourceTree = "<group>"; };
 		FCEE4B3C251D151A00911B5C /* ConversationsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsListViewController.swift; sourceTree = "<group>"; };
 		FCEE4B41251D267C00911B5C /* ConversationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -231,6 +251,7 @@
 				FC94E5EE25286B1C000F09BE /* Theme.swift */,
 				FC1C9A28253B694C00CC9A42 /* Channel.swift */,
 				FC1C9A2C253B6A0100CC9A42 /* Message.swift */,
+				FCD18ABC2565311800B92F3A /* NetworkPhoto.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -239,6 +260,7 @@
 			isa = PBXGroup;
 			children = (
 				FC3859BC255FCFB800B771D5 /* Navigator.swift */,
+				FC2F41F2256637BF000C6416 /* NavigationViewController.swift */,
 			);
 			path = Navigation;
 			sourceTree = "<group>";
@@ -276,11 +298,12 @@
 				FC0BA0F3250B9DEA005AE946 /* StateLoggable.swift */,
 				FC3203902519ED26000C2DD9 /* StateLoggingViewController.swift */,
 				FC4F8B5F255022C00054F31F /* ErrorOccuredView.swift */,
-				FC3811C12530E23F00AB796C /* Backdrop.swift */,
+				FC3811C12530E23F00AB796C /* BackdropWithLoading.swift */,
 				FC94E5F62528808D000F09BE /* MessageView.swift */,
 				FCAC8A8B251E60960085E686 /* ConfigurableView.swift */,
 				FC82CC732519D9DE0041DFAE /* ProfileImageView.swift */,
 				FC47AEB12560416400EF69A4 /* RepeatableAlert.swift */,
+				FC3A5DCB256687D6000DD9E4 /* CloseModalButton.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -302,9 +325,19 @@
 			path = Themes;
 			sourceTree = "<group>";
 		};
+		FC3A5DCD2566A599000DD9E4 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				FCD18ABA25652B8F00B92F3A /* NetworkImagesViewController.swift */,
+				FCD18AC92565654000B92F3A /* NetworkImagesViewDelegate.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
 		FC466E76255DB4F300BC1204 /* Core Layer */ = {
 			isa = PBXGroup;
 			children = (
+				FCD18AC12565519A00B92F3A /* Networking */,
 				FC47AEA92560396100EF69A4 /* Images */,
 				FC466E8D255DEC9900BC1204 /* Profile */,
 				FC4C1EB72549637800F76A6B /* Firebase */,
@@ -317,6 +350,7 @@
 		FC466E79255DB8E000BC1204 /* Service Layer */ = {
 			isa = PBXGroup;
 			children = (
+				FCD18AC625655ABD00B92F3A /* JsonUtilities */,
 				FC47AEAA2560397600EF69A4 /* Images */,
 				FC3859C32560042A00B771D5 /* Themes */,
 				FC466E7D255DBAA800BC1204 /* Shared */,
@@ -359,6 +393,7 @@
 		FC466E90255DF0E000BC1204 /* Presentarion Layer */ = {
 			isa = PBXGroup;
 			children = (
+				FCD18AB925652B5900B92F3A /* NetworkImages */,
 				FC47AEAB25603C0700EF69A4 /* Profile */,
 				FC3859C1256003CE00B771D5 /* Shared */,
 				FC3859BE255FF93200B771D5 /* Themes */,
@@ -433,6 +468,7 @@
 			isa = PBXGroup;
 			children = (
 				FC82CC6D2519C9190041DFAE /* ImagePicker.swift */,
+				FCD18AC42565535E00B92F3A /* NetworkImageService.swift */,
 			);
 			path = Images;
 			sourceTree = "<group>";
@@ -451,6 +487,7 @@
 			isa = PBXGroup;
 			children = (
 				FC47AEAD25603C3500EF69A4 /* StyledLabel.swift */,
+				FC2F41F425663FCA000C6416 /* ActionButton.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -492,6 +529,39 @@
 				FC6D49552547F27200DA09B7 /* MessageEntityExtensions.swift */,
 			);
 			path = CoreData;
+			sourceTree = "<group>";
+		};
+		FCD18AB925652B5900B92F3A /* NetworkImages */ = {
+			isa = PBXGroup;
+			children = (
+				FC3A5DCD2566A599000DD9E4 /* Controller */,
+				FCD18ABE25653F9A00B92F3A /* Views */,
+			);
+			path = NetworkImages;
+			sourceTree = "<group>";
+		};
+		FCD18ABE25653F9A00B92F3A /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				FCD18ABF25653FBA00B92F3A /* PhotoCell.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		FCD18AC12565519A00B92F3A /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				FCD18AC2256551C100B92F3A /* NetworkProvider.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		FCD18AC625655ABD00B92F3A /* JsonUtilities */ = {
+			isa = PBXGroup;
+			children = (
+				FCD18AC725655CCD00B92F3A /* Parser.swift */,
+			);
+			path = JsonUtilities;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -640,12 +710,14 @@
 				FC6D49542547F16A00DA09B7 /* ChannelEntityExtensions.swift in Sources */,
 				FC82CC742519D9DE0041DFAE /* ProfileImageView.swift in Sources */,
 				FC6D49582548281700DA09B7 /* ChannelsRepository.swift in Sources */,
+				FCD18AC025653FBA00B92F3A /* PhotoCell.swift in Sources */,
 				FC47AEB22560416400EF69A4 /* RepeatableAlert.swift in Sources */,
 				FC6D494A2547E7DA00DA09B7 /* Chats.xcdatamodeld in Sources */,
 				FC94E5FB2528B8B9000F09BE /* ThemePickerDelegate.swift in Sources */,
 				FC94E5F72528808D000F09BE /* MessageView.swift in Sources */,
 				FC5370362520B58700653A19 /* ConversationMessageTableViewCell.swift in Sources */,
 				FC4F8B60255022C00054F31F /* ErrorOccuredView.swift in Sources */,
+				FC2F41F3256637BF000C6416 /* NavigationViewController.swift in Sources */,
 				FC3811C82530F3DF00AB796C /* GCDUserProfileDataManager.swift in Sources */,
 				FC466E85255DE15400BC1204 /* MessageRepository.swift in Sources */,
 				FC1C9A29253B694C00CC9A42 /* Channel.swift in Sources */,
@@ -659,11 +731,15 @@
 				FC82CC6E2519C9190041DFAE /* ImagePicker.swift in Sources */,
 				FC96CBF02518AC910036E085 /* ImageManager.swift in Sources */,
 				FCEE4B42251D267C00911B5C /* ConversationTableViewCell.swift in Sources */,
+				FCD18AC52565535E00B92F3A /* NetworkImageService.swift in Sources */,
+				FCD18ACA2565654000B92F3A /* NetworkImagesViewDelegate.swift in Sources */,
+				FC3A5DCC256687D6000DD9E4 /* CloseModalButton.swift in Sources */,
 				FC466E7F255DBAB300BC1204 /* ObjectChanges.swift in Sources */,
 				FC249E2B253572AB00DE093E /* ProfileModel.swift in Sources */,
 				FC466E78255DB5B500BC1204 /* FirestoreChannelProvider.swift in Sources */,
 				FC0BA0F4250B9DEA005AE946 /* StateLoggable.swift in Sources */,
-				FC3811C22530E23F00AB796C /* Backdrop.swift in Sources */,
+				FCD18AC3256551C100B92F3A /* NetworkProvider.swift in Sources */,
+				FC3811C22530E23F00AB796C /* BackdropWithLoading.swift in Sources */,
 				FC466E95255DF41500BC1204 /* PresentaionAssembly.swift in Sources */,
 				FC6D494F2547E9DE00DA09B7 /* MessageEntity+CoreDataClass.swift in Sources */,
 				FC6D49562547F27200DA09B7 /* MessageEntityExtensions.swift in Sources */,
@@ -671,13 +747,17 @@
 				FC94E5EC25286999000F09BE /* ThemesViewController.swift in Sources */,
 				FC61DC25253B7342009B6223 /* FirestoreProvider.swift in Sources */,
 				FC466E8C255DEB1500BC1204 /* ThemeManager.swift in Sources */,
+				FCD18ABB25652B8F00B92F3A /* NetworkImagesViewController.swift in Sources */,
+				FC2F41F525663FCA000C6416 /* ActionButton.swift in Sources */,
 				FC466E81255DDD1F00BC1204 /* FirestoreMessageProvider.swift in Sources */,
 				FC77CCD62542C1D700B08061 /* OldSchoolStack.swift in Sources */,
 				FC0BA0ED250B8911005AE946 /* AppState.swift in Sources */,
+				FCD18ABD2565311800B92F3A /* NetworkPhoto.swift in Sources */,
 				FC466E97255DF4BD00BC1204 /* RootAssembly.swift in Sources */,
 				FC7C00D8253211A700C3DCAE /* FileOperations.swift in Sources */,
 				FC694F232531D9A100256A32 /* ApplicationFileProvider.swift in Sources */,
 				FCAC8A8C251E60960085E686 /* ConfigurableView.swift in Sources */,
+				FCD18AC825655CCD00B92F3A /* Parser.swift in Sources */,
 				FC7C00DA2532144700C3DCAE /* OperationsUserProfileManager.swift in Sources */,
 				FC47AEB025603D9000EF69A4 /* TextViewWithPlaceholder.swift in Sources */,
 				FC466E83255DE02400BC1204 /* MessageService.swift in Sources */,

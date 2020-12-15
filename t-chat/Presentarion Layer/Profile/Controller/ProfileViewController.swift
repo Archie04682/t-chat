@@ -8,19 +8,11 @@
 
 import UIKit
 
-class ProfileViewController: UIViewController {
-    private lazy var backdrop: Backdrop = {
-        let view = Backdrop()
+class ProfileViewController: NavigationViewController {
+    private lazy var backdrop: BackdropWithLoading = {
+        let view = BackdropWithLoading()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.isHidden = true
-        return view
-    }()
-    
-    private lazy var activityIndicator: UIActivityIndicatorView = {
-        let view = UIActivityIndicatorView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.color = .red
-        view.startAnimating()
         return view
     }()
     
@@ -97,14 +89,11 @@ class ProfileViewController: UIViewController {
         return view
     }()
     
-    private lazy var editButton: UIButton = {
-        let view = UIButton(type: .system)
-        view.setTitle("Edit", for: .normal)
-        view.titleLabel?.font = UIFont.systemFont(ofSize: 19, weight: .semibold)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.cornerRadius = 14
-        view.backgroundColor = themeManager.currentTheme.filledButtonColor
-        return view
+    private lazy var editButton: ActionButton = {
+        let button = ActionButton(type: .system)
+        button.configure(with: "Edit", theme: themeManager.currentTheme)
+        
+        return button
     }()
     
     private lazy var saveButtonsContainer: UIStackView = {
@@ -117,23 +106,19 @@ class ProfileViewController: UIViewController {
         return button
     }()
     
-    private lazy var saveWithGCDButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("GCD", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 19, weight: .semibold)
-        button.translatesAutoresizingMaskIntoConstraints = false
+    private lazy var saveWithGCDButton: ActionButton = {
+        let button = ActionButton(type: .system)
+        button.configure(with: "GCD", theme: themeManager.currentTheme)
         button.isEnabled = false
-        button.backgroundColor = themeManager.currentTheme.filledButtonColor
+        
         return button
     }()
     
-    private lazy var saveWithOperationButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Operation", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 19, weight: .semibold)
-        button.translatesAutoresizingMaskIntoConstraints = false
+    private lazy var saveWithOperationButton: ActionButton = {
+        let button = ActionButton(type: .system)
+        button.configure(with: "Operation", theme: themeManager.currentTheme)
         button.isEnabled = false
-        button.backgroundColor = themeManager.currentTheme.filledButtonColor
+        
         return button
     }()
     
@@ -144,11 +129,12 @@ class ProfileViewController: UIViewController {
     private var imagePicker: ImagePicker
     private let themeManager: ThemeManager
     private var profileModel: ProfileModel?
-    
+
     init(model: ProfileModel, imagePicker: ImagePicker, themeManager: ThemeManager) {
         self.profileModel = model
         self.imagePicker = imagePicker
         self.themeManager = themeManager
+        
         super.init(nibName: nil, bundle: nil)
         
         self.imagePicker.delegate = self
@@ -161,7 +147,7 @@ class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        title = "My Profile"
         imagePicker.delegate = self
         imagePicker.rootViewController = self
         profileModel?.delegate = self
@@ -215,19 +201,19 @@ class ProfileViewController: UIViewController {
     }
     
     @objc func cancel() {
-        DispatchQueue.main.async {[weak self] in
-            if self?.profileModel?.changedData[.photoData] != nil {
-                if let data = self?.profileModel?.photoData {
-                    self?.profileImageView.image = UIImage(data: data)
-                } else if let text = self?.usernameLabel.text {
-                    self?.profileImageView.setInitials(username: text)
+        DispatchQueue.main.async {
+            if self.profileModel?.changedData[.photoData] != nil {
+                if let data = self.profileModel?.photoData {
+                    self.profileImageView.image = UIImage(data: data)
+                } else if let text = self.usernameLabel.text {
+                    self.profileImageView.setInitials(username: text)
                 }
             }
+            
+            self.profileModel?.changedData = [:]
+            self.toggleMode()
+            self.view.endEditing(true)
         }
-        
-        profileModel?.changedData = [:]
-        toggleMode()
-        view.endEditing(true)
     }
 
     @objc func saveChanges(_ button: UIButton) {
@@ -277,7 +263,6 @@ class ProfileViewController: UIViewController {
         containerView.addSubview(editButton)
         containerView.addSubview(saveButtonsContainer)
         scrollView.addSubview(containerView)
-        backdrop.addSubview(activityIndicator)
         
         view.addSubview(scrollView)
         view.addSubview(backdrop)
@@ -335,9 +320,6 @@ class ProfileViewController: UIViewController {
         width.priority = UILayoutPriority(1000)
         width.isActive = true
         
-        activityIndicator.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
-        activityIndicator.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor).isActive = true
-        
         backdrop.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         backdrop.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         backdrop.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
@@ -387,6 +369,10 @@ extension ProfileViewController {
                 self.imagePicker.pickImage(with: .camera)
             })
         }
+        
+        ac.addAction(UIAlertAction(title: "Загрузить из сети", style: .default) { _ in
+            self.navigate?(self, .networkImages, true)
+        })
 
         if profileImageView.image != nil {
             ac.addAction(UIAlertAction(title: "Удалить изображение", style: .destructive) { _ in
@@ -402,6 +388,15 @@ extension ProfileViewController {
     @objc func dismissAlertController() {
         self.dismiss(animated: true, completion: nil)
     }
+}
+
+extension ProfileViewController: NetworkImagesViewDelegate {
+    
+    func didSelect(image: UIImage) {
+        profileImageView.image = image
+        profileModel?.changedData[.photoData] = image.pngData()
+    }
+    
 }
 
 extension ProfileViewController: UITextViewDelegate {

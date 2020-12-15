@@ -10,12 +10,12 @@ import CoreData
 import UIKit
 import Firebase
 
-class ConversationsListViewController: UIViewController {
+class ConversationsListViewController: NavigationViewController {
     
     private var themeManager: ThemeManager
     private var channelsService: ChannelService
     private var profileService: ProfileService
-    private var rootNavigator: RootNavigator
+    
     private var theme: Theme
     private var isVisible = true
     
@@ -38,12 +38,11 @@ class ConversationsListViewController: UIViewController {
         return profileImageView
     }()
     
-    init(themeManager: ThemeManager, channelsService: ChannelService, profileService: ProfileService, navigator: RootNavigator) {
+    init(themeManager: ThemeManager, channelsService: ChannelService, profileService: ProfileService) {
         self.themeManager = themeManager
         self.channelsService = channelsService
         self.theme = themeManager.currentTheme
         self.profileService = profileService
-        self.rootNavigator = navigator
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -116,11 +115,11 @@ class ConversationsListViewController: UIViewController {
     }
     
     @objc func goToProfile() {
-        rootNavigator.navigate(to: .profile)
+        self.navigate?(self, .profile, true)
     }
     
     @objc func openSettings() {
-        rootNavigator.navigate(to: .settings)
+        self.navigate?(self, .settings, false)
     }
     
     func saveNewChannel(name: String) {
@@ -173,7 +172,7 @@ extension ConversationsListViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        rootNavigator.navigate(to: .conversation(channel: channels[indexPath.row]))
+        navigate?(self, .conversation(channel: channels[indexPath.row]), false)
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {

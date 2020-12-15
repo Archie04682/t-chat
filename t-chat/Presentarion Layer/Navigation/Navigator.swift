@@ -12,7 +12,7 @@ import UIKit
 protocol Navigator {
     associatedtype Dest
     
-    func navigate(to destination: Dest)
+    func navigate(_ rootVC: UIViewController?, destination: Dest, modal: Bool)
     
     var navigationController: UINavigationController { get }
     
@@ -25,6 +25,7 @@ enum RootDestination {
     case conversation(channel: Channel)
     case settings
     case profile
+    case networkImages
 }
 
 final class RootNavigator: Navigator {
@@ -34,36 +35,53 @@ final class RootNavigator: Navigator {
     var createConversationView: ((Channel) -> ConversationViewController)?
     var createSettingsView: (() -> ThemesViewController)?
     var createProfileView: (() -> ProfileViewController)?
+    var createNetworkImagesView: (() -> NetworkImagesViewController)?
     
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
     
-    func navigate(to destination: RootDestination) {
-        switch destination {
-        case .conversation(let channel):
-            if let controller = createConversationView?(channel) {
-                navigationController.pushViewController(controller, animated: true)
+    func navigate(_ rootVC: UIViewController?, destination: RootDestination, modal: Bool = false) {
+        if let root = rootVC {
+            var vc: UIViewController?
+            
+            switch destination {
+            case .conversation(let channel):
+                vc = createConversationView?(channel)
+            case .settings:
+                vc = createSettingsView?()
+            case .profile:
+                vc = createProfileView?()
+            case .networkImages:
+                let networkImages = createNetworkImagesView?()
+                networkImages?.delegate = rootVC as? NetworkImagesViewDelegate
+                vc = networkImages
             }
-        case .settings:
-            if let controller = createSettingsView?() {
-                navigationController.pushViewController(controller, animated: true)
-            }
-        case .profile:
-            if let vc = createProfileView?() {
-                vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(closeProfilePage))
-                vc.title = "My profile"
-                let nvc = UINavigationController(rootViewController: vc)
-        
-                if let top = navigationController.topViewController {
-                    top.present(nvc, animated: true, completion: nil)
+            
+            if let vc = vc {
+                if modal {
+                    let nvc = UINavigationController(rootViewController: vc)
+                    
+                    let closeButton = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(close(_:)))
+                    vc.navigationItem.leftBarButtonItem = closeButton
+                    
+                    root.present(nvc, animated: true, completion: nil)
+                } else {
+                    navigationController.pushViewController(vc, animated: true)
                 }
             }
         }
     }
     
-    @objc func closeProfilePage() {
-        navigationController.dismiss(animated: true)
+    @objc func close(_ button: UIBarButtonItem) {
+        if var topController = UIApplication.shared.keyWindow?.rootViewController {
+            while let presentedViewController = topController.presentedViewController {
+                topController = presentedViewController
+            }
+            
+            topController.dismiss(animated: true, completion: nil)
+        }
+        
         navigationController.topViewController?.viewWillAppear(true)
     }
 }
