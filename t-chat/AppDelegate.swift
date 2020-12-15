@@ -21,30 +21,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, StateLoggable {
         FirebaseApp.configure()
         
         let window = UIWindow(frame: UIScreen.main.bounds)
+        let root = RootAssembly()
         
-        ThemeManager.shared.apply(theme: ThemeManager.shared.currentTheme)
+        window.rootViewController = root.presentationAssembly.rootNavigator.navigationController
         
-        var coreDataStack: CoreDataStack = NewWaveStack(withModel: "Chats")
-        coreDataStack.didUpdateDatabase = { stack in
-            stack.printStatictics()
-        }
-        
-        coreDataStack.enableObservers()
-        
-        let channelRepository = ChannelRepository(coreDataStack: coreDataStack)
-        let navigationController = UINavigationController()
-        let conversationsListViewController = ConversationsListViewController(channelRepository: channelRepository)
-        navigationController.viewControllers = [conversationsListViewController]
-        
-        if ApplicationFileProvider.isFirstLaunch() {
-            let model = ProfileModel()
-            model.changedData[.username] = "Artur Gnedoy".data(using: .utf8)
-            model.changedData[.about] = "Some description".data(using: .utf8)
-            model.save(with: .GCD)
-        }
-        
-        navigationController.viewControllers = [conversationsListViewController]
-        window.rootViewController = navigationController
         window.makeKeyAndVisible()
         
         self.window = window
