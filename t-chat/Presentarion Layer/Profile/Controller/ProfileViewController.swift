@@ -70,6 +70,7 @@ class ProfileViewController: NavigationViewController {
         view.layer.borderWidth = 1.5
         view.layer.cornerRadius = 4.0
         view.isHidden = true
+        view.accessibilityLabel = "usernameTextField"
         return view
     }()
     
@@ -86,13 +87,14 @@ class ProfileViewController: NavigationViewController {
         view.configure(placeholder: "About user", theme: themeManager.currentTheme)
         view.textDelegate = self
         view.isHidden = true
+        view.accessibilityLabel = "aboutUserTextView"
         return view
     }()
     
     private lazy var editButton: ActionButton = {
         let button = ActionButton(type: .system)
         button.configure(with: "Edit", theme: themeManager.currentTheme)
-        
+        button.accessibilityLabel = "toggleEditModeButton"
         return button
     }()
     
