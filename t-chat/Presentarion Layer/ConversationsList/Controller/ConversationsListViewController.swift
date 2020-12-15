@@ -115,7 +115,7 @@ class ConversationsListViewController: NavigationViewController {
     }
     
     @objc func goToProfile() {
-        self.navigate?(self, .profile, true)
+        self.navigate?(self, .profile, false)
     }
     
     @objc func openSettings() {
@@ -149,6 +149,21 @@ extension ConversationsListViewController: UINavigationControllerDelegate {
             conversationsTable.reloadData()
             theme = themeManager.currentTheme
         }
+    }
+    
+    func navigationController(_ navigationController: UINavigationController,
+                              animationControllerFor operation: UINavigationController.Operation,
+                              from fromVC: UIViewController,
+                              to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        if toVC as? ProfileViewController != nil {
+            return FadeTransitionAnimator(animationDuration: 1.0, type: .present)
+        }
+        
+        if toVC as? ConversationsListViewController != nil, fromVC as? ProfileViewController != nil {
+            return FadeTransitionAnimator(animationDuration: 1.0, type: .dismiss)
+        }
+        
+        return nil
     }
 }
 

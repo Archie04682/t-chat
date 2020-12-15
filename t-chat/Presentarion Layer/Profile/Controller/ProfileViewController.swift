@@ -179,8 +179,22 @@ class ProfileViewController: NavigationViewController {
         }
     }
     
+    private func animatePhotoEditButton() {
+        let transitionBuilder = TransitionAnimationBuilder(duration: 0.3, repeatCount: .infinity)
+        transitionBuilder.addRotation(withAngle: 18.0, reverseRotation: true)
+        transitionBuilder.addPositionTransition(withIntent: 5, direction: .horizontal)
+        transitionBuilder.addPositionTransition(withIntent: 5, direction: .vertical)
+        profileImageEditButton.layer.add(transitionBuilder.build(), forKey: #keyPath(CALayer.transform))
+    }
+    
     @objc func toggleMode() {
         DispatchQueue.main.async {
+            if self.profileImageEditButton.layer.animation(forKey: #keyPath(CALayer.transform)) != nil {
+                self.profileImageEditButton.layer.removeAllAnimations()
+            } else {
+                self.animatePhotoEditButton()
+            }
+            
             UIView.transition(with: self.view, duration: 0.3, options: [.curveEaseInOut],
               animations: {
                 [self.usernameLabel, self.usernameTextField, self.aboutUserLabel, self.aboutUserTextView,
@@ -359,28 +373,38 @@ extension ProfileViewController {
     }
     
     @objc func editProfilePhoto() {
+        if profileImageEditButton.layer.animation(forKey: #keyPath(CALayer.transform)) != nil {
+            profileImageEditButton.layer.removeAllAnimations()
+        }
+        
         let ac = UIAlertController(title: "Изменить фото", message: nil, preferredStyle: .actionSheet)
         ac.addAction(UIAlertAction(title: "Выбрать из галлереи", style: .default) { _ in
             self.imagePicker.pickImage(with: .photoLibrary)
+            self.animatePhotoEditButton()
         })
         
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
             ac.addAction(UIAlertAction(title: "Сделать фото", style: .default) { _ in
                 self.imagePicker.pickImage(with: .camera)
+                self.animatePhotoEditButton()
             })
         }
         
         ac.addAction(UIAlertAction(title: "Загрузить из сети", style: .default) { _ in
             self.navigate?(self, .networkImages, true)
+            self.animatePhotoEditButton()
         })
 
         if profileImageView.image != nil {
             ac.addAction(UIAlertAction(title: "Удалить изображение", style: .destructive) { _ in
+                self.animatePhotoEditButton()
                 self.updateProfileImage(url: nil)
             })
         }
         
-        ac.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: nil))
+        ac.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: { _ in
+            self.animatePhotoEditButton()
+        }))
         
         present(ac, animated: true)
     }

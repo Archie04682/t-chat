@@ -70,6 +70,8 @@
 		FC94E5FB2528B8B9000F09BE /* ThemePickerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC94E5FA2528B8B9000F09BE /* ThemePickerDelegate.swift */; };
 		FC96CBF02518AC910036E085 /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC96CBEF2518AC910036E085 /* ImageManager.swift */; };
 		FC98763C253EA65A0037EBFE /* AddNewChannelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC98763B253EA65A0037EBFE /* AddNewChannelViewController.swift */; };
+		FC9F499A25752A5A004D9D91 /* FadeTransitionAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC9F499925752A5A004D9D91 /* FadeTransitionAnimator.swift */; };
+		FCA9EA1C256ECBDF00BEECE1 /* TransitionAnimationBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA9EA1B256ECBDF00BEECE1 /* TransitionAnimationBuilder.swift */; };
 		FCAC8A8C251E60960085E686 /* ConfigurableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCAC8A8B251E60960085E686 /* ConfigurableView.swift */; };
 		FCC7DA312529AE0D006B5A71 /* ThemeSelectionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC7DA302529AE0D006B5A71 /* ThemeSelectionButton.swift */; };
 		FCD18ABB25652B8F00B92F3A /* NetworkImagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD18ABA25652B8F00B92F3A /* NetworkImagesViewController.swift */; };
@@ -79,6 +81,7 @@
 		FCD18AC52565535E00B92F3A /* NetworkImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD18AC42565535E00B92F3A /* NetworkImageService.swift */; };
 		FCD18AC825655CCD00B92F3A /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD18AC725655CCD00B92F3A /* Parser.swift */; };
 		FCD18ACA2565654000B92F3A /* NetworkImagesViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD18AC92565654000B92F3A /* NetworkImagesViewDelegate.swift */; };
+		FCE12749256EEABE00ED203B /* TinkoffFlakesEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCE12748256EEABE00ED203B /* TinkoffFlakesEmitter.swift */; };
 		FCEE4B3D251D151A00911B5C /* ConversationsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCEE4B3C251D151A00911B5C /* ConversationsListViewController.swift */; };
 		FCEE4B42251D267C00911B5C /* ConversationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCEE4B41251D267C00911B5C /* ConversationTableViewCell.swift */; };
 /* End PBXBuildFile section */
@@ -151,6 +154,8 @@
 		FC94E5FA2528B8B9000F09BE /* ThemePickerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemePickerDelegate.swift; sourceTree = "<group>"; };
 		FC96CBEF2518AC910036E085 /* ImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageManager.swift; sourceTree = "<group>"; };
 		FC98763B253EA65A0037EBFE /* AddNewChannelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewChannelViewController.swift; sourceTree = "<group>"; };
+		FC9F499925752A5A004D9D91 /* FadeTransitionAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FadeTransitionAnimator.swift; sourceTree = "<group>"; };
+		FCA9EA1B256ECBDF00BEECE1 /* TransitionAnimationBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionAnimationBuilder.swift; sourceTree = "<group>"; };
 		FCAC8A8B251E60960085E686 /* ConfigurableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurableView.swift; sourceTree = "<group>"; };
 		FCC7DA302529AE0D006B5A71 /* ThemeSelectionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSelectionButton.swift; sourceTree = "<group>"; };
 		FCD18ABA25652B8F00B92F3A /* NetworkImagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkImagesViewController.swift; sourceTree = "<group>"; };
@@ -160,6 +165,7 @@
 		FCD18AC42565535E00B92F3A /* NetworkImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkImageService.swift; sourceTree = "<group>"; };
 		FCD18AC725655CCD00B92F3A /* Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
 		FCD18AC92565654000B92F3A /* NetworkImagesViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkImagesViewDelegate.swift; sourceTree = "<group>"; };
+		FCE12748256EEABE00ED203B /* TinkoffFlakesEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TinkoffFlakesEmitter.swift; sourceTree = "<group>"; };
 		FCEE4B3C251D151A00911B5C /* ConversationsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsListViewController.swift; sourceTree = "<group>"; };
 		FCEE4B41251D267C00911B5C /* ConversationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -393,6 +399,7 @@
 		FC466E90255DF0E000BC1204 /* Presentarion Layer */ = {
 			isa = PBXGroup;
 			children = (
+				FCA9EA1A256ECBBC00BEECE1 /* Animations */,
 				FCD18AB925652B5900B92F3A /* NetworkImages */,
 				FC47AEAB25603C0700EF69A4 /* Profile */,
 				FC3859C1256003CE00B771D5 /* Shared */,
@@ -529,6 +536,16 @@
 				FC6D49552547F27200DA09B7 /* MessageEntityExtensions.swift */,
 			);
 			path = CoreData;
+			sourceTree = "<group>";
+		};
+		FCA9EA1A256ECBBC00BEECE1 /* Animations */ = {
+			isa = PBXGroup;
+			children = (
+				FCA9EA1B256ECBDF00BEECE1 /* TransitionAnimationBuilder.swift */,
+				FCE12748256EEABE00ED203B /* TinkoffFlakesEmitter.swift */,
+				FC9F499925752A5A004D9D91 /* FadeTransitionAnimator.swift */,
+			);
+			path = Animations;
 			sourceTree = "<group>";
 		};
 		FCD18AB925652B5900B92F3A /* NetworkImages */ = {
@@ -701,6 +718,7 @@
 				FC466E87255DE74E00BC1204 /* ServiceAssembly.swift in Sources */,
 				FC3203912519ED26000C2DD9 /* StateLoggingViewController.swift in Sources */,
 				FC94E5F525287DB0000F09BE /* ThemeView.swift in Sources */,
+				FCA9EA1C256ECBDF00BEECE1 /* TransitionAnimationBuilder.swift in Sources */,
 				FC466E89255DE75D00BC1204 /* CoreAssembly.swift in Sources */,
 				FC47AEAE25603C3500EF69A4 /* StyledLabel.swift in Sources */,
 				FCC7DA312529AE0D006B5A71 /* ThemeSelectionButton.swift in Sources */,
@@ -725,11 +743,13 @@
 				FC6D49502547E9DE00DA09B7 /* MessageEntity+CoreDataProperties.swift in Sources */,
 				FC466E7B255DB8EE00BC1204 /* ChannelService.swift in Sources */,
 				FC77CCD22542BC3A00B08061 /* CoreDataStack.swift in Sources */,
+				FCE12749256EEABE00ED203B /* TinkoffFlakesEmitter.swift in Sources */,
 				FC080064254B04C900A23FF4 /* NewWaveStack.swift in Sources */,
 				FC6D49512547E9DE00DA09B7 /* ChannelEntity+CoreDataClass.swift in Sources */,
 				FC5370382520D42300653A19 /* ProfileViewController.swift in Sources */,
 				FC82CC6E2519C9190041DFAE /* ImagePicker.swift in Sources */,
 				FC96CBF02518AC910036E085 /* ImageManager.swift in Sources */,
+				FC9F499A25752A5A004D9D91 /* FadeTransitionAnimator.swift in Sources */,
 				FCEE4B42251D267C00911B5C /* ConversationTableViewCell.swift in Sources */,
 				FCD18AC52565535E00B92F3A /* NetworkImageService.swift in Sources */,
 				FCD18ACA2565654000B92F3A /* NetworkImagesViewDelegate.swift in Sources */,
