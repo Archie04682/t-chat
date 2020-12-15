@@ -47,7 +47,7 @@ class AddNewChannelViewController: UIAlertController {
     }
     
     @objc func channelNameDidChanged(_ textField: UITextField) {
-        if let text = textField.text, text.count > 0 {
+        if let text = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines), text.count > 0 {
             saveAction.isEnabled = true
         } else {
             saveAction.isEnabled = false

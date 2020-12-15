@@ -40,6 +40,13 @@ struct Channel {
 
         self.lastActivity = (dictionary["lastActivity"] as? Timestamp)?.dateValue()
     }
+    
+    init(from entity: ChannelEntity) {
+        self.identifier = entity.uid
+        self.name = entity.name
+        self.lastActivity = entity.lastActivity
+        self.lastMessage = entity.lastMessage
+    }
 
     func toDictionary() -> [String: Any] {
         return ["name": name]

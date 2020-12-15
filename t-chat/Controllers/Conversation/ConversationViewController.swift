@@ -6,19 +6,21 @@
 //  Copyright © 2020 Артур Гнедой. All rights reserved.
 //
 
+import CoreData
 import UIKit
 import Firebase
 
 class ConversationViewController: UIViewController {
     
-    private let channel: Channel
     private let profile: ProfileModel
     private let channelRepository: ChannelRepository
+    private let channel: ChannelEntity
     
-    private var conversation: [Message] = []
     private var listener: ListenerRegistration?
     private var toolbarBottomConstraint: NSLayoutConstraint?
     private let firestoreProvider: FirestoreProvider
+    
+    private let fetchedResultsController: NSFetchedResultsController<MessageEntity>
     
     private lazy var conversationTable: UITableView = {
         let tableView = UITableView(frame: .zero, style: .plain)
@@ -83,11 +85,16 @@ class ConversationViewController: UIViewController {
         return label
     }()
     
-    init(channel: Channel, profile: ProfileModel, firestoreProvider: FirestoreProvider, channelRepository: ChannelRepository) {
+    init(profile: ProfileModel, firestoreProvider: FirestoreProvider, channelRepository: ChannelRepository, channel: ChannelEntity) {
         self.channelRepository = channelRepository
-        self.channel = channel
         self.profile = profile
         self.firestoreProvider = firestoreProvider
+        self.channel = channel
+        self.fetchedResultsController = channelRepository.createMessagesFetchResultsController(forChannel: channel.objectID,
+                                                                                               sortBy: #keyPath(MessageEntity.created),
+                                                                                               ascending: false,
+                                                                                               fetchBatchSize: 20,
+                                                                                               withCache: false)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -99,6 +106,13 @@ class ConversationViewController: UIViewController {
         super.viewDidLoad()
         setupViews()
         conversationTable.register(ConversationMessageTableViewCell.self, forCellReuseIdentifier: String(describing: type(of: ConversationMessageTableViewCell.self)))
+        fetchedResultsController.delegate = self
+        
+        do {
+            try fetchedResultsController.performFetch()
+        } catch {
+            print(error.localizedDescription)
+        }
     }
     
     private func setupViews() {
@@ -146,12 +160,14 @@ class ConversationViewController: UIViewController {
     }
     
     @objc func sendMessage() {
-        firestoreProvider.sendMessage(toChannel: channel.identifier,
+        firestoreProvider.sendMessage(toChannel: channel.uid,
                                      message: Message(content: messageTextView.text.trimmingCharacters(in: .whitespacesAndNewlines),
                                                       created: Date(),
                                                       senderId: profile.identifier,
                                                       senderName: profile.username)) {[weak self] error in
             guard error == nil else {
+                self?.showError(with: "Failed to send message")
+                
                 return
             }
 
@@ -168,18 +184,19 @@ class ConversationViewController: UIViewController {
         view.backgroundColor = ThemeManager.shared.currentTheme.conversationBackgroundColor
         conversationTable.backgroundColor = ThemeManager.shared.currentTheme.conversationBackgroundColor
         
-        listener = firestoreProvider.getMessages(forChannel: channel.identifier) {[weak self] messages, error in
-            guard error == nil, let messages = messages, let channel = self?.channel else {return}
-            self?.conversation = messages
+        listener = firestoreProvider.getMessages(forChannel: channel.uid) {[weak self] messages, error in
+            guard error == nil, let messages = messages, let channelId = self?.channel.objectID else {return}
             
             if !messages.isEmpty {
-                
-                self?.channelRepository.addMessages(messages: messages, to: channel)
+                self?.channelRepository.addMessages(messages: messages, toObjectWithID: channelId) { error in
+                    if error != nil {
+                        self?.showError(with: "Failed to save cache")
+                    }
+                }
 
                 DispatchQueue.main.async {[weak self] in
                     self?.conversationTable.isHidden = false
                     self?.noMessagesLabel.isHidden = true
-                    self?.conversationTable.reloadData()
                 }
             } else {
                 self?.conversationTable.isHidden = true
@@ -216,23 +233,48 @@ class ConversationViewController: UIViewController {
     deinit {
         listener?.remove()
     }
+    
+    func showError(with message: String) {
+        DispatchQueue.main.async {
+            if self.presentedViewController == nil {
+                let ac = ErrorOccuredView(message: message)
+                self.present(ac, animated: true)
+            }
+        }
+    }
 
 }
 
 extension ConversationViewController: UITableViewDataSource {
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        guard let sections = fetchedResultsController.sections else {
+            return 0
+        }
+
+        return sections.count
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return conversation.count
+        guard let sections = fetchedResultsController.sections else {
+            return 0
+        }
+
+        return sections[section].numberOfObjects
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: type(of: ConversationMessageTableViewCell.self))) as? ConversationMessageTableViewCell
             else { return UITableViewCell(style: .default, reuseIdentifier: "default") }
         
-        cell.configure(with: conversation[indexPath.row])
+        configure(cell, with: Message(from: fetchedResultsController.object(at: indexPath)))
+        return cell
+    }
+    
+    private func configure(_ cell: ConversationMessageTableViewCell, with message: Message) {
+        cell.configure(with: message)
         cell.backgroundColor = .clear
         cell.contentView.transform = CGAffineTransform(scaleX: 1, y: -1)
-        return cell
     }
 
 }
@@ -244,6 +286,48 @@ extension ConversationViewController: UITableViewDelegate {
 extension ConversationViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         messageTextViewPlaceholder.isHidden = !textView.text.isEmpty
-        sendButton.isEnabled = !textView.text.isEmpty
+        sendButton.isEnabled = !textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+}
+
+extension ConversationViewController: NSFetchedResultsControllerDelegate {
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        conversationTable.beginUpdates()
+    }
+
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
+                    didChange anObject: Any,
+                    at indexPath: IndexPath?,
+                    for type: NSFetchedResultsChangeType,
+                    newIndexPath: IndexPath?) {
+        switch type {
+        case .insert:
+            if let indexPath = newIndexPath {
+                conversationTable.insertRows(at: [indexPath], with: .automatic)
+            }
+        case .delete:
+            if let indexPath = indexPath {
+                conversationTable.deleteRows(at: [indexPath], with: .automatic)
+            }
+        case .move:
+            if let indexPath = indexPath {
+                conversationTable.deleteRows(at: [indexPath], with: .automatic)
+            }
+
+            if let newIndexPath = newIndexPath {
+                conversationTable.insertRows(at: [newIndexPath], with: .automatic)
+            }
+        case .update:
+            if let indexPath = indexPath {
+                guard let cell = conversationTable.cellForRow(at: indexPath) as? ConversationMessageTableViewCell else { break }
+                configure(cell, with: Message(from: fetchedResultsController.object(at: indexPath)))
+            }
+        @unknown default:
+            fatalError("Unknown ResultsChangeType")
+        }
+    }
+
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        conversationTable.endUpdates()
     }
 }
