@@ -10,10 +10,10 @@ import UIKit
 
 class ConversationTableViewCell: UITableViewCell {
     
-    private lazy var channelName: UILabel = {
+    private lazy var channelNameLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
-
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -28,7 +28,7 @@ class ConversationTableViewCell: UITableViewCell {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 15, weight: .regular)
         label.textColor = ThemeManager.shared.currentTheme.subtitleColor
-        
+        label.textAlignment = .right
         return label
     }()
     
@@ -37,7 +37,6 @@ class ConversationTableViewCell: UITableViewCell {
         stackView.axis = .vertical
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.distribution = .fill
-        stackView.spacing = 4
         
         return stackView
     }()
@@ -46,7 +45,7 @@ class ConversationTableViewCell: UITableViewCell {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.distribution = .fill
-        stackView.spacing = 4
+        stackView.spacing = 8
 
         return stackView
     }()
@@ -55,7 +54,8 @@ class ConversationTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         self.selectionStyle = .none
-        headerStackView.addArrangedSubview(channelName)
+        
+        headerStackView.addArrangedSubview(channelNameLabel)
         headerStackView.addArrangedSubview(lastActivityLabel)
         parentStackView.addArrangedSubview(headerStackView)
         parentStackView.addArrangedSubview(lastMessageLabel)
@@ -66,6 +66,8 @@ class ConversationTableViewCell: UITableViewCell {
         parentStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16.0).isActive = true
         parentStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16.0).isActive = true
         parentStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16.0).isActive = true
+        
+        channelNameLabel.widthAnchor.constraint(equalTo: headerStackView.widthAnchor, multiplier: 0.8).isActive = true
     }
     
     required init?(coder: NSCoder) {
@@ -79,8 +81,8 @@ extension ConversationTableViewCell: ConfigurableView {
     typealias ConfigurationModel = Channel
     
     func configure(with model: Channel) {
-        channelName.text = model.name
-        channelName.textColor = ThemeManager.shared.currentTheme.textColor
+        channelNameLabel.text = model.name
+        channelNameLabel.textColor = ThemeManager.shared.currentTheme.textColor
         lastMessageLabel.textColor = ThemeManager.shared.currentTheme.subtitleColor
         lastActivityLabel.textColor = ThemeManager.shared.currentTheme.subtitleColor
         

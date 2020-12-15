@@ -24,9 +24,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, StateLoggable {
         
         ThemeManager.shared.apply(theme: ThemeManager.shared.currentTheme)
         
+        var coreDataStack: CoreDataStack = OldSchoolStack(withModel: "Chats")
+        coreDataStack.didUpdateDatabase = { stack in
+            stack.printStatictics()
+        }
+        
+        coreDataStack.enableObservers()
+        
+        let channelRepository = ChannelRepository(coreDataStack: coreDataStack)
         let navigationController = UINavigationController()
-        let conversationsListViewController = ConversationsListViewController()
+        let conversationsListViewController = ConversationsListViewController(channelRepository: channelRepository)
         navigationController.viewControllers = [conversationsListViewController]
+        
         if ApplicationFileProvider.isFirstLaunch() {
             let model = ProfileModel()
             model.changedData[.username] = "Artur Gnedoy".data(using: .utf8)

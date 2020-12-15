@@ -13,6 +13,7 @@ class ConversationViewController: UIViewController {
     
     private let channel: Channel
     private let profile: ProfileModel
+    private let channelRepository: ChannelRepository
     
     private var conversation: [Message] = []
     private var listener: ListenerRegistration?
@@ -82,7 +83,8 @@ class ConversationViewController: UIViewController {
         return label
     }()
     
-    init(channel: Channel, profile: ProfileModel, firestoreProvider: FirestoreProvider) {
+    init(channel: Channel, profile: ProfileModel, firestoreProvider: FirestoreProvider, channelRepository: ChannelRepository) {
+        self.channelRepository = channelRepository
         self.channel = channel
         self.profile = profile
         self.firestoreProvider = firestoreProvider
@@ -167,10 +169,13 @@ class ConversationViewController: UIViewController {
         conversationTable.backgroundColor = ThemeManager.shared.currentTheme.conversationBackgroundColor
         
         listener = firestoreProvider.getMessages(forChannel: channel.identifier) {[weak self] messages, error in
-            guard error == nil, let messages = messages else {return}
+            guard error == nil, let messages = messages, let channel = self?.channel else {return}
             self?.conversation = messages
             
             if !messages.isEmpty {
+                
+                self?.channelRepository.addMessages(messages: messages, to: channel)
+
                 DispatchQueue.main.async {[weak self] in
                     self?.conversationTable.isHidden = false
                     self?.noMessagesLabel.isHidden = true

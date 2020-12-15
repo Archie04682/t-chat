@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		BC49E34E795F92A1362850A1 /* Pods_t_chat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 521A26DB20E122E0ABC55BD8 /* Pods_t_chat.framework */; };
+		FC080064254B04C900A23FF4 /* NewWaveStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC080063254B04C900A23FF4 /* NewWaveStack.swift */; };
 		FC0BA0D9250B7A68005AE946 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0BA0D8250B7A68005AE946 /* AppDelegate.swift */; };
 		FC0BA0E2250B7A69005AE946 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FC0BA0E1250B7A69005AE946 /* Assets.xcassets */; };
 		FC0BA0E5250B7A69005AE946 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FC0BA0E3250B7A69005AE946 /* LaunchScreen.storyboard */; };
@@ -27,6 +28,16 @@
 		FC61DC23253B6CE0009B6223 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FC61DC22253B6CE0009B6223 /* GoogleService-Info.plist */; };
 		FC61DC25253B7342009B6223 /* FirestoreProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC61DC24253B7342009B6223 /* FirestoreProvider.swift */; };
 		FC694F232531D9A100256A32 /* ApplicationFileProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC694F222531D9A100256A32 /* ApplicationFileProvider.swift */; };
+		FC6D494A2547E7DA00DA09B7 /* Chats.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = FC6D49482547E7DA00DA09B7 /* Chats.xcdatamodeld */; };
+		FC6D494F2547E9DE00DA09B7 /* MessageEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC6D494B2547E9DE00DA09B7 /* MessageEntity+CoreDataClass.swift */; };
+		FC6D49502547E9DE00DA09B7 /* MessageEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC6D494C2547E9DE00DA09B7 /* MessageEntity+CoreDataProperties.swift */; };
+		FC6D49512547E9DE00DA09B7 /* ChannelEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC6D494D2547E9DE00DA09B7 /* ChannelEntity+CoreDataClass.swift */; };
+		FC6D49522547E9DE00DA09B7 /* ChannelEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC6D494E2547E9DE00DA09B7 /* ChannelEntity+CoreDataProperties.swift */; };
+		FC6D49542547F16A00DA09B7 /* ChannelEntityExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC6D49532547F16A00DA09B7 /* ChannelEntityExtensions.swift */; };
+		FC6D49562547F27200DA09B7 /* MessageEntityExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC6D49552547F27200DA09B7 /* MessageEntityExtensions.swift */; };
+		FC6D49582548281700DA09B7 /* ChannelsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC6D49572548281700DA09B7 /* ChannelsRepository.swift */; };
+		FC77CCD22542BC3A00B08061 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC77CCD12542BC3A00B08061 /* CoreDataStack.swift */; };
+		FC77CCD62542C1D700B08061 /* OldSchoolStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC77CCD52542C1D700B08061 /* OldSchoolStack.swift */; };
 		FC7C00D8253211A700C3DCAE /* FileOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7C00D7253211A700C3DCAE /* FileOperations.swift */; };
 		FC7C00DA2532144700C3DCAE /* OperationsUserProfileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7C00D92532144700C3DCAE /* OperationsUserProfileManager.swift */; };
 		FC7C00DC253236D000C3DCAE /* UserProfileDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7C00DB253236D000C3DCAE /* UserProfileDataManager.swift */; };
@@ -50,6 +61,7 @@
 		4F025F7F1F448820860C5050 /* Pods-t-chat.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-t-chat.debug.xcconfig"; path = "Target Support Files/Pods-t-chat/Pods-t-chat.debug.xcconfig"; sourceTree = "<group>"; };
 		521A26DB20E122E0ABC55BD8 /* Pods_t_chat.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_t_chat.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED375F2916F152718D98BD78 /* Pods-t-chat.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-t-chat.release.xcconfig"; path = "Target Support Files/Pods-t-chat/Pods-t-chat.release.xcconfig"; sourceTree = "<group>"; };
+		FC080063254B04C900A23FF4 /* NewWaveStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewWaveStack.swift; sourceTree = "<group>"; };
 		FC0BA0D5250B7A68005AE946 /* t-chat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "t-chat.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC0BA0D8250B7A68005AE946 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FC0BA0E1250B7A69005AE946 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -71,6 +83,16 @@
 		FC61DC22253B6CE0009B6223 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FC61DC24253B7342009B6223 /* FirestoreProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreProvider.swift; sourceTree = "<group>"; };
 		FC694F222531D9A100256A32 /* ApplicationFileProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationFileProvider.swift; sourceTree = "<group>"; };
+		FC6D49492547E7DA00DA09B7 /* Chats.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Chats.xcdatamodel; sourceTree = "<group>"; };
+		FC6D494B2547E9DE00DA09B7 /* MessageEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MessageEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
+		FC6D494C2547E9DE00DA09B7 /* MessageEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MessageEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		FC6D494D2547E9DE00DA09B7 /* ChannelEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
+		FC6D494E2547E9DE00DA09B7 /* ChannelEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		FC6D49532547F16A00DA09B7 /* ChannelEntityExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelEntityExtensions.swift; sourceTree = "<group>"; };
+		FC6D49552547F27200DA09B7 /* MessageEntityExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageEntityExtensions.swift; sourceTree = "<group>"; };
+		FC6D49572548281700DA09B7 /* ChannelsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsRepository.swift; sourceTree = "<group>"; };
+		FC77CCD12542BC3A00B08061 /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
+		FC77CCD52542C1D700B08061 /* OldSchoolStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OldSchoolStack.swift; sourceTree = "<group>"; };
 		FC7C00D7253211A700C3DCAE /* FileOperations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileOperations.swift; sourceTree = "<group>"; };
 		FC7C00D92532144700C3DCAE /* OperationsUserProfileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationsUserProfileManager.swift; sourceTree = "<group>"; };
 		FC7C00DB253236D000C3DCAE /* UserProfileDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileDataManager.swift; sourceTree = "<group>"; };
@@ -119,6 +141,18 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		FC09BBD02542B4B9005564D3 /* Persistance */ = {
+			isa = PBXGroup;
+			children = (
+				FC77CCD12542BC3A00B08061 /* CoreDataStack.swift */,
+				FC77CCD52542C1D700B08061 /* OldSchoolStack.swift */,
+				FC6D49482547E7DA00DA09B7 /* Chats.xcdatamodeld */,
+				FC6D49572548281700DA09B7 /* ChannelsRepository.swift */,
+				FC080063254B04C900A23FF4 /* NewWaveStack.swift */,
+			);
+			path = Persistance;
+			sourceTree = "<group>";
+		};
 		FC0BA0CC250B7A67005AE946 = {
 			isa = PBXGroup;
 			children = (
@@ -140,6 +174,7 @@
 		FC0BA0D7250B7A68005AE946 /* t-chat */ = {
 			isa = PBXGroup;
 			children = (
+				FC09BBD02542B4B9005564D3 /* Persistance */,
 				FC94E5EA25286937000F09BE /* Views */,
 				FC4F20BF251FB6FC00F0A8AB /* Utils */,
 				FC32038D2519E37E000C2DD9 /* Models */,
@@ -183,6 +218,7 @@
 		FC32038D2519E37E000C2DD9 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				FC77CCCC2542BA2400B08061 /* CoreData */,
 				FC0BA0EC250B8911005AE946 /* AppState.swift */,
 				FC0BA0EE250B9675005AE946 /* ViewControllerState.swift */,
 				FC32038E2519E394000C2DD9 /* UserProfile.swift */,
@@ -202,6 +238,26 @@
 			path = Profile;
 			sourceTree = "<group>";
 		};
+		FC4C1EB62549632000F76A6B /* ProfileManagement */ = {
+			isa = PBXGroup;
+			children = (
+				FC694F222531D9A100256A32 /* ApplicationFileProvider.swift */,
+				FC3811C72530F3DF00AB796C /* GCDUserProfileDataManager.swift */,
+				FC7C00D92532144700C3DCAE /* OperationsUserProfileManager.swift */,
+				FC7C00D7253211A700C3DCAE /* FileOperations.swift */,
+				FC7C00DB253236D000C3DCAE /* UserProfileDataManager.swift */,
+			);
+			path = ProfileManagement;
+			sourceTree = "<group>";
+		};
+		FC4C1EB72549637800F76A6B /* Firebase */ = {
+			isa = PBXGroup;
+			children = (
+				FC61DC24253B7342009B6223 /* FirestoreProvider.swift */,
+			);
+			path = Firebase;
+			sourceTree = "<group>";
+		};
 		FC4C59922520854B008F72C2 /* Conversation */ = {
 			isa = PBXGroup;
 			children = (
@@ -214,17 +270,26 @@
 		FC4F20BF251FB6FC00F0A8AB /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				FC4C1EB72549637800F76A6B /* Firebase */,
+				FC4C1EB62549632000F76A6B /* ProfileManagement */,
 				FC249E2E2535E41D00DE093E /* Themes */,
 				FC249E2D2535E40800DE093E /* Images */,
 				FC249E2C2535E3FB00DE093E /* Logging */,
-				FC3811C72530F3DF00AB796C /* GCDUserProfileDataManager.swift */,
-				FC7C00D92532144700C3DCAE /* OperationsUserProfileManager.swift */,
-				FC694F222531D9A100256A32 /* ApplicationFileProvider.swift */,
-				FC7C00D7253211A700C3DCAE /* FileOperations.swift */,
-				FC7C00DB253236D000C3DCAE /* UserProfileDataManager.swift */,
-				FC61DC24253B7342009B6223 /* FirestoreProvider.swift */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		FC77CCCC2542BA2400B08061 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				FC6D494B2547E9DE00DA09B7 /* MessageEntity+CoreDataClass.swift */,
+				FC6D494C2547E9DE00DA09B7 /* MessageEntity+CoreDataProperties.swift */,
+				FC6D494D2547E9DE00DA09B7 /* ChannelEntity+CoreDataClass.swift */,
+				FC6D494E2547E9DE00DA09B7 /* ChannelEntity+CoreDataProperties.swift */,
+				FC6D49532547F16A00DA09B7 /* ChannelEntityExtensions.swift */,
+				FC6D49552547F27200DA09B7 /* MessageEntityExtensions.swift */,
+			);
+			path = CoreData;
 			sourceTree = "<group>";
 		};
 		FC82CC6F2519D5ED0041DFAE /* Controllers */ = {
@@ -409,14 +474,21 @@
 				FC1C9A2D253B6A0100CC9A42 /* Message.swift in Sources */,
 				FC0BA0EF250B9675005AE946 /* ViewControllerState.swift in Sources */,
 				FC4C599625208654008F72C2 /* ConversationViewController.swift in Sources */,
+				FC6D49542547F16A00DA09B7 /* ChannelEntityExtensions.swift in Sources */,
 				FC82CC742519D9DE0041DFAE /* ProfileImageView.swift in Sources */,
+				FC6D49582548281700DA09B7 /* ChannelsRepository.swift in Sources */,
 				FCC7DA332529B45F006B5A71 /* ThemeManager.swift in Sources */,
+				FC6D494A2547E7DA00DA09B7 /* Chats.xcdatamodeld in Sources */,
 				FC94E5FB2528B8B9000F09BE /* ThemePickerDelegate.swift in Sources */,
 				FC94E5F72528808D000F09BE /* MessageView.swift in Sources */,
 				FC5370362520B58700653A19 /* ConversationMessageTableViewCell.swift in Sources */,
 				FC3811C82530F3DF00AB796C /* GCDUserProfileDataManager.swift in Sources */,
 				FC1C9A29253B694C00CC9A42 /* Channel.swift in Sources */,
 				FCEE4B3D251D151A00911B5C /* ConversationsListViewController.swift in Sources */,
+				FC6D49502547E9DE00DA09B7 /* MessageEntity+CoreDataProperties.swift in Sources */,
+				FC77CCD22542BC3A00B08061 /* CoreDataStack.swift in Sources */,
+				FC080064254B04C900A23FF4 /* NewWaveStack.swift in Sources */,
+				FC6D49512547E9DE00DA09B7 /* ChannelEntity+CoreDataClass.swift in Sources */,
 				FC5370382520D42300653A19 /* ProfileViewController.swift in Sources */,
 				FC82CC6E2519C9190041DFAE /* ImagePicker.swift in Sources */,
 				FC96CBF02518AC910036E085 /* ImageManager.swift in Sources */,
@@ -424,15 +496,19 @@
 				FC249E2B253572AB00DE093E /* ProfileModel.swift in Sources */,
 				FC0BA0F4250B9DEA005AE946 /* StateLoggable.swift in Sources */,
 				FC3811C22530E23F00AB796C /* Backdrop.swift in Sources */,
+				FC6D494F2547E9DE00DA09B7 /* MessageEntity+CoreDataClass.swift in Sources */,
+				FC6D49562547F27200DA09B7 /* MessageEntityExtensions.swift in Sources */,
 				FC32038F2519E394000C2DD9 /* UserProfile.swift in Sources */,
 				FC94E5EC25286999000F09BE /* ThemesViewController.swift in Sources */,
 				FC61DC25253B7342009B6223 /* FirestoreProvider.swift in Sources */,
+				FC77CCD62542C1D700B08061 /* OldSchoolStack.swift in Sources */,
 				FC0BA0ED250B8911005AE946 /* AppState.swift in Sources */,
 				FC7C00D8253211A700C3DCAE /* FileOperations.swift in Sources */,
 				FC694F232531D9A100256A32 /* ApplicationFileProvider.swift in Sources */,
 				FCAC8A8C251E60960085E686 /* ConfigurableView.swift in Sources */,
 				FC7C00DA2532144700C3DCAE /* OperationsUserProfileManager.swift in Sources */,
 				FC7C00DC253236D000C3DCAE /* UserProfileDataManager.swift in Sources */,
+				FC6D49522547E9DE00DA09B7 /* ChannelEntity+CoreDataProperties.swift in Sources */,
 				FC94E5EF25286B1C000F09BE /* Theme.swift in Sources */,
 				FC0BA0D9250B7A68005AE946 /* AppDelegate.swift in Sources */,
 			);
@@ -628,6 +704,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		FC6D49482547E7DA00DA09B7 /* Chats.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				FC6D49492547E7DA00DA09B7 /* Chats.xcdatamodel */,
+			);
+			currentVersion = FC6D49492547E7DA00DA09B7 /* Chats.xcdatamodel */;
+			path = Chats.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = FC0BA0CD250B7A67005AE946 /* Project object */;
 }
